@@ -20,7 +20,7 @@ type: Contract
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 access: 3rd-Party
 created: '2025-02-17'
-modified: '2025-02-24'
+modified: '2025-04-10'
 position: Consuming
 description: >-
   Absentify is a revolutionary software program that helps businesses track and
@@ -36,3 +36,8 @@ maintainers:
   - FN: Kin Lane
     email: info@apievangelist.com
 specificationVersion: '0.19'
+common:
+  - name: Absence management software for Microsoft Teams
+    description: 'null'
+    url: https://absentify.com/
+    type: Website
