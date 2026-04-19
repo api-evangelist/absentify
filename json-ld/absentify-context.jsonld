@@ -1,0 +1,161 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "absentify": "https://absentify.com/vocab#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "id": "@id",
+    "type": "@type",
+    "Member": "absentify:Member",
+    "Department": "absentify:Department",
+    "LeaveType": "absentify:LeaveType",
+    "Request": "absentify:Request",
+    "Absence": "absentify:Absence",
+    "Workspace": "absentify:Workspace",
+    "PublicHolidayCalendar": "absentify:PublicHolidayCalendar",
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "email": {
+      "@id": "schema:email",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "status": {
+      "@id": "absentify:status",
+      "@type": "xsd:string"
+    },
+    "member_id": {
+      "@id": "absentify:memberId",
+      "@type": "xsd:string"
+    },
+    "department_id": {
+      "@id": "absentify:departmentId",
+      "@type": "xsd:string"
+    },
+    "leave_type_id": {
+      "@id": "absentify:leaveTypeId",
+      "@type": "xsd:string"
+    },
+    "request_id": {
+      "@id": "absentify:requestId",
+      "@type": "xsd:string"
+    },
+    "start": {
+      "@id": "schema:startDate",
+      "@type": "xsd:date"
+    },
+    "end": {
+      "@id": "schema:endDate",
+      "@type": "xsd:date"
+    },
+    "date": {
+      "@id": "schema:date",
+      "@type": "xsd:date"
+    },
+    "created_at": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+    "updated_at": {
+      "@id": "schema:dateModified",
+      "@type": "xsd:dateTime"
+    },
+    "color": {
+      "@id": "absentify:color",
+      "@type": "xsd:string"
+    },
+    "approval_required": {
+      "@id": "absentify:approvalRequired",
+      "@type": "xsd:boolean"
+    },
+    "approved_by_id": {
+      "@id": "absentify:approvedById",
+      "@type": "xsd:string"
+    },
+    "approved_at": {
+      "@id": "absentify:approvedAt",
+      "@type": "xsd:dateTime"
+    },
+    "workdays": {
+      "@id": "absentify:workdays",
+      "@type": "xsd:integer"
+    },
+    "half_day": {
+      "@id": "absentify:halfDay",
+      "@type": "xsd:boolean"
+    },
+    "half_day_part": {
+      "@id": "absentify:halfDayPart",
+      "@type": "xsd:string"
+    },
+    "limit": {
+      "@id": "absentify:limit",
+      "@type": "xsd:integer"
+    },
+    "limit_type": {
+      "@id": "absentify:limitType",
+      "@type": "xsd:string"
+    },
+    "active": {
+      "@id": "absentify:active",
+      "@type": "xsd:boolean"
+    },
+    "reason": {
+      "@id": "absentify:reason",
+      "@type": "xsd:string"
+    },
+    "reason_required": {
+      "@id": "absentify:reasonRequired",
+      "@type": "xsd:boolean"
+    },
+    "country_code": {
+      "@id": "absentify:countryCode",
+      "@type": "xsd:string"
+    },
+    "year": {
+      "@id": "schema:copyrightYear",
+      "@type": "xsd:integer"
+    },
+    "holidays": {
+      "@id": "absentify:holidays",
+      "@container": "@set"
+    },
+    "employment_start": {
+      "@id": "schema:startDate",
+      "@type": "xsd:date"
+    },
+    "employment_end": {
+      "@id": "schema:endDate",
+      "@type": "xsd:date"
+    },
+    "timezone": {
+      "@id": "absentify:timezone",
+      "@type": "xsd:string"
+    },
+    "language": {
+      "@id": "absentify:language",
+      "@type": "xsd:string"
+    },
+    "manager_ids": {
+      "@id": "absentify:managerIds",
+      "@container": "@set"
+    },
+    "microsoft_365_id": {
+      "@id": "absentify:microsoft365Id",
+      "@type": "xsd:string"
+    },
+    "plan": {
+      "@id": "absentify:plan",
+      "@type": "xsd:string"
+    },
+    "fiscal_year_start_month": {
+      "@id": "absentify:fiscalYearStartMonth",
+      "@type": "xsd:integer"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-structure.org/meta/extended/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/absentify/main/json-structure/absentify-absence-structure.json",
+  "title": "Absence",
+  "description": "An absence entry for a specific date and member.",
+  "type": "record",
+  "fields": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the absence."
+    },
+    "date": {
+      "type": "string",
+      "description": "Date of the absence.",
+      "format": "date"
+    },
+    "duration": {
+      "type": "number",
+      "description": "Duration of the absence (0.5 for half day, 1 for full day)."
+    },
+    "request_id": {
+      "type": "string",
+      "description": "ID of the associated leave request."
+    }
+  },
+  "x-provider": "absentify"
+}

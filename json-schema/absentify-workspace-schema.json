@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/absentify/main/json-schema/absentify-workspace-schema.json",
+  "title": "Workspace",
+  "description": "Workspace settings and configuration.",
+  "type": "object",
+  "x-schema-source": "openapi-spec",
+  "x-provider": "absentify",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the workspace.",
+      "example": "500001"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the workspace.",
+      "example": "Acme Corporation"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the workspace was created.",
+      "example": "2024-01-01T00:00:00Z"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the workspace was last updated.",
+      "example": "2025-06-01T09:00:00Z"
+    }
+  }
+}

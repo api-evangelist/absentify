@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-structure.org/meta/extended/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/absentify/main/json-structure/absentify-request-structure.json",
+  "title": "Request",
+  "description": "A leave request in absentify.",
+  "type": "record",
+  "fields": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the request."
+    },
+    "start": {
+      "type": "string",
+      "description": "Start date of the request.",
+      "format": "date"
+    },
+    "start_at": {
+      "type": "string",
+      "description": "Time of day when the leave starts."
+    },
+    "end": {
+      "type": "string",
+      "description": "End date of the request.",
+      "format": "date"
+    },
+    "end_at": {
+      "type": "string",
+      "description": "Time of day when the leave ends."
+    },
+    "status": {
+      "type": "string",
+      "description": "Current status of the request."
+    },
+    "reason": {
+      "type": "string",
+      "description": "Reason for the leave request."
+    },
+    "duration": {
+      "type": "number",
+      "description": "Duration of the leave."
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "Timestamp when the request was created.",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "Timestamp when the request was last updated.",
+      "format": "date-time"
+    }
+  },
+  "x-provider": "absentify"
+}

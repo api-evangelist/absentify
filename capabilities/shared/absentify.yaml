@@ -1,0 +1,164 @@
+$schema: https://naftiko.com/schemas/capability/v1
+$id: https://raw.githubusercontent.com/api-evangelist/absentify/main/capabilities/shared/absentify.yaml
+title: Absentify Shared Capabilities
+description: Shared per-API capability definitions for the Absentify absence management API
+provider: absentify
+version: "1.0"
+
+capabilities:
+  - id: list-members
+    title: List Members
+    description: Retrieve a paginated list of all workspace members
+    operationId: getMembers
+    method: GET
+    path: /members
+    parameters:
+      - name: page
+        in: query
+        type: integer
+      - name: limit
+        in: query
+        type: integer
+    outputs:
+      - name: members
+        schema: Member
+
+  - id: get-member
+    title: Get Member
+    description: Retrieve a specific member by their unique identifier
+    operationId: getMembersId
+    method: GET
+    path: /members/{id}
+    parameters:
+      - name: id
+        in: path
+        required: true
+    outputs:
+      - name: member
+        schema: Member
+
+  - id: create-member
+    title: Create Member
+    description: Add a new member to the workspace
+    operationId: postMembers
+    method: POST
+    path: /members
+    inputs:
+      - name: memberData
+        schema: Member
+    outputs:
+      - name: member
+        schema: Member
+
+  - id: update-member
+    title: Update Member
+    description: Update an existing member's information
+    operationId: patchMembersId
+    method: PATCH
+    path: /members/{id}
+    inputs:
+      - name: memberData
+        schema: Member
+    outputs:
+      - name: member
+        schema: Member
+
+  - id: list-departments
+    title: List Departments
+    description: Retrieve all departments in the workspace
+    operationId: getDepartments
+    method: GET
+    path: /departments
+    outputs:
+      - name: departments
+        schema: Department
+
+  - id: get-department
+    title: Get Department
+    description: Retrieve a specific department by ID
+    operationId: getDepartmentsId
+    method: GET
+    path: /departments/{id}
+    outputs:
+      - name: department
+        schema: Department
+
+  - id: list-leave-types
+    title: List Leave Types
+    description: Retrieve all leave types configured in the workspace
+    operationId: getLeavetypes
+    method: GET
+    path: /leave_types
+    outputs:
+      - name: leaveTypes
+        schema: LeaveType
+
+  - id: list-requests
+    title: List Requests
+    description: Retrieve absence requests with optional filters
+    operationId: getRequests
+    method: GET
+    path: /requests
+    parameters:
+      - name: member_id
+        in: query
+      - name: status
+        in: query
+      - name: start
+        in: query
+      - name: end
+        in: query
+    outputs:
+      - name: requests
+        schema: Request
+
+  - id: create-request
+    title: Create Request
+    description: Submit a new leave request
+    operationId: postRequests
+    method: POST
+    path: /requests
+    inputs:
+      - name: requestData
+        schema: Request
+    outputs:
+      - name: request
+        schema: Request
+
+  - id: update-request-status
+    title: Update Request Status
+    description: Approve or decline a leave request
+    operationId: patchRequestsId
+    method: PATCH
+    path: /requests/{id}
+    inputs:
+      - name: statusUpdate
+        schema: Request
+    outputs:
+      - name: request
+        schema: Request
+
+  - id: list-absences-per-day
+    title: List Absences per Day
+    description: Retrieve individual absence days for reporting
+    operationId: getAbsencesPerDay
+    method: GET
+    path: /absences_per_day
+    parameters:
+      - name: start
+        in: query
+      - name: end
+        in: query
+    outputs:
+      - name: absences
+        schema: Absence
+
+  - id: get-workspace
+    title: Get Workspace
+    description: Retrieve workspace configuration and settings
+    operationId: getWorkspace
+    method: GET
+    path: /workspace
+    outputs:
+      - name: workspace
+        schema: Workspace

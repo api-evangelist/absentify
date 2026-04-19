@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-structure.org/meta/extended/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/absentify/main/json-structure/absentify-department-structure.json",
+  "title": "Department",
+  "description": "A department in the absentify workspace.",
+  "type": "record",
+  "fields": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the department."
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the department."
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "Timestamp when the department was created.",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "Timestamp when the department was last updated.",
+      "format": "date-time"
+    }
+  },
+  "x-provider": "absentify"
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/absentify/main/json-schema/absentify-request-schema.json",
+  "title": "Request",
+  "description": "A leave request in absentify.",
+  "type": "object",
+  "x-schema-source": "openapi-spec",
+  "x-provider": "absentify",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the request.",
+      "example": "500456"
+    },
+    "start": {
+      "type": "string",
+      "format": "date",
+      "description": "Start date of the request.",
+      "example": "2025-06-01"
+    },
+    "start_at": {
+      "type": "string",
+      "description": "Time of day when the leave starts.",
+      "example": "morning"
+    },
+    "end": {
+      "type": "string",
+      "format": "date",
+      "description": "End date of the request.",
+      "example": "2025-06-05"
+    },
+    "end_at": {
+      "type": "string",
+      "description": "Time of day when the leave ends.",
+      "example": "afternoon"
+    },
+    "status": {
+      "type": "string",
+      "description": "Current status of the request.",
+      "example": "APPROVED"
+    },
+    "reason": {
+      "type": "string",
+      "description": "Reason for the leave request.",
+      "example": "Annual vacation"
+    },
+    "duration": {
+      "type": "number",
+      "description": "Duration of the leave.",
+      "example": 5
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the request was created.",
+      "example": "2025-05-15T10:00:00Z"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the request was last updated.",
+      "example": "2025-05-16T09:00:00Z"
+    }
+  }
+}

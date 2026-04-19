@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-structure.org/meta/extended/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/absentify/main/json-structure/absentify-leave-type-structure.json",
+  "title": "LeaveType",
+  "description": "A leave type defined in the absentify workspace.",
+  "type": "record",
+  "fields": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the leave type."
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the leave type."
+    },
+    "leave_unit": {
+      "type": "string",
+      "description": "Unit for this leave type (days or hours)."
+    },
+    "color": {
+      "type": "string",
+      "description": "Color code for this leave type."
+    },
+    "icon": {
+      "type": "string",
+      "description": "Icon for this leave type."
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "Timestamp when the leave type was created.",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "Timestamp when the leave type was last updated.",
+      "format": "date-time"
+    }
+  },
+  "x-provider": "absentify"
+}

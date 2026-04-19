@@ -1,0 +1,16 @@
+{
+  "id": "req_01JKL",
+  "member_id": "mem_01HXYZ",
+  "leave_type_id": "lt_01GHI",
+  "start": "2026-07-01",
+  "end": "2026-07-05",
+  "start_half_day": false,
+  "end_half_day": false,
+  "status": "approved",
+  "reason": "Annual family vacation",
+  "workdays": 5,
+  "created_at": "2026-05-15T10:00:00Z",
+  "updated_at": "2026-05-16T09:30:00Z",
+  "approved_by_id": "mem_02DEF",
+  "approved_at": "2026-05-16T09:30:00Z"
+}

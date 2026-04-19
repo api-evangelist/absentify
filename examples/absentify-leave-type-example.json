@@ -1,0 +1,14 @@
+{
+  "id": "lt_01GHI",
+  "name": "Vacation",
+  "color": "#4CAF50",
+  "approval_required": true,
+  "limit": 25,
+  "limit_type": "days",
+  "active": true,
+  "reason_required": false,
+  "attachment_required": false,
+  "half_days_enabled": true,
+  "ignore_public_holidays": false,
+  "ignore_weekends": true
+}

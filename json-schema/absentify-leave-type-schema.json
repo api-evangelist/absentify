@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/absentify/main/json-schema/absentify-leave-type-schema.json",
+  "title": "LeaveType",
+  "description": "A leave type defined in the absentify workspace.",
+  "type": "object",
+  "x-schema-source": "openapi-spec",
+  "x-provider": "absentify",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the leave type.",
+      "example": "500789"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the leave type.",
+      "example": "Vacation"
+    },
+    "leave_unit": {
+      "type": "string",
+      "description": "Unit for this leave type (days or hours).",
+      "example": "DAYS"
+    },
+    "color": {
+      "type": "string",
+      "description": "Color code for this leave type.",
+      "example": "#4CAF50"
+    },
+    "icon": {
+      "type": "string",
+      "description": "Icon for this leave type.",
+      "example": "beach"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the leave type was created.",
+      "example": "2025-01-01T00:00:00Z"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the leave type was last updated.",
+      "example": "2025-06-01T09:00:00Z"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-structure.org/meta/extended/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/absentify/main/json-structure/absentify-workspace-structure.json",
+  "title": "Workspace",
+  "description": "Workspace settings and configuration.",
+  "type": "record",
+  "fields": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the workspace."
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the workspace."
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "Timestamp when the workspace was created.",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "Timestamp when the workspace was last updated.",
+      "format": "date-time"
+    }
+  },
+  "x-provider": "absentify"
+}

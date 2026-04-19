@@ -1,0 +1,10 @@
+{
+  "id": "dep_01ABC",
+  "name": "Engineering",
+  "description": "Software engineering team",
+  "parent_department_id": null,
+  "manager_ids": [
+    "mem_02DEF"
+  ],
+  "allowance_ids": []
+}

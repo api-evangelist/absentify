@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-structure.org/meta/extended/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/absentify/main/json-structure/absentify-public-holiday-calendar-structure.json",
+  "title": "PublicHolidayCalendar",
+  "description": "A public holiday calendar in absentify.",
+  "type": "record",
+  "fields": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the calendar."
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the public holiday calendar."
+    },
+    "country": {
+      "type": "string",
+      "description": "Country code for the public holidays."
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "Timestamp when the calendar was created.",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "Timestamp when the calendar was last updated.",
+      "format": "date-time"
+    }
+  },
+  "x-provider": "absentify"
+}

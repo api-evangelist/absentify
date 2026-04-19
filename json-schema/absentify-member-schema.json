@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/absentify/main/json-schema/absentify-member-schema.json",
+  "title": "Member",
+  "description": "A member (employee) in the absentify workspace.",
+  "type": "object",
+  "x-schema-source": "openapi-spec",
+  "x-provider": "absentify",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the member.",
+      "example": "500123"
+    },
+    "custom_id": {
+      "type": "string",
+      "description": "Custom identifier for the member.",
+      "example": "EMP001"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the member.",
+      "example": "Jane Smith"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Email address of the member.",
+      "example": "jsmith@example.com"
+    },
+    "status": {
+      "type": "string",
+      "description": "Current status of the member.",
+      "example": "ACTIVE"
+    },
+    "is_admin": {
+      "type": "boolean",
+      "description": "Whether the member is an admin.",
+      "example": false
+    },
+    "approval_process": {
+      "type": "string",
+      "description": "Approval process type for this member.",
+      "example": "CUSTOM"
+    },
+    "employment_start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Employment start date.",
+      "example": "2024-01-15"
+    },
+    "employment_end_date": {
+      "type": "string",
+      "format": "date",
+      "nullable": true,
+      "description": "Employment end date if applicable.",
+      "example": null
+    },
+    "birthday": {
+      "type": "string",
+      "format": "date",
+      "nullable": true,
+      "description": "Birthday of the member.",
+      "example": "1990-06-15"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the member was created.",
+      "example": "2025-03-15T14:30:00Z"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the member was last updated.",
+      "example": "2025-06-01T09:00:00Z"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "phc_01MNO",
+  "name": "United States Federal Holidays",
+  "country_code": "US",
+  "subdivision_code": null,
+  "year": 2026,
+  "holidays": [
+    {
+      "date": "2026-01-01",
+      "name": "New Year's Day"
+    },
+    {
+      "date": "2026-07-04",
+      "name": "Independence Day"
+    },
+    {
+      "date": "2026-12-25",
+      "name": "Christmas Day"
+    }
+  ]
+}

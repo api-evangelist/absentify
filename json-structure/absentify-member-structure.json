@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-structure.org/meta/extended/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/absentify/main/json-structure/absentify-member-structure.json",
+  "title": "Member",
+  "description": "A member (employee) in the absentify workspace.",
+  "type": "record",
+  "fields": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the member."
+    },
+    "custom_id": {
+      "type": "string",
+      "description": "Custom identifier for the member."
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the member."
+    },
+    "email": {
+      "type": "string",
+      "description": "Email address of the member.",
+      "format": "email"
+    },
+    "status": {
+      "type": "string",
+      "description": "Current status of the member."
+    },
+    "is_admin": {
+      "type": "boolean",
+      "description": "Whether the member is an admin."
+    },
+    "approval_process": {
+      "type": "string",
+      "description": "Approval process type for this member."
+    },
+    "employment_start_date": {
+      "type": "string",
+      "description": "Employment start date.",
+      "format": "date"
+    },
+    "employment_end_date": {
+      "type": "string",
+      "description": "Employment end date if applicable.",
+      "format": "date"
+    },
+    "birthday": {
+      "type": "string",
+      "description": "Birthday of the member.",
+      "format": "date"
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "Timestamp when the member was created.",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "Timestamp when the member was last updated.",
+      "format": "date-time"
+    }
+  },
+  "x-provider": "absentify"
+}

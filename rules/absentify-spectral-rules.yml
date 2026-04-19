@@ -1,0 +1,138 @@
+extends: [[spectral:oas, recommended]]
+rules:
+  absentify-operation-must-have-summary:
+    description: Every operation must have a summary
+    message: "Operation {{path}} is missing a summary"
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: summary
+      function: truthy
+
+  absentify-operation-must-have-description:
+    description: Every operation must have a description
+    message: "Operation {{path}} is missing a description"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: description
+      function: truthy
+
+  absentify-operation-must-have-operation-id:
+    description: Every operation must have an operationId
+    message: "Operation {{path}} is missing an operationId"
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: operationId
+      function: truthy
+
+  absentify-operation-must-have-tags:
+    description: Every operation must have at least one tag
+    message: "Operation {{path}} must have at least one tag"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: tags
+      function: truthy
+
+  absentify-summary-title-case:
+    description: Operation summaries should be in Title Case
+    message: "Summary '{{value}}' should start with 'Absentify'"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].summary"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^Absentify"
+
+  absentify-parameters-must-have-description:
+    description: All parameters must have a description
+    message: "Parameter {{path}} is missing a description"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].parameters[*]"
+    then:
+      field: description
+      function: truthy
+
+  absentify-request-body-must-have-schema:
+    description: Request body content must define a schema
+    message: "Request body at {{path}} must define a schema"
+    severity: error
+    given: "$.paths[*][post,put,patch].requestBody.content[*]"
+    then:
+      field: schema
+      function: truthy
+
+  absentify-response-must-have-schema:
+    description: Successful responses should define a schema
+    message: "Response at {{path}} should define a schema"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].responses[200,201]"
+    then:
+      field: content
+      function: truthy
+
+  absentify-security-must-use-api-key:
+    description: Operations should use ApiKeyAuth security
+    message: "Operation {{path}} should specify security requirements"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: security
+      function: truthy
+
+  absentify-schema-properties-must-have-type:
+    description: Schema properties must define a type
+    message: "Schema property {{path}} must have a type"
+    severity: warn
+    given: "$.components.schemas[*].properties[*]"
+    then:
+      field: type
+      function: truthy
+
+  absentify-info-must-have-contact:
+    description: API info must have contact information
+    message: "API info is missing contact information"
+    severity: warn
+    given: "$.info"
+    then:
+      field: contact
+      function: truthy
+
+  absentify-info-must-have-license:
+    description: API info must have license information
+    message: "API info is missing license information"
+    severity: info
+    given: "$.info"
+    then:
+      field: license
+      function: truthy
+
+  absentify-server-must-be-defined:
+    description: At least one server must be defined
+    message: "API must define at least one server"
+    severity: error
+    given: "$"
+    then:
+      field: servers
+      function: truthy
+
+  absentify-components-schemas-must-exist:
+    description: Components section should define reusable schemas
+    message: "API should define component schemas for reusability"
+    severity: warn
+    given: "$.components"
+    then:
+      field: schemas
+      function: truthy
+
+  absentify-paths-must-use-kebab-case:
+    description: Path segments should use kebab-case
+    message: "Path {{path}} should use kebab-case or underscores for readability"
+    severity: info
+    given: "$.paths"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^/[a-z0-9_/-{}]*$"

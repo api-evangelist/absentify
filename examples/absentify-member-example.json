@@ -1,0 +1,17 @@
+{
+  "id": "mem_01HXYZ",
+  "name": "Jane Doe",
+  "email": "jane.doe@example.com",
+  "employment_start": "2022-01-01",
+  "employment_end": null,
+  "date_of_birth": "1990-05-15",
+  "status": "active",
+  "department_id": "dep_01ABC",
+  "language": "en",
+  "timezone": "America/New_York",
+  "leavetype_limit_overwrite": [],
+  "manager_ids": [
+    "mem_02DEF"
+  ],
+  "microsoft_365_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+}

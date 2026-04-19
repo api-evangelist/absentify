@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/absentify/main/json-schema/absentify-absence-schema.json",
+  "title": "Absence",
+  "description": "An absence entry for a specific date and member.",
+  "type": "object",
+  "x-schema-source": "openapi-spec",
+  "x-provider": "absentify",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the absence.",
+      "example": "500321"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the absence.",
+      "example": "2025-06-02"
+    },
+    "duration": {
+      "type": "number",
+      "description": "Duration of the absence (0.5 for half day, 1 for full day).",
+      "example": 1
+    },
+    "request_id": {
+      "type": "string",
+      "description": "ID of the associated leave request.",
+      "example": "500456"
+    }
+  }
+}

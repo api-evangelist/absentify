@@ -1,0 +1,77 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://raw.githubusercontent.com/api-evangelist/absentify/main/vocabulary/absentify-vocabulary.yaml
+title: Absentify Vocabulary
+description: Controlled vocabulary for the Absentify absence management platform API
+x-provider: absentify
+x-version: "1.0"
+
+resources:
+  - term: Member
+    definition: An employee or team member whose absences are tracked in the workspace
+    synonyms: [Employee, User, Staff Member, Team Member]
+    related: [Department, Absence, Request]
+  - term: Department
+    definition: An organizational unit grouping members for absence management and reporting
+    synonyms: [Team, Group, Division, Unit]
+    related: [Member, LeaveType]
+  - term: LeaveType
+    definition: A category of absence (e.g., vacation, sick leave, parental leave) with specific rules and limits
+    synonyms: [Absence Type, Leave Category, Time Off Type]
+    related: [Request, Absence]
+  - term: Request
+    definition: A formal application by a member to take leave for a specified period
+    synonyms: [Leave Request, Absence Request, Time Off Request]
+    related: [Member, LeaveType, Absence]
+  - term: Absence
+    definition: A single calendar day within an approved leave request period
+    synonyms: [Leave Day, Time Off Day, Absent Day]
+    related: [Request, Member]
+  - term: Workspace
+    definition: The organizational account in Absentify containing all members, departments, and settings
+    synonyms: [Organization, Company Account, Tenant]
+    related: [Member, Department]
+  - term: PublicHolidayCalendar
+    definition: A country or region-specific calendar of official public holidays
+    synonyms: [Holiday Calendar, National Holidays, Bank Holidays]
+    related: [Absence, LeaveType]
+
+actions:
+  - term: Submit
+    definition: The act of a member creating and sending a leave request for approval
+    synonyms: [Apply, Request, Create]
+    related: [Request]
+  - term: Approve
+    definition: The act of a manager or approver accepting a leave request
+    synonyms: [Accept, Authorize, Confirm]
+    related: [Request]
+  - term: Decline
+    definition: The act of a manager or approver rejecting a leave request
+    synonyms: [Reject, Deny, Refuse]
+    related: [Request]
+  - term: Cancel
+    definition: The act of withdrawing a previously submitted or approved leave request
+    synonyms: [Withdraw, Revoke, Rescind]
+    related: [Request]
+  - term: Track
+    definition: The act of monitoring and recording absence patterns over time
+    synonyms: [Monitor, Record, Log]
+    related: [Absence, Member]
+
+workflows:
+  - term: Absence Management
+    definition: The end-to-end process of submitting, reviewing, approving, and recording employee absences
+    steps: [Submit Request, Review Request, Approve or Decline, Record Absence, Report]
+
+personas:
+  - term: Employee
+    definition: A team member who submits absence requests and tracks their own leave balance
+    synonyms: [Member, Staff, Worker]
+  - term: Manager
+    definition: A team lead who reviews and approves or declines absence requests for their team
+    synonyms: [Team Lead, Approver, Supervisor]
+  - term: HR Administrator
+    definition: A human resources professional who configures the workspace, leave types, and reports
+    synonyms: [HR Manager, Admin, HR Business Partner]
+  - term: System Integrator
+    definition: A developer who integrates Absentify with external systems via the REST API or webhooks
+    synonyms: [Developer, API Consumer, Integration Engineer]

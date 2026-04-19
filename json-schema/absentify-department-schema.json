@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/absentify/main/json-schema/absentify-department-schema.json",
+  "title": "Department",
+  "description": "A department in the absentify workspace.",
+  "type": "object",
+  "x-schema-source": "openapi-spec",
+  "x-provider": "absentify",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the department.",
+      "example": "500999"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the department.",
+      "example": "Engineering"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the department was created.",
+      "example": "2025-01-01T00:00:00Z"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the department was last updated.",
+      "example": "2025-06-01T09:00:00Z"
+    }
+  }
+}
