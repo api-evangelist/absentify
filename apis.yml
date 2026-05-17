@@ -15,7 +15,7 @@ tags:
   - Leave Management
   - Microsoft Teams
   - Human Resources
-type: Contract
+kind: contract
 access: 3rd-Party
 created: '2025-02-17'
 modified: '2026-04-19'
@@ -83,7 +83,7 @@ apis:
       - type: JSONStructure
         url: json-structure/absentify-public-holiday-calendar-structure.json
         title: Public Holiday Calendar Structure
-      - type: JSON-LD
+      - type: JSONLD
         url: json-ld/absentify-context.jsonld
       - type: Example
         url: examples/absentify-member-example.json
