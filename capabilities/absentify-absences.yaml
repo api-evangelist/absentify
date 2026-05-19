@@ -1,0 +1,97 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Absentify API — Absences
+  description: 'Absentify API — Absences. 1 operations. Lead operation: Absentify Get All Requests and Public Holiday Per
+    Member Per Day. Self-contained Naftiko capability covering one Absentify business surface.'
+  tags:
+  - Absentify
+  - Absences
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ABSENTIFY_API_KEY: ABSENTIFY_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: absentify-absences
+    baseUri: https://api.absentify.com/api/v1
+    description: Absentify API — Absences business capability. Self-contained, no shared references.
+    resources:
+    - name: absences_per_day
+      path: /absences_per_day
+      operations:
+      - name: absencesgetabsencesperday
+        method: GET
+        description: Absentify Get All Requests and Public Holiday Per Member Per Day
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: start
+          in: query
+          type: string
+          required: true
+        - name: end
+          in: query
+          type: string
+          required: true
+        - name: request_member_ids
+          in: query
+          type: string
+        - name: department_ids
+          in: query
+          type: string
+    authentication:
+      type: apikey
+      key: X-API-KEY
+      value: '{{env.ABSENTIFY_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: absentify-absences-rest
+    port: 8080
+    description: REST adapter for Absentify API — Absences. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/absences-per-day
+      name: absences-per-day
+      description: REST surface for absences_per_day.
+      operations:
+      - method: GET
+        name: absencesgetabsencesperday
+        description: Absentify Get All Requests and Public Holiday Per Member Per Day
+        call: absentify-absences.absencesgetabsencesperday
+        with:
+          start: rest.start
+          end: rest.end
+          request_member_ids: rest.request_member_ids
+          department_ids: rest.department_ids
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: absentify-absences-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Absentify API — Absences. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: absentify-get-all-requests-and
+      description: Absentify Get All Requests and Public Holiday Per Member Per Day
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: absentify-absences.absencesgetabsencesperday
+      with:
+        start: tools.start
+        end: tools.end
+        request_member_ids: tools.request_member_ids
+        department_ids: tools.department_ids
+      outputParameters:
+      - type: object
+        mapping: $.

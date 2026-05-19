@@ -1,0 +1,508 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Absentify API — Requests
+  description: 'Absentify API — Requests. 10 operations. Lead operation: Absentify Get All Requests. Self-contained Naftiko
+    capability covering one Absentify business surface.'
+  tags:
+  - Absentify
+  - Requests
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ABSENTIFY_API_KEY: ABSENTIFY_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: absentify-requests
+    baseUri: https://api.absentify.com/api/v1
+    description: Absentify API — Requests business capability. Self-contained, no shared references.
+    resources:
+    - name: requests
+      path: /requests
+      operations:
+      - name: requestgetrequests
+        method: GET
+        description: Absentify Get All Requests
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: start
+          in: query
+          type: string
+          required: true
+        - name: end
+          in: query
+          type: string
+          required: true
+        - name: status
+          in: query
+          type: string
+        - name: request_member_ids
+          in: query
+          type: string
+        - name: department_ids
+          in: query
+          type: string
+      - name: requestcreaterequest
+        method: POST
+        description: Absentify Create a Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: requests-recurring
+      path: /requests/recurring
+      operations:
+      - name: requestcreaterecurringrequests
+        method: POST
+        description: Absentify Create Recurring Requests
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: requests-id
+      path: /requests/{id}
+      operations:
+      - name: requestgetrequestbyid
+        method: GET
+        description: Absentify Read a Request by Id
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+    - name: requests-id-approve
+      path: /requests/{id}/approve
+      operations:
+      - name: requestapproverequest
+        method: POST
+        description: Absentify Approve a Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+    - name: requests-id-approve_representative
+      path: /requests/{id}/approve_representative
+      operations:
+      - name: requestapproverequestrepresentative
+        method: POST
+        description: Absentify Approve a Request as a Representative
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+    - name: requests-id-cancel
+      path: /requests/{id}/cancel
+      operations:
+      - name: requestcancelrequest
+        method: POST
+        description: Absentify Cancel a Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: requests-id-decline
+      path: /requests/{id}/decline
+      operations:
+      - name: requestdeclinerequest
+        method: POST
+        description: Absentify Decline a Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: requests-id-decline_representative
+      path: /requests/{id}/decline_representative
+      operations:
+      - name: requestdeclinerequestrepresentative
+        method: POST
+        description: Absentify Decline a Request as a Representative
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: requests_per_day
+      path: /requests_per_day
+      operations:
+      - name: requestgetrequestsperday
+        method: GET
+        description: Absentify Get All Requests Per Day
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: start
+          in: query
+          type: string
+          required: true
+        - name: end
+          in: query
+          type: string
+          required: true
+        - name: status
+          in: query
+          type: string
+        - name: request_member_ids
+          in: query
+          type: string
+        - name: department_ids
+          in: query
+          type: string
+    authentication:
+      type: apikey
+      key: X-API-KEY
+      value: '{{env.ABSENTIFY_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: absentify-requests-rest
+    port: 8080
+    description: REST adapter for Absentify API — Requests. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/requests
+      name: requests
+      description: REST surface for requests.
+      operations:
+      - method: GET
+        name: requestgetrequests
+        description: Absentify Get All Requests
+        call: absentify-requests.requestgetrequests
+        with:
+          start: rest.start
+          end: rest.end
+          status: rest.status
+          request_member_ids: rest.request_member_ids
+          department_ids: rest.department_ids
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: requestcreaterequest
+        description: Absentify Create a Request
+        call: absentify-requests.requestcreaterequest
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/requests/recurring
+      name: requests-recurring
+      description: REST surface for requests-recurring.
+      operations:
+      - method: POST
+        name: requestcreaterecurringrequests
+        description: Absentify Create Recurring Requests
+        call: absentify-requests.requestcreaterecurringrequests
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/requests/{id}
+      name: requests-id
+      description: REST surface for requests-id.
+      operations:
+      - method: GET
+        name: requestgetrequestbyid
+        description: Absentify Read a Request by Id
+        call: absentify-requests.requestgetrequestbyid
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/requests/{id}/approve
+      name: requests-id-approve
+      description: REST surface for requests-id-approve.
+      operations:
+      - method: POST
+        name: requestapproverequest
+        description: Absentify Approve a Request
+        call: absentify-requests.requestapproverequest
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/requests/{id}/approve-representative
+      name: requests-id-approve-representative
+      description: REST surface for requests-id-approve_representative.
+      operations:
+      - method: POST
+        name: requestapproverequestrepresentative
+        description: Absentify Approve a Request as a Representative
+        call: absentify-requests.requestapproverequestrepresentative
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/requests/{id}/cancel
+      name: requests-id-cancel
+      description: REST surface for requests-id-cancel.
+      operations:
+      - method: POST
+        name: requestcancelrequest
+        description: Absentify Cancel a Request
+        call: absentify-requests.requestcancelrequest
+        with:
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/requests/{id}/decline
+      name: requests-id-decline
+      description: REST surface for requests-id-decline.
+      operations:
+      - method: POST
+        name: requestdeclinerequest
+        description: Absentify Decline a Request
+        call: absentify-requests.requestdeclinerequest
+        with:
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/requests/{id}/decline-representative
+      name: requests-id-decline-representative
+      description: REST surface for requests-id-decline_representative.
+      operations:
+      - method: POST
+        name: requestdeclinerequestrepresentative
+        description: Absentify Decline a Request as a Representative
+        call: absentify-requests.requestdeclinerequestrepresentative
+        with:
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/requests-per-day
+      name: requests-per-day
+      description: REST surface for requests_per_day.
+      operations:
+      - method: GET
+        name: requestgetrequestsperday
+        description: Absentify Get All Requests Per Day
+        call: absentify-requests.requestgetrequestsperday
+        with:
+          start: rest.start
+          end: rest.end
+          status: rest.status
+          request_member_ids: rest.request_member_ids
+          department_ids: rest.department_ids
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: absentify-requests-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Absentify API — Requests. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: absentify-get-all-requests
+      description: Absentify Get All Requests
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: absentify-requests.requestgetrequests
+      with:
+        start: tools.start
+        end: tools.end
+        status: tools.status
+        request_member_ids: tools.request_member_ids
+        department_ids: tools.department_ids
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: absentify-create-request
+      description: Absentify Create a Request
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: absentify-requests.requestcreaterequest
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: absentify-create-recurring-requests
+      description: Absentify Create Recurring Requests
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: absentify-requests.requestcreaterecurringrequests
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: absentify-read-request-id
+      description: Absentify Read a Request by Id
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: absentify-requests.requestgetrequestbyid
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: absentify-approve-request
+      description: Absentify Approve a Request
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: absentify-requests.requestapproverequest
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: absentify-approve-request-representative
+      description: Absentify Approve a Request as a Representative
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: absentify-requests.requestapproverequestrepresentative
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: absentify-cancel-request
+      description: Absentify Cancel a Request
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: absentify-requests.requestcancelrequest
+      with:
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: absentify-decline-request
+      description: Absentify Decline a Request
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: absentify-requests.requestdeclinerequest
+      with:
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: absentify-decline-request-representative
+      description: Absentify Decline a Request as a Representative
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: absentify-requests.requestdeclinerequestrepresentative
+      with:
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: absentify-get-all-requests-per
+      description: Absentify Get All Requests Per Day
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: absentify-requests.requestgetrequestsperday
+      with:
+        start: tools.start
+        end: tools.end
+        status: tools.status
+        request_member_ids: tools.request_member_ids
+        department_ids: tools.department_ids
+      outputParameters:
+      - type: object
+        mapping: $.

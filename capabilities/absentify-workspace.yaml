@@ -1,0 +1,107 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Absentify API — Workspace
+  description: 'Absentify API — Workspace. 2 operations. Lead operation: Absentify Get Current Workspace Settings. Self-contained
+    Naftiko capability covering one Absentify business surface.'
+  tags:
+  - Absentify
+  - Workspace
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ABSENTIFY_API_KEY: ABSENTIFY_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: absentify-workspace
+    baseUri: https://api.absentify.com/api/v1
+    description: Absentify API — Workspace business capability. Self-contained, no shared references.
+    resources:
+    - name: workspace
+      path: /workspace
+      operations:
+      - name: workspacegetcurrentworkspace
+        method: GET
+        description: Absentify Get Current Workspace Settings
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: workspaceupdatesettings
+        method: PUT
+        description: Absentify Update the Workspace Settings
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: X-API-KEY
+      value: '{{env.ABSENTIFY_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: absentify-workspace-rest
+    port: 8080
+    description: REST adapter for Absentify API — Workspace. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/workspace
+      name: workspace
+      description: REST surface for workspace.
+      operations:
+      - method: GET
+        name: workspacegetcurrentworkspace
+        description: Absentify Get Current Workspace Settings
+        call: absentify-workspace.workspacegetcurrentworkspace
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: workspaceupdatesettings
+        description: Absentify Update the Workspace Settings
+        call: absentify-workspace.workspaceupdatesettings
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: absentify-workspace-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Absentify API — Workspace. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: absentify-get-current-workspace-settings
+      description: Absentify Get Current Workspace Settings
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: absentify-workspace.workspacegetcurrentworkspace
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: absentify-update-workspace-settings
+      description: Absentify Update the Workspace Settings
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: absentify-workspace.workspaceupdatesettings
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
