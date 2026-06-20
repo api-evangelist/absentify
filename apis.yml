@@ -6,7 +6,7 @@ description: >-
   track and manage employee absences, leave requests, approvals, and team schedules. Built by BrainCore Solutions GmbH,
   it provides a REST API for integrating absence management into custom workflows, HR systems, and business automation
   tools.
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
   - Absence Management
   - HR
