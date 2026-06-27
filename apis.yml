@@ -82,22 +82,22 @@ apis:
         title: Public Holiday Calendar Structure
       - type: JSONLD
         url: json-ld/absentify-context.jsonld
-      - type: Example
+      - type: Examples
         url: examples/absentify-member-example.json
         title: Member Example
-      - type: Example
+      - type: Examples
         url: examples/absentify-department-example.json
         title: Department Example
-      - type: Example
+      - type: Examples
         url: examples/absentify-leave-type-example.json
         title: Leave Type Example
-      - type: Example
+      - type: Examples
         url: examples/absentify-request-example.json
         title: Request Example
-      - type: Example
+      - type: Examples
         url: examples/absentify-absence-example.json
         title: Absence Example
-      - type: Example
+      - type: Examples
         url: examples/absentify-workspace-example.json
         title: Workspace Example
 common:

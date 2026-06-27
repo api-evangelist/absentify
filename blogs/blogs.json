@@ -3,12 +3,12 @@
   "feeds": [
     {
       "source": "https://absentify.com/blog",
-      "feed_url": "https://absentify.com/blog",
-      "title": "absentify Blog",
+      "feed_url": "",
       "saved": 0,
-      "method": "html-scrape"
+      "method": "agent-scrape"
     }
   ],
   "post_count": 1,
-  "fetched": "2026-06-21T17:00:00Z"
+  "fetched": "2026-06-27T12:21:33Z",
+  "agent_pulled": "2026-06-27"
 }
