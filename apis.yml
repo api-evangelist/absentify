@@ -101,6 +101,14 @@ apis:
         url: examples/absentify-workspace-example.json
         title: Workspace Example
 common:
+  - type: TrustCenter
+    url: security/absentify-trust-center.yml
+  - type: VulnerabilityDisclosure
+    url: security/absentify-vulnerability-disclosure.yml
+  - type: DomainSecurity
+    url: security/absentify-domain-security.yml
+  - type: Authentication
+    url: authentication/absentify-authentication.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/absentify
   - type: Portal

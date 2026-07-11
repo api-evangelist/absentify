@@ -1,0 +1,22 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/absentify-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: ApiKey
+  type: apiKey
+  in: header
+  parameter: X-API-KEY
+  sources:
+  - openapi/absentify-openapi.yml
+- name: ApiKeyAuth
+  type: apiKey
+  in: header
+  parameter: x-api-key
+  description: API key from your absentify account settings. Requires Plus plan.
+  sources:
+  - openapi/absentify-openapi.yml
