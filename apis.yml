@@ -101,6 +101,8 @@ apis:
         url: examples/absentify-workspace-example.json
         title: Workspace Example
 common:
+  - type: AgenticAccess
+    url: agentic-access/absentify-agentic-access.yml
   - type: TrustCenter
     url: security/absentify-trust-center.yml
   - type: VulnerabilityDisclosure
