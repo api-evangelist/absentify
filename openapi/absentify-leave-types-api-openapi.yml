@@ -1,0 +1,977 @@
+openapi: 3.1.0
+info:
+  title: Absentify Absences Leave types API
+  description: 'The Absentify REST API provides comprehensive absence management capabilities for Microsoft 365-integrated organizations. Manage members, departments, leave types, requests, allowances, public holidays, and workspace settings. The API requires the Plus plan and uses API key authentication. Rate limit: 150 requests per second per IP.'
+  version: 1.0.0
+  contact:
+    url: https://absentify.com/docs
+    email: support@absentify.com
+  license:
+    name: Proprietary
+    url: https://absentify.com/terms-and-conditions
+  x-generated-from: official-openapi-spec
+servers:
+- url: https://api.absentify.com/api/v1
+tags:
+- name: Leave types
+paths:
+  /leave_types:
+    get:
+      operationId: leaveTypes-getLeaveTypes
+      summary: Absentify Get All Leave Types
+      description: Get all leave types
+      tags:
+      - Leave types
+      security:
+      - ApiKey: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    createdAt:
+                      type: string
+                    updatedAt:
+                      type: string
+                    color:
+                      type: string
+                    icon:
+                      type: string
+                    needs_approval:
+                      type: boolean
+                    deleted:
+                      type: boolean
+                    deleted_at:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    deleted_by:
+                      anyOf:
+                      - type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          email:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - id
+                        - name
+                        - email
+                        additionalProperties: false
+                      - type: 'null'
+                    maximum_absent:
+                      type: boolean
+                    leave_unit:
+                      type: string
+                      enum:
+                      - days
+                      - half_days
+                      - hours
+                      - minutes_30
+                      - minutes_15
+                      - minutes_10
+                      - minutes_5
+                      - minutes_1
+                    position:
+                      type: number
+                    take_from_allowance:
+                      type: boolean
+                    privacy_hide_leavetype:
+                      type: boolean
+                    outlook_synchronization_show_as:
+                      type: string
+                      enum:
+                      - free
+                      - tentative
+                      - busy
+                      - oof
+                      - workingElsewhere
+                      - unknown
+                    outlook_synchronization_subject:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    allowance_type:
+                      anyOf:
+                      - type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          ignore_allowance_limit:
+                            type: boolean
+                          allowance_unit:
+                            type: string
+                            enum:
+                            - days
+                            - hours
+                        required:
+                        - id
+                        - name
+                        - ignore_allowance_limit
+                        - allowance_unit
+                        additionalProperties: false
+                      - type: 'null'
+                    counts_as_leave:
+                      type: boolean
+                  required:
+                  - id
+                  - name
+                  - createdAt
+                  - updatedAt
+                  - color
+                  - icon
+                  - needs_approval
+                  - deleted
+                  - deleted_at
+                  - deleted_by
+                  - maximum_absent
+                  - leave_unit
+                  - position
+                  - take_from_allowance
+                  - privacy_hide_leavetype
+                  - outlook_synchronization_show_as
+                  - outlook_synchronization_subject
+                  - allowance_type
+                  - counts_as_leave
+                  additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    post:
+      operationId: leaveTypes-createLeaveType
+      summary: Absentify Create a Leave Type
+      description: Create a leave type
+      tags:
+      - Leave types
+      security:
+      - ApiKey: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 255
+                color:
+                  type: string
+                needs_approval:
+                  type: boolean
+                maximum_absent:
+                  type: boolean
+                leave_unit:
+                  type: string
+                  enum:
+                  - days
+                  - half_days
+                  - hours
+                  - minutes_30
+                  - minutes_15
+                  - minutes_10
+                  - minutes_5
+                  - minutes_1
+                position:
+                  type: number
+                take_from_allowance:
+                  type: boolean
+                privacy_hide_leavetype:
+                  type: boolean
+                outlook_synchronization_show_as:
+                  type: string
+                  enum:
+                  - free
+                  - tentative
+                  - busy
+                  - oof
+                  - workingElsewhere
+                  - unknown
+                outlook_synchronization_subject:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                icon:
+                  type: string
+                  enum:
+                  - NoIcon
+                  - Umbrella
+                  - Anchor
+                  - Archive
+                  - Award
+                  - Briefcase
+                  - Calendar
+                  - Cast
+                  - Clock
+                  - Coffee
+                  - Compass
+                  - Battery
+                  - Emoji
+                  - Gift
+                  - Frown
+                  - Image
+                  - Sun
+                  - Zap
+                  - Home
+                  - Users
+                reason_mandatory:
+                  type: boolean
+                reason_hint_text:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                allowance_type_id:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                ignore_schedule:
+                  type: boolean
+                sync_option:
+                  type: string
+                  enum:
+                  - Disabled
+                  - All
+                  - OnlyApproved
+                ignore_public_holidays:
+                  type: boolean
+                reason_visibility_public:
+                  type: boolean
+                counts_as_leave:
+                  default: true
+                  type: boolean
+              required:
+              - name
+              - color
+              - needs_approval
+              - maximum_absent
+              - leave_unit
+              - position
+              - take_from_allowance
+              - privacy_hide_leavetype
+              - outlook_synchronization_show_as
+              - outlook_synchronization_subject
+              - icon
+              - reason_mandatory
+              - reason_hint_text
+              - allowance_type_id
+              - ignore_schedule
+              - sync_option
+              - ignore_public_holidays
+              - reason_visibility_public
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /leave_types/{id}:
+    get:
+      operationId: leaveTypes-getLeaveTypeById
+      summary: Absentify Read a Leave Type by Id
+      description: Read a leave type by id
+      tags:
+      - Leave types
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    createdAt:
+                      type: string
+                    updatedAt:
+                      type: string
+                    color:
+                      type: string
+                    icon:
+                      type: string
+                    needs_approval:
+                      type: boolean
+                    deleted:
+                      type: boolean
+                    deleted_at:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    deleted_by:
+                      anyOf:
+                      - type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          email:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - id
+                        - name
+                        - email
+                        additionalProperties: false
+                      - type: 'null'
+                    maximum_absent:
+                      type: boolean
+                    leave_unit:
+                      type: string
+                      enum:
+                      - days
+                      - half_days
+                      - hours
+                      - minutes_30
+                      - minutes_15
+                      - minutes_10
+                      - minutes_5
+                      - minutes_1
+                    position:
+                      type: number
+                    take_from_allowance:
+                      type: boolean
+                    privacy_hide_leavetype:
+                      type: boolean
+                    outlook_synchronization_show_as:
+                      type: string
+                      enum:
+                      - free
+                      - tentative
+                      - busy
+                      - oof
+                      - workingElsewhere
+                      - unknown
+                    outlook_synchronization_subject:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    allowance_type:
+                      anyOf:
+                      - type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          ignore_allowance_limit:
+                            type: boolean
+                          allowance_unit:
+                            type: string
+                            enum:
+                            - days
+                            - hours
+                        required:
+                        - id
+                        - name
+                        - ignore_allowance_limit
+                        - allowance_unit
+                        additionalProperties: false
+                      - type: 'null'
+                    counts_as_leave:
+                      type: boolean
+                  required:
+                  - id
+                  - name
+                  - createdAt
+                  - updatedAt
+                  - color
+                  - icon
+                  - needs_approval
+                  - deleted
+                  - deleted_at
+                  - deleted_by
+                  - maximum_absent
+                  - leave_unit
+                  - position
+                  - take_from_allowance
+                  - privacy_hide_leavetype
+                  - outlook_synchronization_show_as
+                  - outlook_synchronization_subject
+                  - allowance_type
+                  - counts_as_leave
+                  additionalProperties: false
+                - type: 'null'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    put:
+      operationId: leaveTypes-updateLeaveType
+      summary: Absentify Update a Leave Type
+      description: Update a leave type
+      tags:
+      - Leave types
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 255
+                color:
+                  type: string
+                needs_approval:
+                  type: boolean
+                maximum_absent:
+                  type: boolean
+                leave_unit:
+                  type: string
+                  enum:
+                  - days
+                  - half_days
+                  - hours
+                  - minutes_30
+                  - minutes_15
+                  - minutes_10
+                  - minutes_5
+                  - minutes_1
+                position:
+                  type: integer
+                  minimum: -9007199254740991
+                  maximum: 9007199254740991
+                take_from_allowance:
+                  type: boolean
+                privacy_hide_leavetype:
+                  type: boolean
+                outlook_synchronization_show_as:
+                  type: string
+                  enum:
+                  - free
+                  - tentative
+                  - busy
+                  - oof
+                  - workingElsewhere
+                  - unknown
+                outlook_synchronization_subject:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                icon:
+                  type: string
+                  enum:
+                  - NoIcon
+                  - Umbrella
+                  - Anchor
+                  - Archive
+                  - Award
+                  - Briefcase
+                  - Calendar
+                  - Cast
+                  - Clock
+                  - Coffee
+                  - Compass
+                  - Battery
+                  - Emoji
+                  - Gift
+                  - Frown
+                  - Image
+                  - Sun
+                  - Zap
+                  - Home
+                  - Users
+                reason_mandatory:
+                  type: boolean
+                reason_hint_text:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                allowance_type_id:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                sync_option:
+                  type: string
+                  enum:
+                  - Disabled
+                  - All
+                  - OnlyApproved
+                counts_as_leave:
+                  type: boolean
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                - type: 'null'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    delete:
+      operationId: leaveTypes-DeleteLeaveTypeById
+      summary: Absentify Delete a Leave Type
+      description: Delete a leave type
+      tags:
+      - Leave types
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      - in: query
+        name: deleted
+        schema:
+          type: boolean
+        required: true
+      - in: query
+        name: deleted_by_member_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: 'null'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /leave_types/{id}/restore:
+    put:
+      operationId: leaveTypes-restoreLeaveType
+      summary: Absentify Restore an Archived Leave Type
+      description: Restore an archived leave type to make it available for user selection in the UI again
+      tags:
+      - Leave types
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  schemas:
+    error.BAD_REQUEST:
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Invalid input data
+          type: string
+        code:
+          description: The error code
+          example: BAD_REQUEST
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.UNAUTHORIZED:
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Authorization not provided
+          type: string
+        code:
+          description: The error code
+          example: UNAUTHORIZED
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.NOT_FOUND:
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Not found
+          type: string
+        code:
+          description: The error code
+          example: NOT_FOUND
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.INTERNAL_SERVER_ERROR:
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Internal server error
+          type: string
+        code:
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.FORBIDDEN:
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Insufficient access
+          type: string
+        code:
+          description: The error code
+          example: FORBIDDEN
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key from your absentify account settings. Requires Plus plan.
+externalDocs:
+  url: https://absentify.com/docs/en/api-reference

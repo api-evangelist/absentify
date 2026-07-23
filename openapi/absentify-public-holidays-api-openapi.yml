@@ -1,0 +1,457 @@
+openapi: 3.1.0
+info:
+  title: Absentify Absences Public holidays API
+  description: 'The Absentify REST API provides comprehensive absence management capabilities for Microsoft 365-integrated organizations. Manage members, departments, leave types, requests, allowances, public holidays, and workspace settings. The API requires the Plus plan and uses API key authentication. Rate limit: 150 requests per second per IP.'
+  version: 1.0.0
+  contact:
+    url: https://absentify.com/docs
+    email: support@absentify.com
+  license:
+    name: Proprietary
+    url: https://absentify.com/terms-and-conditions
+  x-generated-from: official-openapi-spec
+servers:
+- url: https://api.absentify.com/api/v1
+tags:
+- name: Public holidays
+paths:
+  /public_holidays:
+    get:
+      operationId: publicHolidays-getPublicHolidays
+      summary: Absentify Get All Public Holidays
+      description: Get all public holidays
+      tags:
+      - Public holidays
+      security:
+      - ApiKey: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    createdAt:
+                      type: string
+                    updatedAt:
+                      type: string
+                    country_code:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    county_code:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    public_holiday_days:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          date:
+                            type: string
+                          year:
+                            type: number
+                          custom_value:
+                            type: boolean
+                          duration:
+                            type: string
+                            enum:
+                            - Morning
+                            - Afternoon
+                            - FullDay
+                          updatedAt:
+                            type: string
+                          createdAt:
+                            type: string
+                          public_holiday_day_languages:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                name:
+                                  type: string
+                                language:
+                                  type: string
+                              required:
+                              - id
+                              - name
+                              - language
+                              additionalProperties: false
+                        required:
+                        - id
+                        - date
+                        - year
+                        - custom_value
+                        - duration
+                        - updatedAt
+                        - createdAt
+                        - public_holiday_day_languages
+                        additionalProperties: false
+                  required:
+                  - id
+                  - name
+                  - createdAt
+                  - updatedAt
+                  - country_code
+                  - county_code
+                  - public_holiday_days
+                  additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /public_holidays/{id}:
+    get:
+      operationId: publicHolidays-getPublicHolidayById
+      summary: Absentify Read a Public Holiday by Id
+      description: Read a public holiday by id
+      tags:
+      - Public holidays
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    createdAt:
+                      type: string
+                    updatedAt:
+                      type: string
+                    country_code:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    county_code:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    public_holiday_days:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          date:
+                            type: string
+                          year:
+                            type: number
+                          custom_value:
+                            type: boolean
+                          duration:
+                            type: string
+                            enum:
+                            - Morning
+                            - Afternoon
+                            - FullDay
+                          updatedAt:
+                            type: string
+                          createdAt:
+                            type: string
+                          public_holiday_day_languages:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                name:
+                                  type: string
+                                language:
+                                  type: string
+                              required:
+                              - id
+                              - name
+                              - language
+                              additionalProperties: false
+                        required:
+                        - id
+                        - date
+                        - year
+                        - custom_value
+                        - duration
+                        - updatedAt
+                        - createdAt
+                        - public_holiday_day_languages
+                        additionalProperties: false
+                  required:
+                  - id
+                  - name
+                  - createdAt
+                  - updatedAt
+                  - country_code
+                  - county_code
+                  - public_holiday_days
+                  additionalProperties: false
+                - type: 'null'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  schemas:
+    error.BAD_REQUEST:
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Invalid input data
+          type: string
+        code:
+          description: The error code
+          example: BAD_REQUEST
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.UNAUTHORIZED:
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Authorization not provided
+          type: string
+        code:
+          description: The error code
+          example: UNAUTHORIZED
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.NOT_FOUND:
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Not found
+          type: string
+        code:
+          description: The error code
+          example: NOT_FOUND
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.INTERNAL_SERVER_ERROR:
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Internal server error
+          type: string
+        code:
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.FORBIDDEN:
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Insufficient access
+          type: string
+        code:
+          description: The error code
+          example: FORBIDDEN
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key from your absentify account settings. Requires Plus plan.
+externalDocs:
+  url: https://absentify.com/docs/en/api-reference

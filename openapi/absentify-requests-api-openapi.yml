@@ -1,0 +1,1915 @@
+openapi: 3.1.0
+info:
+  title: Absentify Absences Requests API
+  description: 'The Absentify REST API provides comprehensive absence management capabilities for Microsoft 365-integrated organizations. Manage members, departments, leave types, requests, allowances, public holidays, and workspace settings. The API requires the Plus plan and uses API key authentication. Rate limit: 150 requests per second per IP.'
+  version: 1.0.0
+  contact:
+    url: https://absentify.com/docs
+    email: support@absentify.com
+  license:
+    name: Proprietary
+    url: https://absentify.com/terms-and-conditions
+  x-generated-from: official-openapi-spec
+servers:
+- url: https://api.absentify.com/api/v1
+tags:
+- name: Requests
+paths:
+  /requests:
+    get:
+      operationId: request-getRequests
+      summary: Absentify Get All Requests
+      description: Get all requests
+      tags:
+      - Requests
+      security:
+      - ApiKey: []
+      parameters:
+      - in: query
+        name: start
+        schema:
+          type: string
+        required: true
+      - in: query
+        name: end
+        schema:
+          type: string
+        required: true
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - PENDING
+          - APPROVED
+          - DECLINED
+          - CANCELED
+      - in: query
+        name: request_member_ids
+        schema:
+          type: string
+      - in: query
+        name: department_ids
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                  - type: object
+                    properties:
+                      id:
+                        type: string
+                      createdAt:
+                        type: string
+                      updatedAt:
+                        type: string
+                      end:
+                        type: string
+                      start:
+                        type: string
+                      start_at:
+                        type: string
+                        enum:
+                        - morning
+                        - afternoon
+                      end_at:
+                        type: string
+                        enum:
+                        - lunchtime
+                        - end_of_day
+                      leave_unit:
+                        type: string
+                        enum:
+                        - days
+                        - half_days
+                        - hours
+                        - minutes_30
+                        - minutes_15
+                        - minutes_10
+                        - minutes_5
+                        - minutes_1
+                      request_creator_member:
+                        anyOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                            custom_id:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            name:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            email:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                          required:
+                          - id
+                          - custom_id
+                          - name
+                          - email
+                          additionalProperties: false
+                        - type: 'null'
+                      leave_type:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          id:
+                            type: string
+                          leave_unit:
+                            type: string
+                            enum:
+                            - days
+                            - half_days
+                            - hours
+                            - minutes_30
+                            - minutes_15
+                            - minutes_10
+                            - minutes_5
+                            - minutes_1
+                        required:
+                        - name
+                        - id
+                        - leave_unit
+                        additionalProperties: false
+                      approval_process:
+                        type: string
+                        enum:
+                        - Linear_all_have_to_agree
+                        - Linear_one_has_to_agree
+                        - Parallel_all_have_to_agree
+                        - Parallel_one_has_to_agree
+                      cancel_reason:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      canceld_by_member:
+                        anyOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                            custom_id:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            name:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            email:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                          required:
+                          - id
+                          - custom_id
+                          - name
+                          - email
+                          additionalProperties: false
+                        - type: 'null'
+                      requester_member:
+                        anyOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                            custom_id:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            name:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            email:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                          required:
+                          - id
+                          - custom_id
+                          - name
+                          - email
+                          additionalProperties: false
+                        - type: 'null'
+                      reason:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      take_from_allowance:
+                        type: boolean
+                      allowance_type:
+                        anyOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                            ignore_allowance_limit:
+                              type: boolean
+                            allowance_unit:
+                              type: string
+                              enum:
+                              - days
+                              - hours
+                          required:
+                          - id
+                          - name
+                          - ignore_allowance_limit
+                          - allowance_unit
+                          additionalProperties: false
+                        - type: 'null'
+                      workday_absence_duration:
+                        type: number
+                      duration:
+                        type: number
+                      status:
+                        type: string
+                      canceld_date:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      request_approvers:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            reason:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            status:
+                              type: string
+                              enum:
+                              - PENDING
+                              - APPROVED
+                              - DECLINED
+                              - CANCELED
+                              - APPROVED_BY_ANOTHER_MANAGER
+                              - DECLINED_BY_ANOTHER_MANAGER
+                              - CANCELED_BY_ANOTHER_MANAGER
+                            status_changed_by_member:
+                              anyOf:
+                              - type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  custom_id:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  name:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  email:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                required:
+                                - id
+                                - custom_id
+                                - name
+                                - email
+                                additionalProperties: false
+                              - type: 'null'
+                            status_changed_date:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            approver_member:
+                              anyOf:
+                              - type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  custom_id:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  name:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  email:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                required:
+                                - id
+                                - custom_id
+                                - name
+                                - email
+                                additionalProperties: false
+                              - type: 'null'
+                          required:
+                          - reason
+                          - status
+                          - status_changed_by_member
+                          - status_changed_date
+                          - approver_member
+                          additionalProperties: false
+                    required:
+                    - id
+                    - createdAt
+                    - updatedAt
+                    - end
+                    - start
+                    - start_at
+                    - end_at
+                    - leave_unit
+                    - request_creator_member
+                    - leave_type
+                    - approval_process
+                    - cancel_reason
+                    - canceld_by_member
+                    - requester_member
+                    - reason
+                    - take_from_allowance
+                    - allowance_type
+                    - workday_absence_duration
+                    - duration
+                    - status
+                    - canceld_date
+                    - request_approvers
+                    additionalProperties: false
+                  - type: 'null'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    post:
+      operationId: request-createRequest
+      summary: Absentify Create a Request
+      description: 'Create a leave request.
+
+
+        **Date/Time Format:** All dates must be in ISO 8601 format with UTC timezone (e.g., ''2024-01-15T09:00:00Z'').
+
+
+        **Day-based leave types (leave_unit: days):**
+
+        - Use start_at: ''morning'' or ''afternoon'' to specify when the absence starts
+
+        - Use end_at: ''lunchtime'' or ''end_of_day'' to specify when the absence ends
+
+        - Example full day: start=''2024-01-15T00:00:00Z'', end=''2024-01-15T00:00:00Z'', start_at=''morning'', end_at=''end_of_day''
+
+        - Example half day (morning): start=''2024-01-15T00:00:00Z'', end=''2024-01-15T00:00:00Z'', start_at=''morning'', end_at=''lunchtime''
+
+
+        **Hour-based leave types (leave_unit: hours):**
+
+        - Include the exact time in the start and end timestamps
+
+        - The start_at and end_at parameters are ignored
+
+        - Example: start=''2024-01-15T09:00:00Z'', end=''2024-01-15T12:30:00Z'' for a 9:00-12:30 UTC absence'
+      tags:
+      - Requests
+      security:
+      - ApiKey: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                end:
+                  type: string
+                start:
+                  type: string
+                start_at:
+                  type: string
+                  enum:
+                  - morning
+                  - afternoon
+                end_at:
+                  type: string
+                  enum:
+                  - lunchtime
+                  - end_of_day
+                leave_type_id:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                reason:
+                  type: string
+                requester_member_id:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+              required:
+              - end
+              - start
+              - leave_type_id
+              - requester_member_id
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /requests_per_day:
+    get:
+      operationId: request-getRequestsPerDay
+      summary: Absentify Get All Requests Per Day
+      description: Get all requests per day
+      tags:
+      - Requests
+      security:
+      - ApiKey: []
+      parameters:
+      - in: query
+        name: start
+        schema:
+          type: string
+        required: true
+      - in: query
+        name: end
+        schema:
+          type: string
+        required: true
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - PENDING
+          - APPROVED
+          - DECLINED
+          - CANCELED
+      - in: query
+        name: request_member_ids
+        schema:
+          type: string
+      - in: query
+        name: department_ids
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                  - type: object
+                    properties:
+                      id:
+                        type: string
+                      createdAt:
+                        type: string
+                      updatedAt:
+                        type: string
+                      end:
+                        type: string
+                      start:
+                        type: string
+                      start_at:
+                        type: string
+                        enum:
+                        - morning
+                        - afternoon
+                      end_at:
+                        type: string
+                        enum:
+                        - lunchtime
+                        - end_of_day
+                      leave_unit:
+                        type: string
+                        enum:
+                        - days
+                        - half_days
+                        - hours
+                        - minutes_30
+                        - minutes_15
+                        - minutes_10
+                        - minutes_5
+                        - minutes_1
+                      day:
+                        type: string
+                      month:
+                        type: string
+                      weekday:
+                        type: string
+                      fullday:
+                        type: string
+                      request_creator_member:
+                        anyOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                            custom_id:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            name:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            email:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                          required:
+                          - id
+                          - custom_id
+                          - name
+                          - email
+                          additionalProperties: false
+                        - type: 'null'
+                      leave_type:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          id:
+                            type: string
+                          leave_unit:
+                            type: string
+                            enum:
+                            - days
+                            - half_days
+                            - hours
+                            - minutes_30
+                            - minutes_15
+                            - minutes_10
+                            - minutes_5
+                            - minutes_1
+                        required:
+                        - name
+                        - id
+                        - leave_unit
+                        additionalProperties: false
+                      approval_process:
+                        type: string
+                        enum:
+                        - Linear_all_have_to_agree
+                        - Linear_one_has_to_agree
+                        - Parallel_all_have_to_agree
+                        - Parallel_one_has_to_agree
+                      cancel_reason:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      canceld_by_member:
+                        anyOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                            custom_id:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            name:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            email:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                          required:
+                          - id
+                          - custom_id
+                          - name
+                          - email
+                          additionalProperties: false
+                        - type: 'null'
+                      requester_member:
+                        anyOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                            custom_id:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            name:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            email:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                          required:
+                          - id
+                          - custom_id
+                          - name
+                          - email
+                          additionalProperties: false
+                        - type: 'null'
+                      reason:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      take_from_allowance:
+                        type: boolean
+                      allowance_type:
+                        anyOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                            ignore_allowance_limit:
+                              type: boolean
+                            allowance_unit:
+                              type: string
+                              enum:
+                              - days
+                              - hours
+                          required:
+                          - id
+                          - name
+                          - ignore_allowance_limit
+                          - allowance_unit
+                          additionalProperties: false
+                        - type: 'null'
+                      workday_absence_duration:
+                        type: number
+                      duration:
+                        type: number
+                      status:
+                        type: string
+                      canceld_date:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      request_approvers:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            reason:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            status:
+                              type: string
+                              enum:
+                              - PENDING
+                              - APPROVED
+                              - DECLINED
+                              - CANCELED
+                              - APPROVED_BY_ANOTHER_MANAGER
+                              - DECLINED_BY_ANOTHER_MANAGER
+                              - CANCELED_BY_ANOTHER_MANAGER
+                            status_changed_by_member:
+                              anyOf:
+                              - type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  custom_id:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  name:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  email:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                required:
+                                - id
+                                - custom_id
+                                - name
+                                - email
+                                additionalProperties: false
+                              - type: 'null'
+                            status_changed_date:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            approver_member:
+                              anyOf:
+                              - type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  custom_id:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  name:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  email:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                required:
+                                - id
+                                - custom_id
+                                - name
+                                - email
+                                additionalProperties: false
+                              - type: 'null'
+                          required:
+                          - reason
+                          - status
+                          - status_changed_by_member
+                          - status_changed_date
+                          - approver_member
+                          additionalProperties: false
+                    required:
+                    - id
+                    - createdAt
+                    - updatedAt
+                    - end
+                    - start
+                    - start_at
+                    - end_at
+                    - leave_unit
+                    - day
+                    - month
+                    - weekday
+                    - fullday
+                    - request_creator_member
+                    - leave_type
+                    - approval_process
+                    - cancel_reason
+                    - canceld_by_member
+                    - requester_member
+                    - reason
+                    - take_from_allowance
+                    - allowance_type
+                    - workday_absence_duration
+                    - duration
+                    - status
+                    - canceld_date
+                    - request_approvers
+                    additionalProperties: false
+                  - type: 'null'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /requests/{id}:
+    get:
+      operationId: request-getRequestById
+      summary: Absentify Read a Request by Id
+      description: Read a request by id
+      tags:
+      - Requests
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                    createdAt:
+                      type: string
+                    updatedAt:
+                      type: string
+                    end:
+                      type: string
+                    start:
+                      type: string
+                    start_at:
+                      type: string
+                      enum:
+                      - morning
+                      - afternoon
+                    end_at:
+                      type: string
+                      enum:
+                      - lunchtime
+                      - end_of_day
+                    leave_unit:
+                      type: string
+                      enum:
+                      - days
+                      - half_days
+                      - hours
+                      - minutes_30
+                      - minutes_15
+                      - minutes_10
+                      - minutes_5
+                      - minutes_1
+                    request_creator_member:
+                      anyOf:
+                      - type: object
+                        properties:
+                          id:
+                            type: string
+                          custom_id:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          name:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          email:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - id
+                        - custom_id
+                        - name
+                        - email
+                        additionalProperties: false
+                      - type: 'null'
+                    leave_type:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        id:
+                          type: string
+                        leave_unit:
+                          type: string
+                          enum:
+                          - days
+                          - half_days
+                          - hours
+                          - minutes_30
+                          - minutes_15
+                          - minutes_10
+                          - minutes_5
+                          - minutes_1
+                      required:
+                      - name
+                      - id
+                      - leave_unit
+                      additionalProperties: false
+                    approval_process:
+                      type: string
+                      enum:
+                      - Linear_all_have_to_agree
+                      - Linear_one_has_to_agree
+                      - Parallel_all_have_to_agree
+                      - Parallel_one_has_to_agree
+                    cancel_reason:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    canceld_by_member:
+                      anyOf:
+                      - type: object
+                        properties:
+                          id:
+                            type: string
+                          custom_id:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          name:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          email:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - id
+                        - custom_id
+                        - name
+                        - email
+                        additionalProperties: false
+                      - type: 'null'
+                    requester_member:
+                      anyOf:
+                      - type: object
+                        properties:
+                          id:
+                            type: string
+                          custom_id:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          name:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          email:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - id
+                        - custom_id
+                        - name
+                        - email
+                        additionalProperties: false
+                      - type: 'null'
+                    take_from_allowance:
+                      type: boolean
+                    allowance_type:
+                      anyOf:
+                      - type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          ignore_allowance_limit:
+                            type: boolean
+                          allowance_unit:
+                            type: string
+                            enum:
+                            - days
+                            - hours
+                        required:
+                        - id
+                        - name
+                        - ignore_allowance_limit
+                        - allowance_unit
+                        additionalProperties: false
+                      - type: 'null'
+                    reason:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    workday_absence_duration:
+                      type: number
+                    duration:
+                      type: number
+                    status:
+                      type: string
+                    canceld_date:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    request_approvers:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          reason:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          status:
+                            type: string
+                            enum:
+                            - PENDING
+                            - APPROVED
+                            - DECLINED
+                            - CANCELED
+                            - APPROVED_BY_ANOTHER_MANAGER
+                            - DECLINED_BY_ANOTHER_MANAGER
+                            - CANCELED_BY_ANOTHER_MANAGER
+                          status_changed_by_member:
+                            anyOf:
+                            - type: object
+                              properties:
+                                id:
+                                  type: string
+                                custom_id:
+                                  anyOf:
+                                  - type: string
+                                  - type: 'null'
+                                name:
+                                  anyOf:
+                                  - type: string
+                                  - type: 'null'
+                                email:
+                                  anyOf:
+                                  - type: string
+                                  - type: 'null'
+                              required:
+                              - id
+                              - custom_id
+                              - name
+                              - email
+                              additionalProperties: false
+                            - type: 'null'
+                          status_changed_date:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          approver_member:
+                            anyOf:
+                            - type: object
+                              properties:
+                                id:
+                                  type: string
+                                custom_id:
+                                  anyOf:
+                                  - type: string
+                                  - type: 'null'
+                                name:
+                                  anyOf:
+                                  - type: string
+                                  - type: 'null'
+                                email:
+                                  anyOf:
+                                  - type: string
+                                  - type: 'null'
+                              required:
+                              - id
+                              - custom_id
+                              - name
+                              - email
+                              additionalProperties: false
+                            - type: 'null'
+                          predecessor_request_member_approver_id:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - reason
+                        - status
+                        - status_changed_by_member
+                        - status_changed_date
+                        - approver_member
+                        - predecessor_request_member_approver_id
+                        additionalProperties: false
+                  required:
+                  - id
+                  - createdAt
+                  - updatedAt
+                  - end
+                  - start
+                  - start_at
+                  - end_at
+                  - leave_unit
+                  - request_creator_member
+                  - leave_type
+                  - approval_process
+                  - cancel_reason
+                  - canceld_by_member
+                  - requester_member
+                  - take_from_allowance
+                  - allowance_type
+                  - reason
+                  - workday_absence_duration
+                  - duration
+                  - status
+                  - canceld_date
+                  - request_approvers
+                  additionalProperties: false
+                - type: 'null'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /requests/recurring:
+    post:
+      operationId: request-createRecurringRequests
+      summary: Absentify Create Recurring Requests
+      description: Create multiple recurring requests based on a recurrence pattern
+      tags:
+      - Requests
+      security:
+      - ApiKey: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                leave_type_id:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                requester_member_id:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                reason:
+                  type: string
+                repeat:
+                  type: string
+                  enum:
+                  - daily
+                  - weekly
+                  - monthly
+                interval:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                from:
+                  type: string
+                until:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                count:
+                  anyOf:
+                  - type: integer
+                    minimum: 1
+                    maximum: 365
+                  - type: 'null'
+                start_time:
+                  type: object
+                  properties:
+                    hour:
+                      type: integer
+                      minimum: 0
+                      maximum: 23
+                    minute:
+                      type: integer
+                      minimum: 0
+                      maximum: 59
+                  required:
+                  - hour
+                  - minute
+                end_time:
+                  type: object
+                  properties:
+                    hour:
+                      type: integer
+                      minimum: 0
+                      maximum: 23
+                    minute:
+                      type: integer
+                      minimum: 0
+                      maximum: 59
+                  required:
+                  - hour
+                  - minute
+                half_day:
+                  type: string
+                  enum:
+                  - full_day
+                  - morning
+                  - afternoon
+                weekDays:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                day:
+                  anyOf:
+                  - anyOf:
+                    - type: integer
+                      minimum: 1
+                      maximum: 31
+                    - type: string
+                  - type: 'null'
+                month:
+                  anyOf:
+                  - type: integer
+                    minimum: 1
+                    maximum: 12
+                  - type: 'null'
+                pos:
+                  anyOf:
+                  - anyOf:
+                    - type: integer
+                      minimum: -1
+                      maximum: 5
+                    - type: string
+                  - type: 'null'
+                exDates:
+                  type: array
+                  items:
+                    type: string
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                    pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                representative_member_ids:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                    pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                ignoreMaximumAbsence:
+                  type: boolean
+                admin_approval_option:
+                  type: string
+                  enum:
+                  - approve_request_immediately
+                  - go_through_the_normal_approval_process
+              required:
+              - leave_type_id
+              - requester_member_id
+              - repeat
+              - interval
+              - from
+              - until
+              - count
+              - weekDays
+              - day
+              - month
+              - pos
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  created:
+                    type: number
+                  requestIds:
+                    type: array
+                    items:
+                      type: string
+                      format: uuid
+                      pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                  recurrenceId:
+                    type: string
+                required:
+                - created
+                - requestIds
+                - recurrenceId
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /requests/{id}/approve:
+    post:
+      operationId: request-approveRequest
+      summary: Absentify Approve a Request
+      description: Approve a pending request on behalf of the user who created the API token. The API automatically finds the next pending approval and approves it.
+      tags:
+      - Requests
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                required:
+                - success
+                - message
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /requests/{id}/decline:
+    post:
+      operationId: request-declineRequest
+      summary: Absentify Decline a Request
+      description: Decline a pending request on behalf of the user who created the API token. The API automatically finds the next pending approval and declines it with the provided reason.
+      tags:
+      - Requests
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                decline_reason:
+                  type: string
+                  minLength: 1
+              required:
+              - decline_reason
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                required:
+                - success
+                - message
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /requests/{id}/approve_representative:
+    post:
+      operationId: request-approveRequestRepresentative
+      summary: Absentify Approve a Request as a Representative
+      description: Approve a request as a representative/substitute on behalf of the user who created the API token. The API automatically finds the pending representative approval.
+      tags:
+      - Requests
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                required:
+                - success
+                - message
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /requests/{id}/decline_representative:
+    post:
+      operationId: request-declineRequestRepresentative
+      summary: Absentify Decline a Request as a Representative
+      description: Decline a request as a representative/substitute on behalf of the user who created the API token. The API automatically finds the pending representative approval.
+      tags:
+      - Requests
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  minLength: 1
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                required:
+                - success
+                - message
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /requests/{id}/cancel:
+    post:
+      operationId: request-cancelRequest
+      summary: Absentify Cancel a Request
+      description: Cancel a request on behalf of the user who created the API token. The user must be the requester, an admin, or a department manager with appropriate permissions.
+      tags:
+      - Requests
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cancel_reason:
+                  type: string
+                  minLength: 1
+              required:
+              - cancel_reason
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                required:
+                - success
+                - message
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  schemas:
+    error.BAD_REQUEST:
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Invalid input data
+          type: string
+        code:
+          description: The error code
+          example: BAD_REQUEST
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.UNAUTHORIZED:
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Authorization not provided
+          type: string
+        code:
+          description: The error code
+          example: UNAUTHORIZED
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.NOT_FOUND:
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Not found
+          type: string
+        code:
+          description: The error code
+          example: NOT_FOUND
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.INTERNAL_SERVER_ERROR:
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Internal server error
+          type: string
+        code:
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.FORBIDDEN:
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Insufficient access
+          type: string
+        code:
+          description: The error code
+          example: FORBIDDEN
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key from your absentify account settings. Requires Plus plan.
+externalDocs:
+  url: https://absentify.com/docs/en/api-reference

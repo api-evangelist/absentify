@@ -1,0 +1,3451 @@
+openapi: 3.1.0
+info:
+  title: Absentify Absences Members API
+  description: 'The Absentify REST API provides comprehensive absence management capabilities for Microsoft 365-integrated organizations. Manage members, departments, leave types, requests, allowances, public holidays, and workspace settings. The API requires the Plus plan and uses API key authentication. Rate limit: 150 requests per second per IP.'
+  version: 1.0.0
+  contact:
+    url: https://absentify.com/docs
+    email: support@absentify.com
+  license:
+    name: Proprietary
+    url: https://absentify.com/terms-and-conditions
+  x-generated-from: official-openapi-spec
+servers:
+- url: https://api.absentify.com/api/v1
+tags:
+- name: Members
+paths:
+  /members:
+    get:
+      operationId: member-getMembers
+      summary: Absentify Get All Members
+      description: Get all members with optional filters for departments, status, employment dates, admin status, approval process, approvers, allowance types, name, birthday month, and manager type
+      tags:
+      - Members
+      security:
+      - ApiKey: []
+      parameters:
+      - in: query
+        name: department_ids
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+            pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - INACTIVE
+          - ACTIVE
+          - ARCHIVED
+      - in: query
+        name: employment_start_date_from
+        schema:
+          type: string
+      - in: query
+        name: employment_start_date_to
+        schema:
+          type: string
+      - in: query
+        name: employment_end_date_from
+        schema:
+          type: string
+      - in: query
+        name: employment_end_date_to
+        schema:
+          type: string
+      - in: query
+        name: is_admin
+        schema:
+          type: boolean
+      - in: query
+        name: approval_process
+        schema:
+          type: string
+          enum:
+          - Linear_all_have_to_agree
+          - Linear_one_has_to_agree
+          - Parallel_all_have_to_agree
+          - Parallel_one_has_to_agree
+      - in: query
+        name: has_approvers
+        schema:
+          type: boolean
+      - in: query
+        name: allowance_type_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+      - in: query
+        name: name
+        schema:
+          type: string
+      - in: query
+        name: birthday_month
+        schema:
+          type: number
+          minimum: 1
+          maximum: 12
+      - in: query
+        name: manager_type
+        schema:
+          type: string
+          enum:
+          - Member
+          - Manager
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    custom_id:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    name:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    createdAt:
+                      type: string
+                    updatedAt:
+                      type: string
+                    allowances:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          remaining:
+                            type: number
+                          brought_forward:
+                            type: number
+                          allowance:
+                            type: number
+                          taken:
+                            type: number
+                          year:
+                            type: number
+                          compensatory_time_off:
+                            type: number
+                          updatedAt:
+                            type: string
+                          createdAt:
+                            type: string
+                          id:
+                            type: string
+                          allowance_type:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              name:
+                                type: string
+                              ignore_allowance_limit:
+                                type: boolean
+                            required:
+                            - id
+                            - name
+                            - ignore_allowance_limit
+                            additionalProperties: false
+                        required:
+                        - remaining
+                        - brought_forward
+                        - allowance
+                        - taken
+                        - year
+                        - compensatory_time_off
+                        - updatedAt
+                        - createdAt
+                        - id
+                        - allowance_type
+                        additionalProperties: false
+                    allowance_type_configurations:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          allowance_type_id:
+                            type: string
+                          default:
+                            type: boolean
+                          disabled:
+                            type: boolean
+                        required:
+                        - id
+                        - allowance_type_id
+                        - default
+                        - disabled
+                        additionalProperties: false
+                    allowance_type_configurtaions:
+                      description: 'DEPRECATED: Use allowance_type_configurations instead'
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          allowance_type_id:
+                            type: string
+                          default:
+                            type: boolean
+                          disabled:
+                            type: boolean
+                        required:
+                        - id
+                        - allowance_type_id
+                        - default
+                        - disabled
+                        additionalProperties: false
+                    approval_process:
+                      type: string
+                      enum:
+                      - Linear_all_have_to_agree
+                      - Linear_one_has_to_agree
+                      - Parallel_all_have_to_agree
+                      - Parallel_one_has_to_agree
+                    status:
+                      type: string
+                      enum:
+                      - INACTIVE
+                      - ACTIVE
+                      - ARCHIVED
+                    birthday:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    employment_start_date:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    employment_end_date:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    email:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    departments:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          manager_type:
+                            type: string
+                            enum:
+                            - Member
+                            - Manager
+                        required:
+                        - id
+                        - name
+                        - manager_type
+                        additionalProperties: false
+                    is_admin:
+                      type: boolean
+                    has_approvers:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          member:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                              email:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - id
+                            - name
+                            - email
+                            additionalProperties: false
+                        required:
+                        - member
+                        additionalProperties: false
+                    approver_config:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - custom
+                          - department
+                          - microsoft
+                        department_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        microsoft_sync_level:
+                          anyOf:
+                          - type: number
+                          - type: 'null'
+                      required:
+                      - type
+                      - department_id
+                      - microsoft_sync_level
+                      additionalProperties: false
+                  required:
+                  - id
+                  - custom_id
+                  - name
+                  - createdAt
+                  - updatedAt
+                  - allowances
+                  - allowance_type_configurations
+                  - allowance_type_configurtaions
+                  - approval_process
+                  - status
+                  - birthday
+                  - employment_start_date
+                  - employment_end_date
+                  - email
+                  - departments
+                  - is_admin
+                  - has_approvers
+                  - approver_config
+                  additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    post:
+      operationId: member-inviteMember
+      summary: Absentify Invite a Member
+      description: Invite a member
+      tags:
+      - Members
+      security:
+      - ApiKey: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 255
+                email:
+                  anyOf:
+                  - type: string
+                    format: email
+                    pattern: ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
+                  - type: 'null'
+                department_ids:
+                  minItems: 1
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                    required:
+                    - id
+                employment_start_date:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                public_holiday_id:
+                  type: string
+                annual_allowance_current_year:
+                  type: number
+                annual_allowance_next_year:
+                  type: number
+                birthday:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                custom_id:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                defaultAllowances:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      current_year:
+                        type: number
+                      next_year:
+                        type: number
+                      default:
+                        type: boolean
+                      disabled:
+                        type: boolean
+                    required:
+                    - id
+                    - current_year
+                    - next_year
+              required:
+              - name
+              - email
+              - department_ids
+              - employment_start_date
+              - public_holiday_id
+              - annual_allowance_current_year
+              - annual_allowance_next_year
+              - birthday
+              - custom_id
+              - defaultAllowances
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /members/{id}:
+    get:
+      operationId: member-getMemberById
+      summary: Absentify Read a Member by Id
+      description: Read a member by id
+      tags:
+      - Members
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                    custom_id:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    name:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    createdAt:
+                      type: string
+                    updatedAt:
+                      type: string
+                    allowances:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          remaining:
+                            type: number
+                          brought_forward:
+                            type: number
+                          allowance:
+                            type: number
+                          taken:
+                            type: number
+                          year:
+                            type: number
+                          compensatory_time_off:
+                            type: number
+                          updatedAt:
+                            type: string
+                          createdAt:
+                            type: string
+                          id:
+                            type: string
+                          allowance_type:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              name:
+                                type: string
+                              ignore_allowance_limit:
+                                type: boolean
+                            required:
+                            - id
+                            - name
+                            - ignore_allowance_limit
+                            additionalProperties: false
+                        required:
+                        - remaining
+                        - brought_forward
+                        - allowance
+                        - taken
+                        - year
+                        - compensatory_time_off
+                        - updatedAt
+                        - createdAt
+                        - id
+                        - allowance_type
+                        additionalProperties: false
+                    allowance_type_configurations:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          allowance_type_id:
+                            type: string
+                          default:
+                            type: boolean
+                          disabled:
+                            type: boolean
+                        required:
+                        - id
+                        - allowance_type_id
+                        - default
+                        - disabled
+                        additionalProperties: false
+                    allowance_type_configurtaions:
+                      description: 'DEPRECATED: Use allowance_type_configurations instead'
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          allowance_type_id:
+                            type: string
+                          default:
+                            type: boolean
+                          disabled:
+                            type: boolean
+                        required:
+                        - id
+                        - allowance_type_id
+                        - default
+                        - disabled
+                        additionalProperties: false
+                    approval_process:
+                      type: string
+                      enum:
+                      - Linear_all_have_to_agree
+                      - Linear_one_has_to_agree
+                      - Parallel_all_have_to_agree
+                      - Parallel_one_has_to_agree
+                    status:
+                      type: string
+                      enum:
+                      - INACTIVE
+                      - ACTIVE
+                      - ARCHIVED
+                    birthday:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    employment_start_date:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    employment_end_date:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    email:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    departments:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          manager_type:
+                            type: string
+                            enum:
+                            - Member
+                            - Manager
+                        required:
+                        - id
+                        - name
+                        - manager_type
+                        additionalProperties: false
+                    is_admin:
+                      type: boolean
+                    has_approvers:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          member:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                              email:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - id
+                            - name
+                            - email
+                            additionalProperties: false
+                        required:
+                        - member
+                        additionalProperties: false
+                    approver_config:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - custom
+                          - department
+                          - microsoft
+                        department_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        microsoft_sync_level:
+                          anyOf:
+                          - type: number
+                          - type: 'null'
+                      required:
+                      - type
+                      - department_id
+                      - microsoft_sync_level
+                      additionalProperties: false
+                    schedules:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          from:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          monday_am_start:
+                            type: string
+                          monday_am_end:
+                            type: string
+                          monday_pm_start:
+                            type: string
+                          monday_pm_end:
+                            type: string
+                          monday_am_enabled:
+                            type: boolean
+                          monday_pm_enabled:
+                            type: boolean
+                          monday_deduct_fullday:
+                            type: boolean
+                          tuesday_am_start:
+                            type: string
+                          tuesday_am_end:
+                            type: string
+                          tuesday_pm_start:
+                            type: string
+                          tuesday_pm_end:
+                            type: string
+                          tuesday_am_enabled:
+                            type: boolean
+                          tuesday_pm_enabled:
+                            type: boolean
+                          tuesday_deduct_fullday:
+                            type: boolean
+                          wednesday_am_start:
+                            type: string
+                          wednesday_am_end:
+                            type: string
+                          wednesday_pm_start:
+                            type: string
+                          wednesday_pm_end:
+                            type: string
+                          wednesday_am_enabled:
+                            type: boolean
+                          wednesday_pm_enabled:
+                            type: boolean
+                          wednesday_deduct_fullday:
+                            type: boolean
+                          thursday_am_start:
+                            type: string
+                          thursday_am_end:
+                            type: string
+                          thursday_pm_start:
+                            type: string
+                          thursday_pm_end:
+                            type: string
+                          thursday_am_enabled:
+                            type: boolean
+                          thursday_pm_enabled:
+                            type: boolean
+                          thursday_deduct_fullday:
+                            type: boolean
+                          friday_am_start:
+                            type: string
+                          friday_am_end:
+                            type: string
+                          friday_pm_start:
+                            type: string
+                          friday_pm_end:
+                            type: string
+                          friday_am_enabled:
+                            type: boolean
+                          friday_pm_enabled:
+                            type: boolean
+                          friday_deduct_fullday:
+                            type: boolean
+                          saturday_am_start:
+                            type: string
+                          saturday_am_end:
+                            type: string
+                          saturday_pm_start:
+                            type: string
+                          saturday_pm_end:
+                            type: string
+                          saturday_am_enabled:
+                            type: boolean
+                          saturday_pm_enabled:
+                            type: boolean
+                          saturday_deduct_fullday:
+                            type: boolean
+                          sunday_am_start:
+                            type: string
+                          sunday_am_end:
+                            type: string
+                          sunday_pm_start:
+                            type: string
+                          sunday_pm_end:
+                            type: string
+                          sunday_am_enabled:
+                            type: boolean
+                          sunday_pm_enabled:
+                            type: boolean
+                          sunday_deduct_fullday:
+                            type: boolean
+                          updatedAt:
+                            type: string
+                          createdAt:
+                            type: string
+                        required:
+                        - id
+                        - from
+                        - monday_am_start
+                        - monday_am_end
+                        - monday_pm_start
+                        - monday_pm_end
+                        - monday_am_enabled
+                        - monday_pm_enabled
+                        - monday_deduct_fullday
+                        - tuesday_am_start
+                        - tuesday_am_end
+                        - tuesday_pm_start
+                        - tuesday_pm_end
+                        - tuesday_am_enabled
+                        - tuesday_pm_enabled
+                        - tuesday_deduct_fullday
+                        - wednesday_am_start
+                        - wednesday_am_end
+                        - wednesday_pm_start
+                        - wednesday_pm_end
+                        - wednesday_am_enabled
+                        - wednesday_pm_enabled
+                        - wednesday_deduct_fullday
+                        - thursday_am_start
+                        - thursday_am_end
+                        - thursday_pm_start
+                        - thursday_pm_end
+                        - thursday_am_enabled
+                        - thursday_pm_enabled
+                        - thursday_deduct_fullday
+                        - friday_am_start
+                        - friday_am_end
+                        - friday_pm_start
+                        - friday_pm_end
+                        - friday_am_enabled
+                        - friday_pm_enabled
+                        - friday_deduct_fullday
+                        - saturday_am_start
+                        - saturday_am_end
+                        - saturday_pm_start
+                        - saturday_pm_end
+                        - saturday_am_enabled
+                        - saturday_pm_enabled
+                        - saturday_deduct_fullday
+                        - sunday_am_start
+                        - sunday_am_end
+                        - sunday_pm_start
+                        - sunday_pm_end
+                        - sunday_am_enabled
+                        - sunday_pm_enabled
+                        - sunday_deduct_fullday
+                        - updatedAt
+                        - createdAt
+                        additionalProperties: false
+                  required:
+                  - id
+                  - custom_id
+                  - name
+                  - createdAt
+                  - updatedAt
+                  - allowances
+                  - allowance_type_configurations
+                  - allowance_type_configurtaions
+                  - approval_process
+                  - status
+                  - birthday
+                  - employment_start_date
+                  - employment_end_date
+                  - email
+                  - departments
+                  - is_admin
+                  - has_approvers
+                  - approver_config
+                  - schedules
+                  additionalProperties: false
+                - type: 'null'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    put:
+      operationId: member-updateMember
+      summary: Absentify Update a Member
+      description: Update a member
+      tags:
+      - Members
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_admin:
+                  type: boolean
+                department_ids:
+                  minItems: 1
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                    required:
+                    - id
+                employment_start_date:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                employment_end_date:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                public_holiday_id:
+                  type: string
+                birthday:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                custom_id:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                status:
+                  type: string
+                  enum:
+                  - INACTIVE
+                  - ACTIVE
+                  - ARCHIVED
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    delete:
+      operationId: member-deleteMember
+      summary: Absentify Delete a Member
+      description: Delete a member, all data will be deleted permanently
+      tags:
+      - Members
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /members/microsoft/{microsoft_user_id}:
+    get:
+      operationId: member-getMemberByMicrosoftId
+      summary: Absentify Read a Member by Microsoft User Id
+      description: Read a member Microsoft user id
+      tags:
+      - Members
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: microsoft_user_id
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                    custom_id:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    name:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    createdAt:
+                      type: string
+                    updatedAt:
+                      type: string
+                    allowances:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          remaining:
+                            type: number
+                          brought_forward:
+                            type: number
+                          allowance:
+                            type: number
+                          taken:
+                            type: number
+                          year:
+                            type: number
+                          compensatory_time_off:
+                            type: number
+                          updatedAt:
+                            type: string
+                          createdAt:
+                            type: string
+                          id:
+                            type: string
+                          allowance_type:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              name:
+                                type: string
+                              ignore_allowance_limit:
+                                type: boolean
+                            required:
+                            - id
+                            - name
+                            - ignore_allowance_limit
+                            additionalProperties: false
+                        required:
+                        - remaining
+                        - brought_forward
+                        - allowance
+                        - taken
+                        - year
+                        - compensatory_time_off
+                        - updatedAt
+                        - createdAt
+                        - id
+                        - allowance_type
+                        additionalProperties: false
+                    allowance_type_configurations:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          allowance_type_id:
+                            type: string
+                          default:
+                            type: boolean
+                          disabled:
+                            type: boolean
+                        required:
+                        - id
+                        - allowance_type_id
+                        - default
+                        - disabled
+                        additionalProperties: false
+                    allowance_type_configurtaions:
+                      description: 'DEPRECATED: Use allowance_type_configurations instead'
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          allowance_type_id:
+                            type: string
+                          default:
+                            type: boolean
+                          disabled:
+                            type: boolean
+                        required:
+                        - id
+                        - allowance_type_id
+                        - default
+                        - disabled
+                        additionalProperties: false
+                    approval_process:
+                      type: string
+                      enum:
+                      - Linear_all_have_to_agree
+                      - Linear_one_has_to_agree
+                      - Parallel_all_have_to_agree
+                      - Parallel_one_has_to_agree
+                    status:
+                      type: string
+                      enum:
+                      - INACTIVE
+                      - ACTIVE
+                      - ARCHIVED
+                    birthday:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    employment_start_date:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    employment_end_date:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    email:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    departments:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          manager_type:
+                            type: string
+                            enum:
+                            - Member
+                            - Manager
+                        required:
+                        - id
+                        - name
+                        - manager_type
+                        additionalProperties: false
+                    is_admin:
+                      type: boolean
+                    has_approvers:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          member:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                              email:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - id
+                            - name
+                            - email
+                            additionalProperties: false
+                        required:
+                        - member
+                        additionalProperties: false
+                    approver_config:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - custom
+                          - department
+                          - microsoft
+                        department_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        microsoft_sync_level:
+                          anyOf:
+                          - type: number
+                          - type: 'null'
+                      required:
+                      - type
+                      - department_id
+                      - microsoft_sync_level
+                      additionalProperties: false
+                    schedules:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          from:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          monday_am_start:
+                            type: string
+                          monday_am_end:
+                            type: string
+                          monday_pm_start:
+                            type: string
+                          monday_pm_end:
+                            type: string
+                          monday_am_enabled:
+                            type: boolean
+                          monday_pm_enabled:
+                            type: boolean
+                          monday_deduct_fullday:
+                            type: boolean
+                          tuesday_am_start:
+                            type: string
+                          tuesday_am_end:
+                            type: string
+                          tuesday_pm_start:
+                            type: string
+                          tuesday_pm_end:
+                            type: string
+                          tuesday_am_enabled:
+                            type: boolean
+                          tuesday_pm_enabled:
+                            type: boolean
+                          tuesday_deduct_fullday:
+                            type: boolean
+                          wednesday_am_start:
+                            type: string
+                          wednesday_am_end:
+                            type: string
+                          wednesday_pm_start:
+                            type: string
+                          wednesday_pm_end:
+                            type: string
+                          wednesday_am_enabled:
+                            type: boolean
+                          wednesday_pm_enabled:
+                            type: boolean
+                          wednesday_deduct_fullday:
+                            type: boolean
+                          thursday_am_start:
+                            type: string
+                          thursday_am_end:
+                            type: string
+                          thursday_pm_start:
+                            type: string
+                          thursday_pm_end:
+                            type: string
+                          thursday_am_enabled:
+                            type: boolean
+                          thursday_pm_enabled:
+                            type: boolean
+                          thursday_deduct_fullday:
+                            type: boolean
+                          friday_am_start:
+                            type: string
+                          friday_am_end:
+                            type: string
+                          friday_pm_start:
+                            type: string
+                          friday_pm_end:
+                            type: string
+                          friday_am_enabled:
+                            type: boolean
+                          friday_pm_enabled:
+                            type: boolean
+                          friday_deduct_fullday:
+                            type: boolean
+                          saturday_am_start:
+                            type: string
+                          saturday_am_end:
+                            type: string
+                          saturday_pm_start:
+                            type: string
+                          saturday_pm_end:
+                            type: string
+                          saturday_am_enabled:
+                            type: boolean
+                          saturday_pm_enabled:
+                            type: boolean
+                          saturday_deduct_fullday:
+                            type: boolean
+                          sunday_am_start:
+                            type: string
+                          sunday_am_end:
+                            type: string
+                          sunday_pm_start:
+                            type: string
+                          sunday_pm_end:
+                            type: string
+                          sunday_am_enabled:
+                            type: boolean
+                          sunday_pm_enabled:
+                            type: boolean
+                          sunday_deduct_fullday:
+                            type: boolean
+                          updatedAt:
+                            type: string
+                          createdAt:
+                            type: string
+                        required:
+                        - id
+                        - from
+                        - monday_am_start
+                        - monday_am_end
+                        - monday_pm_start
+                        - monday_pm_end
+                        - monday_am_enabled
+                        - monday_pm_enabled
+                        - monday_deduct_fullday
+                        - tuesday_am_start
+                        - tuesday_am_end
+                        - tuesday_pm_start
+                        - tuesday_pm_end
+                        - tuesday_am_enabled
+                        - tuesday_pm_enabled
+                        - tuesday_deduct_fullday
+                        - wednesday_am_start
+                        - wednesday_am_end
+                        - wednesday_pm_start
+                        - wednesday_pm_end
+                        - wednesday_am_enabled
+                        - wednesday_pm_enabled
+                        - wednesday_deduct_fullday
+                        - thursday_am_start
+                        - thursday_am_end
+                        - thursday_pm_start
+                        - thursday_pm_end
+                        - thursday_am_enabled
+                        - thursday_pm_enabled
+                        - thursday_deduct_fullday
+                        - friday_am_start
+                        - friday_am_end
+                        - friday_pm_start
+                        - friday_pm_end
+                        - friday_am_enabled
+                        - friday_pm_enabled
+                        - friday_deduct_fullday
+                        - saturday_am_start
+                        - saturday_am_end
+                        - saturday_pm_start
+                        - saturday_pm_end
+                        - saturday_am_enabled
+                        - saturday_pm_enabled
+                        - saturday_deduct_fullday
+                        - sunday_am_start
+                        - sunday_am_end
+                        - sunday_pm_start
+                        - sunday_pm_end
+                        - sunday_am_enabled
+                        - sunday_pm_enabled
+                        - sunday_deduct_fullday
+                        - updatedAt
+                        - createdAt
+                        additionalProperties: false
+                  required:
+                  - id
+                  - custom_id
+                  - name
+                  - createdAt
+                  - updatedAt
+                  - allowances
+                  - allowance_type_configurations
+                  - allowance_type_configurtaions
+                  - approval_process
+                  - status
+                  - birthday
+                  - employment_start_date
+                  - employment_end_date
+                  - email
+                  - departments
+                  - is_admin
+                  - has_approvers
+                  - approver_config
+                  - schedules
+                  additionalProperties: false
+                - type: 'null'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /members/email/{email}:
+    get:
+      operationId: member-getMemberByEmail
+      summary: Absentify Read a Member by Email
+      description: Read a member email
+      tags:
+      - Members
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: email
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                    custom_id:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    name:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    createdAt:
+                      type: string
+                    updatedAt:
+                      type: string
+                    allowances:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          remaining:
+                            type: number
+                          brought_forward:
+                            type: number
+                          allowance:
+                            type: number
+                          taken:
+                            type: number
+                          year:
+                            type: number
+                          compensatory_time_off:
+                            type: number
+                          updatedAt:
+                            type: string
+                          createdAt:
+                            type: string
+                          id:
+                            type: string
+                          allowance_type:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              name:
+                                type: string
+                              ignore_allowance_limit:
+                                type: boolean
+                            required:
+                            - id
+                            - name
+                            - ignore_allowance_limit
+                            additionalProperties: false
+                        required:
+                        - remaining
+                        - brought_forward
+                        - allowance
+                        - taken
+                        - year
+                        - compensatory_time_off
+                        - updatedAt
+                        - createdAt
+                        - id
+                        - allowance_type
+                        additionalProperties: false
+                    allowance_type_configurations:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          allowance_type_id:
+                            type: string
+                          default:
+                            type: boolean
+                          disabled:
+                            type: boolean
+                        required:
+                        - id
+                        - allowance_type_id
+                        - default
+                        - disabled
+                        additionalProperties: false
+                    allowance_type_configurtaions:
+                      description: 'DEPRECATED: Use allowance_type_configurations instead'
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          allowance_type_id:
+                            type: string
+                          default:
+                            type: boolean
+                          disabled:
+                            type: boolean
+                        required:
+                        - id
+                        - allowance_type_id
+                        - default
+                        - disabled
+                        additionalProperties: false
+                    approval_process:
+                      type: string
+                      enum:
+                      - Linear_all_have_to_agree
+                      - Linear_one_has_to_agree
+                      - Parallel_all_have_to_agree
+                      - Parallel_one_has_to_agree
+                    status:
+                      type: string
+                      enum:
+                      - INACTIVE
+                      - ACTIVE
+                      - ARCHIVED
+                    birthday:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    employment_start_date:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    employment_end_date:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    email:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    departments:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          manager_type:
+                            type: string
+                            enum:
+                            - Member
+                            - Manager
+                        required:
+                        - id
+                        - name
+                        - manager_type
+                        additionalProperties: false
+                    is_admin:
+                      type: boolean
+                    has_approvers:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          member:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                              email:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - id
+                            - name
+                            - email
+                            additionalProperties: false
+                        required:
+                        - member
+                        additionalProperties: false
+                    approver_config:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - custom
+                          - department
+                          - microsoft
+                        department_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        microsoft_sync_level:
+                          anyOf:
+                          - type: number
+                          - type: 'null'
+                      required:
+                      - type
+                      - department_id
+                      - microsoft_sync_level
+                      additionalProperties: false
+                    schedules:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          from:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          monday_am_start:
+                            type: string
+                          monday_am_end:
+                            type: string
+                          monday_pm_start:
+                            type: string
+                          monday_pm_end:
+                            type: string
+                          monday_am_enabled:
+                            type: boolean
+                          monday_pm_enabled:
+                            type: boolean
+                          monday_deduct_fullday:
+                            type: boolean
+                          tuesday_am_start:
+                            type: string
+                          tuesday_am_end:
+                            type: string
+                          tuesday_pm_start:
+                            type: string
+                          tuesday_pm_end:
+                            type: string
+                          tuesday_am_enabled:
+                            type: boolean
+                          tuesday_pm_enabled:
+                            type: boolean
+                          tuesday_deduct_fullday:
+                            type: boolean
+                          wednesday_am_start:
+                            type: string
+                          wednesday_am_end:
+                            type: string
+                          wednesday_pm_start:
+                            type: string
+                          wednesday_pm_end:
+                            type: string
+                          wednesday_am_enabled:
+                            type: boolean
+                          wednesday_pm_enabled:
+                            type: boolean
+                          wednesday_deduct_fullday:
+                            type: boolean
+                          thursday_am_start:
+                            type: string
+                          thursday_am_end:
+                            type: string
+                          thursday_pm_start:
+                            type: string
+                          thursday_pm_end:
+                            type: string
+                          thursday_am_enabled:
+                            type: boolean
+                          thursday_pm_enabled:
+                            type: boolean
+                          thursday_deduct_fullday:
+                            type: boolean
+                          friday_am_start:
+                            type: string
+                          friday_am_end:
+                            type: string
+                          friday_pm_start:
+                            type: string
+                          friday_pm_end:
+                            type: string
+                          friday_am_enabled:
+                            type: boolean
+                          friday_pm_enabled:
+                            type: boolean
+                          friday_deduct_fullday:
+                            type: boolean
+                          saturday_am_start:
+                            type: string
+                          saturday_am_end:
+                            type: string
+                          saturday_pm_start:
+                            type: string
+                          saturday_pm_end:
+                            type: string
+                          saturday_am_enabled:
+                            type: boolean
+                          saturday_pm_enabled:
+                            type: boolean
+                          saturday_deduct_fullday:
+                            type: boolean
+                          sunday_am_start:
+                            type: string
+                          sunday_am_end:
+                            type: string
+                          sunday_pm_start:
+                            type: string
+                          sunday_pm_end:
+                            type: string
+                          sunday_am_enabled:
+                            type: boolean
+                          sunday_pm_enabled:
+                            type: boolean
+                          sunday_deduct_fullday:
+                            type: boolean
+                          updatedAt:
+                            type: string
+                          createdAt:
+                            type: string
+                        required:
+                        - id
+                        - from
+                        - monday_am_start
+                        - monday_am_end
+                        - monday_pm_start
+                        - monday_pm_end
+                        - monday_am_enabled
+                        - monday_pm_enabled
+                        - monday_deduct_fullday
+                        - tuesday_am_start
+                        - tuesday_am_end
+                        - tuesday_pm_start
+                        - tuesday_pm_end
+                        - tuesday_am_enabled
+                        - tuesday_pm_enabled
+                        - tuesday_deduct_fullday
+                        - wednesday_am_start
+                        - wednesday_am_end
+                        - wednesday_pm_start
+                        - wednesday_pm_end
+                        - wednesday_am_enabled
+                        - wednesday_pm_enabled
+                        - wednesday_deduct_fullday
+                        - thursday_am_start
+                        - thursday_am_end
+                        - thursday_pm_start
+                        - thursday_pm_end
+                        - thursday_am_enabled
+                        - thursday_pm_enabled
+                        - thursday_deduct_fullday
+                        - friday_am_start
+                        - friday_am_end
+                        - friday_pm_start
+                        - friday_pm_end
+                        - friday_am_enabled
+                        - friday_pm_enabled
+                        - friday_deduct_fullday
+                        - saturday_am_start
+                        - saturday_am_end
+                        - saturday_pm_start
+                        - saturday_pm_end
+                        - saturday_am_enabled
+                        - saturday_pm_enabled
+                        - saturday_deduct_fullday
+                        - sunday_am_start
+                        - sunday_am_end
+                        - sunday_pm_start
+                        - sunday_pm_end
+                        - sunday_am_enabled
+                        - sunday_pm_enabled
+                        - sunday_deduct_fullday
+                        - updatedAt
+                        - createdAt
+                        additionalProperties: false
+                  required:
+                  - id
+                  - custom_id
+                  - name
+                  - createdAt
+                  - updatedAt
+                  - allowances
+                  - allowance_type_configurations
+                  - allowance_type_configurtaions
+                  - approval_process
+                  - status
+                  - birthday
+                  - employment_start_date
+                  - employment_end_date
+                  - email
+                  - departments
+                  - is_admin
+                  - has_approvers
+                  - approver_config
+                  - schedules
+                  additionalProperties: false
+                - type: 'null'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /members/custom_id/{custom_id}:
+    get:
+      operationId: member-getMemberByCustomId
+      summary: Absentify Read a Member by Custom_id
+      description: Read a member by custom_id
+      tags:
+      - Members
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: custom_id
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                    custom_id:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    name:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    createdAt:
+                      type: string
+                    updatedAt:
+                      type: string
+                    allowances:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          remaining:
+                            type: number
+                          brought_forward:
+                            type: number
+                          allowance:
+                            type: number
+                          taken:
+                            type: number
+                          year:
+                            type: number
+                          compensatory_time_off:
+                            type: number
+                          updatedAt:
+                            type: string
+                          createdAt:
+                            type: string
+                          id:
+                            type: string
+                          allowance_type:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              name:
+                                type: string
+                              ignore_allowance_limit:
+                                type: boolean
+                            required:
+                            - id
+                            - name
+                            - ignore_allowance_limit
+                            additionalProperties: false
+                        required:
+                        - remaining
+                        - brought_forward
+                        - allowance
+                        - taken
+                        - year
+                        - compensatory_time_off
+                        - updatedAt
+                        - createdAt
+                        - id
+                        - allowance_type
+                        additionalProperties: false
+                    allowance_type_configurations:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          allowance_type_id:
+                            type: string
+                          default:
+                            type: boolean
+                          disabled:
+                            type: boolean
+                        required:
+                        - id
+                        - allowance_type_id
+                        - default
+                        - disabled
+                        additionalProperties: false
+                    allowance_type_configurtaions:
+                      description: 'DEPRECATED: Use allowance_type_configurations instead'
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          allowance_type_id:
+                            type: string
+                          default:
+                            type: boolean
+                          disabled:
+                            type: boolean
+                        required:
+                        - id
+                        - allowance_type_id
+                        - default
+                        - disabled
+                        additionalProperties: false
+                    approval_process:
+                      type: string
+                      enum:
+                      - Linear_all_have_to_agree
+                      - Linear_one_has_to_agree
+                      - Parallel_all_have_to_agree
+                      - Parallel_one_has_to_agree
+                    status:
+                      type: string
+                      enum:
+                      - INACTIVE
+                      - ACTIVE
+                      - ARCHIVED
+                    birthday:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    employment_start_date:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    employment_end_date:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    email:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    departments:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          manager_type:
+                            type: string
+                            enum:
+                            - Member
+                            - Manager
+                        required:
+                        - id
+                        - name
+                        - manager_type
+                        additionalProperties: false
+                    is_admin:
+                      type: boolean
+                    has_approvers:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          member:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                              email:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - id
+                            - name
+                            - email
+                            additionalProperties: false
+                        required:
+                        - member
+                        additionalProperties: false
+                    approver_config:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - custom
+                          - department
+                          - microsoft
+                        department_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        microsoft_sync_level:
+                          anyOf:
+                          - type: number
+                          - type: 'null'
+                      required:
+                      - type
+                      - department_id
+                      - microsoft_sync_level
+                      additionalProperties: false
+                    schedules:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          from:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          monday_am_start:
+                            type: string
+                          monday_am_end:
+                            type: string
+                          monday_pm_start:
+                            type: string
+                          monday_pm_end:
+                            type: string
+                          monday_am_enabled:
+                            type: boolean
+                          monday_pm_enabled:
+                            type: boolean
+                          monday_deduct_fullday:
+                            type: boolean
+                          tuesday_am_start:
+                            type: string
+                          tuesday_am_end:
+                            type: string
+                          tuesday_pm_start:
+                            type: string
+                          tuesday_pm_end:
+                            type: string
+                          tuesday_am_enabled:
+                            type: boolean
+                          tuesday_pm_enabled:
+                            type: boolean
+                          tuesday_deduct_fullday:
+                            type: boolean
+                          wednesday_am_start:
+                            type: string
+                          wednesday_am_end:
+                            type: string
+                          wednesday_pm_start:
+                            type: string
+                          wednesday_pm_end:
+                            type: string
+                          wednesday_am_enabled:
+                            type: boolean
+                          wednesday_pm_enabled:
+                            type: boolean
+                          wednesday_deduct_fullday:
+                            type: boolean
+                          thursday_am_start:
+                            type: string
+                          thursday_am_end:
+                            type: string
+                          thursday_pm_start:
+                            type: string
+                          thursday_pm_end:
+                            type: string
+                          thursday_am_enabled:
+                            type: boolean
+                          thursday_pm_enabled:
+                            type: boolean
+                          thursday_deduct_fullday:
+                            type: boolean
+                          friday_am_start:
+                            type: string
+                          friday_am_end:
+                            type: string
+                          friday_pm_start:
+                            type: string
+                          friday_pm_end:
+                            type: string
+                          friday_am_enabled:
+                            type: boolean
+                          friday_pm_enabled:
+                            type: boolean
+                          friday_deduct_fullday:
+                            type: boolean
+                          saturday_am_start:
+                            type: string
+                          saturday_am_end:
+                            type: string
+                          saturday_pm_start:
+                            type: string
+                          saturday_pm_end:
+                            type: string
+                          saturday_am_enabled:
+                            type: boolean
+                          saturday_pm_enabled:
+                            type: boolean
+                          saturday_deduct_fullday:
+                            type: boolean
+                          sunday_am_start:
+                            type: string
+                          sunday_am_end:
+                            type: string
+                          sunday_pm_start:
+                            type: string
+                          sunday_pm_end:
+                            type: string
+                          sunday_am_enabled:
+                            type: boolean
+                          sunday_pm_enabled:
+                            type: boolean
+                          sunday_deduct_fullday:
+                            type: boolean
+                          updatedAt:
+                            type: string
+                          createdAt:
+                            type: string
+                        required:
+                        - id
+                        - from
+                        - monday_am_start
+                        - monday_am_end
+                        - monday_pm_start
+                        - monday_pm_end
+                        - monday_am_enabled
+                        - monday_pm_enabled
+                        - monday_deduct_fullday
+                        - tuesday_am_start
+                        - tuesday_am_end
+                        - tuesday_pm_start
+                        - tuesday_pm_end
+                        - tuesday_am_enabled
+                        - tuesday_pm_enabled
+                        - tuesday_deduct_fullday
+                        - wednesday_am_start
+                        - wednesday_am_end
+                        - wednesday_pm_start
+                        - wednesday_pm_end
+                        - wednesday_am_enabled
+                        - wednesday_pm_enabled
+                        - wednesday_deduct_fullday
+                        - thursday_am_start
+                        - thursday_am_end
+                        - thursday_pm_start
+                        - thursday_pm_end
+                        - thursday_am_enabled
+                        - thursday_pm_enabled
+                        - thursday_deduct_fullday
+                        - friday_am_start
+                        - friday_am_end
+                        - friday_pm_start
+                        - friday_pm_end
+                        - friday_am_enabled
+                        - friday_pm_enabled
+                        - friday_deduct_fullday
+                        - saturday_am_start
+                        - saturday_am_end
+                        - saturday_pm_start
+                        - saturday_pm_end
+                        - saturday_am_enabled
+                        - saturday_pm_enabled
+                        - saturday_deduct_fullday
+                        - sunday_am_start
+                        - sunday_am_end
+                        - sunday_pm_start
+                        - sunday_pm_end
+                        - sunday_am_enabled
+                        - sunday_pm_enabled
+                        - sunday_deduct_fullday
+                        - updatedAt
+                        - createdAt
+                        additionalProperties: false
+                  required:
+                  - id
+                  - custom_id
+                  - name
+                  - createdAt
+                  - updatedAt
+                  - allowances
+                  - allowance_type_configurations
+                  - allowance_type_configurtaions
+                  - approval_process
+                  - status
+                  - birthday
+                  - employment_start_date
+                  - employment_end_date
+                  - email
+                  - departments
+                  - is_admin
+                  - has_approvers
+                  - approver_config
+                  - schedules
+                  additionalProperties: false
+                - type: 'null'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /members/{id}/approvers:
+    put:
+      operationId: member-updateMemberApprovers
+      summary: Absentify Update Approvers for a Member
+      description: "\n        This endpoint allows updating the approvers for a specific member based on the chosen approval process.\n        Depending on the provided configuration:\n        - If Microsoft profile managers are used, department and custom approvers are ignored.\n        - If department settings are used, Microsoft profile managers and custom approvers are ignored.\n        - If custom approvers are provided, Microsoft profile managers and department settings are ignored.\n\n        **No Approver (Self-Approval):**\n        To set \"no approver\" for a member, provide an empty array: `approvers: []`.\n        The system will automatically configure the member as their own approver (self-approval),\n        which is internally recognized as \"no approver\" throughout the application.\n\n        The 'id' and 'approval_process' fields are always required.\n      "
+      tags:
+      - Members
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                approval_process:
+                  type: string
+                  enum:
+                  - Linear_all_have_to_agree
+                  - Linear_one_has_to_agree
+                  - Parallel_all_have_to_agree
+                  - Parallel_one_has_to_agree
+                microsoft_settings:
+                  type: object
+                  properties:
+                    use_profile_managers:
+                      type: boolean
+                    profile_managers_level:
+                      anyOf:
+                      - type: integer
+                        minimum: -9007199254740991
+                        maximum: 9007199254740991
+                      - type: 'null'
+                  required:
+                  - use_profile_managers
+                  - profile_managers_level
+                department_settings:
+                  type: object
+                  properties:
+                    use_department_settings:
+                      type: boolean
+                    department_id:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                  required:
+                  - use_department_settings
+                  - department_id
+                approvers:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      member_id:
+                        type: string
+                      predecessor_manager_id:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                    required:
+                    - member_id
+                    - predecessor_manager_id
+              required:
+              - approval_process
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /members/{id}/allowance/{allowance_type_id}/{year}:
+    put:
+      operationId: member-updateMemberAllowance
+      summary: Absentify Update a Member's Allowance
+      description: Update a member's allowance and optionally configure if this allowance type should be default or disabled for the member
+      tags:
+      - Members
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      - in: path
+        name: allowance_type_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      - in: path
+        name: year
+        schema:
+          type: number
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                allowance:
+                  type: number
+                compensatory_time_off:
+                  type: number
+                brought_forward:
+                  type: number
+                reason:
+                  type: string
+                overwrite_brought_forward:
+                  type: boolean
+                set_as_default:
+                  type: boolean
+                disabled:
+                  type: boolean
+              required:
+              - allowance
+              - compensatory_time_off
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /members/{id}/schedule:
+    post:
+      operationId: member-addMemberSchedule
+      summary: Absentify Add a Member's Schedule
+      description: Add a member's schedule
+      tags:
+      - Members
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                from:
+                  type: string
+                monday_am_start:
+                  type: string
+                monday_am_end:
+                  type: string
+                monday_pm_start:
+                  type: string
+                monday_pm_end:
+                  type: string
+                monday_am_enabled:
+                  type: boolean
+                monday_pm_enabled:
+                  type: boolean
+                monday_deduct_fullday:
+                  type: boolean
+                tuesday_am_start:
+                  type: string
+                tuesday_am_end:
+                  type: string
+                tuesday_pm_start:
+                  type: string
+                tuesday_pm_end:
+                  type: string
+                tuesday_am_enabled:
+                  type: boolean
+                tuesday_pm_enabled:
+                  type: boolean
+                tuesday_deduct_fullday:
+                  type: boolean
+                wednesday_am_start:
+                  type: string
+                wednesday_am_end:
+                  type: string
+                wednesday_pm_start:
+                  type: string
+                wednesday_pm_end:
+                  type: string
+                wednesday_am_enabled:
+                  type: boolean
+                wednesday_pm_enabled:
+                  type: boolean
+                wednesday_deduct_fullday:
+                  type: boolean
+                thursday_am_start:
+                  type: string
+                thursday_am_end:
+                  type: string
+                thursday_pm_start:
+                  type: string
+                thursday_pm_end:
+                  type: string
+                thursday_am_enabled:
+                  type: boolean
+                thursday_pm_enabled:
+                  type: boolean
+                thursday_deduct_fullday:
+                  type: boolean
+                friday_am_start:
+                  type: string
+                friday_am_end:
+                  type: string
+                friday_pm_start:
+                  type: string
+                friday_pm_end:
+                  type: string
+                friday_am_enabled:
+                  type: boolean
+                friday_pm_enabled:
+                  type: boolean
+                friday_deduct_fullday:
+                  type: boolean
+                saturday_am_start:
+                  type: string
+                saturday_am_end:
+                  type: string
+                saturday_pm_start:
+                  type: string
+                saturday_pm_end:
+                  type: string
+                saturday_am_enabled:
+                  type: boolean
+                saturday_pm_enabled:
+                  type: boolean
+                saturday_deduct_fullday:
+                  type: boolean
+                sunday_am_start:
+                  type: string
+                sunday_am_end:
+                  type: string
+                sunday_pm_start:
+                  type: string
+                sunday_pm_end:
+                  type: string
+                sunday_am_enabled:
+                  type: boolean
+                sunday_pm_enabled:
+                  type: boolean
+                sunday_deduct_fullday:
+                  type: boolean
+              required:
+              - from
+              - monday_am_start
+              - monday_am_end
+              - monday_pm_start
+              - monday_pm_end
+              - monday_am_enabled
+              - monday_pm_enabled
+              - monday_deduct_fullday
+              - tuesday_am_start
+              - tuesday_am_end
+              - tuesday_pm_start
+              - tuesday_pm_end
+              - tuesday_am_enabled
+              - tuesday_pm_enabled
+              - tuesday_deduct_fullday
+              - wednesday_am_start
+              - wednesday_am_end
+              - wednesday_pm_start
+              - wednesday_pm_end
+              - wednesday_am_enabled
+              - wednesday_pm_enabled
+              - wednesday_deduct_fullday
+              - thursday_am_start
+              - thursday_am_end
+              - thursday_pm_start
+              - thursday_pm_end
+              - thursday_am_enabled
+              - thursday_pm_enabled
+              - thursday_deduct_fullday
+              - friday_am_start
+              - friday_am_end
+              - friday_pm_start
+              - friday_pm_end
+              - friday_am_enabled
+              - friday_pm_enabled
+              - friday_deduct_fullday
+              - saturday_am_start
+              - saturday_am_end
+              - saturday_pm_start
+              - saturday_pm_end
+              - saturday_am_enabled
+              - saturday_pm_enabled
+              - saturday_deduct_fullday
+              - sunday_am_start
+              - sunday_am_end
+              - sunday_pm_start
+              - sunday_pm_end
+              - sunday_am_enabled
+              - sunday_pm_enabled
+              - sunday_deduct_fullday
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /members/{member_id}/schedule/{id}:
+    put:
+      operationId: member-updateMemberSchedule
+      summary: Absentify Update a Member's Schedule
+      description: Update a member's schedule
+      tags:
+      - Members
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: member_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                from:
+                  type: string
+                monday_am_start:
+                  type: string
+                monday_am_end:
+                  type: string
+                monday_pm_start:
+                  type: string
+                monday_pm_end:
+                  type: string
+                monday_am_enabled:
+                  type: boolean
+                monday_pm_enabled:
+                  type: boolean
+                monday_deduct_fullday:
+                  type: boolean
+                tuesday_am_start:
+                  type: string
+                tuesday_am_end:
+                  type: string
+                tuesday_pm_start:
+                  type: string
+                tuesday_pm_end:
+                  type: string
+                tuesday_am_enabled:
+                  type: boolean
+                tuesday_pm_enabled:
+                  type: boolean
+                tuesday_deduct_fullday:
+                  type: boolean
+                wednesday_am_start:
+                  type: string
+                wednesday_am_end:
+                  type: string
+                wednesday_pm_start:
+                  type: string
+                wednesday_pm_end:
+                  type: string
+                wednesday_am_enabled:
+                  type: boolean
+                wednesday_pm_enabled:
+                  type: boolean
+                wednesday_deduct_fullday:
+                  type: boolean
+                thursday_am_start:
+                  type: string
+                thursday_am_end:
+                  type: string
+                thursday_pm_start:
+                  type: string
+                thursday_pm_end:
+                  type: string
+                thursday_am_enabled:
+                  type: boolean
+                thursday_pm_enabled:
+                  type: boolean
+                thursday_deduct_fullday:
+                  type: boolean
+                friday_am_start:
+                  type: string
+                friday_am_end:
+                  type: string
+                friday_pm_start:
+                  type: string
+                friday_pm_end:
+                  type: string
+                friday_am_enabled:
+                  type: boolean
+                friday_pm_enabled:
+                  type: boolean
+                friday_deduct_fullday:
+                  type: boolean
+                saturday_am_start:
+                  type: string
+                saturday_am_end:
+                  type: string
+                saturday_pm_start:
+                  type: string
+                saturday_pm_end:
+                  type: string
+                saturday_am_enabled:
+                  type: boolean
+                saturday_pm_enabled:
+                  type: boolean
+                saturday_deduct_fullday:
+                  type: boolean
+                sunday_am_start:
+                  type: string
+                sunday_am_end:
+                  type: string
+                sunday_pm_start:
+                  type: string
+                sunday_pm_end:
+                  type: string
+                sunday_am_enabled:
+                  type: boolean
+                sunday_pm_enabled:
+                  type: boolean
+                sunday_deduct_fullday:
+                  type: boolean
+              required:
+              - from
+              - monday_am_start
+              - monday_am_end
+              - monday_pm_start
+              - monday_pm_end
+              - monday_am_enabled
+              - monday_pm_enabled
+              - monday_deduct_fullday
+              - tuesday_am_start
+              - tuesday_am_end
+              - tuesday_pm_start
+              - tuesday_pm_end
+              - tuesday_am_enabled
+              - tuesday_pm_enabled
+              - tuesday_deduct_fullday
+              - wednesday_am_start
+              - wednesday_am_end
+              - wednesday_pm_start
+              - wednesday_pm_end
+              - wednesday_am_enabled
+              - wednesday_pm_enabled
+              - wednesday_deduct_fullday
+              - thursday_am_start
+              - thursday_am_end
+              - thursday_pm_start
+              - thursday_pm_end
+              - thursday_am_enabled
+              - thursday_pm_enabled
+              - thursday_deduct_fullday
+              - friday_am_start
+              - friday_am_end
+              - friday_pm_start
+              - friday_pm_end
+              - friday_am_enabled
+              - friday_pm_enabled
+              - friday_deduct_fullday
+              - saturday_am_start
+              - saturday_am_end
+              - saturday_pm_start
+              - saturday_pm_end
+              - saturday_am_enabled
+              - saturday_pm_enabled
+              - saturday_deduct_fullday
+              - sunday_am_start
+              - sunday_am_end
+              - sunday_pm_start
+              - sunday_pm_end
+              - sunday_am_enabled
+              - sunday_pm_enabled
+              - sunday_deduct_fullday
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /members/{id}/representatives:
+    put:
+      operationId: member-updateMemberRepresentatives
+      summary: Absentify Update Representatives for a Member
+      description: "\n        This endpoint allows updating the representatives for a specific member.\n        It also configures how representative approvals work for this member.\n        The 'id', 'representative_approval_process', 'member_can_reorder_representatives',\n        'member_can_choose_representatives', 'required_representatives_count', and 'representatives' fields are always required.\n      "
+      tags:
+      - Members
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                representative_approval_process:
+                  type: string
+                  enum:
+                  - Linear
+                  - Parallel
+                member_can_reorder_representatives:
+                  type: boolean
+                member_can_choose_representatives:
+                  type: boolean
+                required_representatives_count:
+                  type: integer
+                  minimum: 0
+                  maximum: 9007199254740991
+                representatives:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                    pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+              required:
+              - representative_approval_process
+              - member_can_reorder_representatives
+              - member_can_choose_representatives
+              - required_representatives_count
+              - representatives
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    get:
+      operationId: member-getMemberRepresentatives
+      summary: Absentify Get a Member's Representative Settings and List
+      description: Retrieves the representative configuration (such as approval process, ability to choose/reorder) and the list of representatives for a specific member.
+      tags:
+      - Members
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  representative_approval_process:
+                    anyOf:
+                    - type: string
+                      enum:
+                      - Linear
+                      - Parallel
+                    - type: 'null'
+                  member_can_reorder_representatives:
+                    anyOf:
+                    - type: boolean
+                    - type: 'null'
+                  member_can_choose_representatives:
+                    anyOf:
+                    - type: boolean
+                    - type: 'null'
+                  required_representatives_count:
+                    anyOf:
+                    - type: integer
+                      minimum: 0
+                      maximum: 9007199254740991
+                    - type: 'null'
+                  representatives:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                        name:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                      required:
+                      - id
+                      - name
+                      additionalProperties: false
+                required:
+                - representative_approval_process
+                - member_can_reorder_representatives
+                - member_can_choose_representatives
+                - required_representatives_count
+                - representatives
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  schemas:
+    error.BAD_REQUEST:
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Invalid input data
+          type: string
+        code:
+          description: The error code
+          example: BAD_REQUEST
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.UNAUTHORIZED:
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Authorization not provided
+          type: string
+        code:
+          description: The error code
+          example: UNAUTHORIZED
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.NOT_FOUND:
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Not found
+          type: string
+        code:
+          description: The error code
+          example: NOT_FOUND
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.INTERNAL_SERVER_ERROR:
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Internal server error
+          type: string
+        code:
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.FORBIDDEN:
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Insufficient access
+          type: string
+        code:
+          description: The error code
+          example: FORBIDDEN
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key from your absentify account settings. Requires Plus plan.
+externalDocs:
+  url: https://absentify.com/docs/en/api-reference

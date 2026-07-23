@@ -1,0 +1,424 @@
+openapi: 3.1.0
+info:
+  title: Absentify Absences API
+  description: 'The Absentify REST API provides comprehensive absence management capabilities for Microsoft 365-integrated organizations. Manage members, departments, leave types, requests, allowances, public holidays, and workspace settings. The API requires the Plus plan and uses API key authentication. Rate limit: 150 requests per second per IP.'
+  version: 1.0.0
+  contact:
+    url: https://absentify.com/docs
+    email: support@absentify.com
+  license:
+    name: Proprietary
+    url: https://absentify.com/terms-and-conditions
+  x-generated-from: official-openapi-spec
+servers:
+- url: https://api.absentify.com/api/v1
+tags:
+- name: Absences
+paths:
+  /absences_per_day:
+    get:
+      operationId: absences-getAbsencesPerDay
+      summary: Absentify Get All Requests and Public Holiday Per Member Per Day
+      description: Get all requests and public holiday per member per day
+      tags:
+      - Absences
+      security:
+      - ApiKey: []
+      parameters:
+      - in: query
+        name: start
+        schema:
+          type: string
+        required: true
+      - in: query
+        name: end
+        schema:
+          type: string
+        required: true
+      - in: query
+        name: request_member_ids
+        schema:
+          type: string
+      - in: query
+        name: department_ids
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                  - type: object
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                        - request
+                        - public_holiday
+                      member:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          custom_id:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          name:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          email:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - id
+                        - custom_id
+                        - name
+                        - email
+                        additionalProperties: false
+                      date:
+                        type: string
+                      start_at:
+                        anyOf:
+                        - type: string
+                          enum:
+                          - morning
+                          - afternoon
+                        - type: 'null'
+                      end_at:
+                        anyOf:
+                        - type: string
+                          enum:
+                          - lunchtime
+                          - end_of_day
+                        - type: 'null'
+                      request:
+                        anyOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                            duration:
+                              type: number
+                            workday_absence_duration:
+                              type: number
+                            status:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            take_from_allowance:
+                              type: boolean
+                            allowance_type:
+                              anyOf:
+                              - type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  name:
+                                    type: string
+                                  ignore_allowance_limit:
+                                    type: boolean
+                                  allowance_unit:
+                                    type: string
+                                    enum:
+                                    - days
+                                    - hours
+                                required:
+                                - id
+                                - name
+                                - ignore_allowance_limit
+                                - allowance_unit
+                                additionalProperties: false
+                              - type: 'null'
+                            leave_type:
+                              anyOf:
+                              - type: object
+                                properties:
+                                  name:
+                                    type: string
+                                  id:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  leave_unit:
+                                    type: string
+                                    enum:
+                                    - days
+                                    - half_days
+                                    - hours
+                                    - minutes_30
+                                    - minutes_15
+                                    - minutes_10
+                                    - minutes_5
+                                    - minutes_1
+                                required:
+                                - name
+                                - id
+                                - leave_unit
+                                additionalProperties: false
+                              - type: 'null'
+                          required:
+                          - id
+                          - duration
+                          - workday_absence_duration
+                          - status
+                          - take_from_allowance
+                          - allowance_type
+                          - leave_type
+                          additionalProperties: false
+                        - type: 'null'
+                      public_holiday_day:
+                        anyOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                            duration:
+                              type: string
+                            names:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  language:
+                                    type: string
+                                  name:
+                                    type: string
+                                required:
+                                - language
+                                - name
+                                additionalProperties: false
+                          required:
+                          - id
+                          - duration
+                          - names
+                          additionalProperties: false
+                        - type: 'null'
+                    required:
+                    - type
+                    - member
+                    - date
+                    - start_at
+                    - end_at
+                    - request
+                    - public_holiday_day
+                    additionalProperties: false
+                  - type: 'null'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  schemas:
+    error.BAD_REQUEST:
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Invalid input data
+          type: string
+        code:
+          description: The error code
+          example: BAD_REQUEST
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.UNAUTHORIZED:
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Authorization not provided
+          type: string
+        code:
+          description: The error code
+          example: UNAUTHORIZED
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.NOT_FOUND:
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Not found
+          type: string
+        code:
+          description: The error code
+          example: NOT_FOUND
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.INTERNAL_SERVER_ERROR:
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Internal server error
+          type: string
+        code:
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.FORBIDDEN:
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Insufficient access
+          type: string
+        code:
+          description: The error code
+          example: FORBIDDEN
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key from your absentify account settings. Requires Plus plan.
+externalDocs:
+  url: https://absentify.com/docs/en/api-reference
