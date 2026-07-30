@@ -6,7 +6,20 @@ description: >-
   track and manage employee absences, leave requests, approvals, and team schedules. Built by BrainCore Solutions GmbH,
   it provides a REST API for integrating absence management into custom workflows, HR systems, and business automation
   tools.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/absentify.png
 tags:
   - Absence Management
   - HR
@@ -19,88 +32,387 @@ created: '2025-02-17'
 modified: '2026-05-19'
 specificationVersion: '0.19'
 apis:
-  - aid: absentify:absentify
-    name: Absentify API
-    description: >-
-      REST API for managing employee absences, leave requests, members, departments, leave types, public holidays, and
-      workspace settings. Requires an API key (x-api-key header) available on the Plus plan. Rate limit of 150 requests
-      per second per IP address.
-    humanURL: https://absentify.com/docs/en/api-reference/introduction
-    baseURL: https://api.absentify.com/api/v1
-    tags:
-      - Absence Management
-      - Leave Requests
-      - Members
-      - Departments
-      - Leave Types
-    properties:
-      - type: Documentation
-        url: https://absentify.com/docs/en/api-reference/introduction
-      - type: OpenAPI
-        url: openapi/absentify-openapi.yml
-      - type: JSONSchema
-        url: json-schema/absentify-member-schema.json
-        title: Member Schema
-      - type: JSONSchema
-        url: json-schema/absentify-department-schema.json
-        title: Department Schema
-      - type: JSONSchema
-        url: json-schema/absentify-leave-type-schema.json
-        title: Leave Type Schema
-      - type: JSONSchema
-        url: json-schema/absentify-request-schema.json
-        title: Request Schema
-      - type: JSONSchema
-        url: json-schema/absentify-absence-schema.json
-        title: Absence Schema
-      - type: JSONSchema
-        url: json-schema/absentify-workspace-schema.json
-        title: Workspace Schema
-      - type: JSONSchema
-        url: json-schema/absentify-public-holiday-calendar-schema.json
-        title: Public Holiday Calendar Schema
-      - type: JSONStructure
-        url: json-structure/absentify-member-structure.json
-        title: Member Structure
-      - type: JSONStructure
-        url: json-structure/absentify-department-structure.json
-        title: Department Structure
-      - type: JSONStructure
-        url: json-structure/absentify-leave-type-structure.json
-        title: Leave Type Structure
-      - type: JSONStructure
-        url: json-structure/absentify-request-structure.json
-        title: Request Structure
-      - type: JSONStructure
-        url: json-structure/absentify-absence-structure.json
-        title: Absence Structure
-      - type: JSONStructure
-        url: json-structure/absentify-workspace-structure.json
-        title: Workspace Structure
-      - type: JSONStructure
-        url: json-structure/absentify-public-holiday-calendar-structure.json
-        title: Public Holiday Calendar Structure
-      - type: JSONLD
-        url: json-ld/absentify-context.jsonld
-      - type: Examples
-        url: examples/absentify-member-example.json
-        title: Member Example
-      - type: Examples
-        url: examples/absentify-department-example.json
-        title: Department Example
-      - type: Examples
-        url: examples/absentify-leave-type-example.json
-        title: Leave Type Example
-      - type: Examples
-        url: examples/absentify-request-example.json
-        title: Request Example
-      - type: Examples
-        url: examples/absentify-absence-example.json
-        title: Absence Example
-      - type: Examples
-        url: examples/absentify-workspace-example.json
-        title: Workspace Example
+- aid: absentify:absentify-absences-api
+  name: Absentify Absences API
+  description: The Absences API from Absentify — 1 operation(s) for absences.
+  humanURL: https://absentify.com/docs/en/api-reference/introduction
+  baseURL: https://api.absentify.com/api/v1
+  tags:
+  - Absences
+  properties:
+  - type: OpenAPI
+    url: openapi/absentify-absences-api-openapi.yml
+  - type: Documentation
+    url: https://absentify.com/docs/en/api-reference/introduction
+  - type: JSONSchema
+    url: json-schema/absentify-member-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-department-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-leave-type-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-request-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-absence-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-workspace-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-public-holiday-calendar-schema.json
+  - type: JSONStructure
+    url: json-structure/absentify-member-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-department-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-leave-type-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-request-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-absence-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-workspace-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-public-holiday-calendar-structure.json
+  - type: JSONLD
+    url: json-ld/absentify-context.jsonld
+  - type: Examples
+    url: examples/absentify-member-example.json
+  - type: Examples
+    url: examples/absentify-department-example.json
+  - type: Examples
+    url: examples/absentify-leave-type-example.json
+  - type: Examples
+    url: examples/absentify-request-example.json
+  - type: Examples
+    url: examples/absentify-absence-example.json
+  - type: Examples
+    url: examples/absentify-workspace-example.json
+- aid: absentify:absentify-departments-api
+  name: Absentify Departments API
+  description: The Departments API from Absentify — 2 operation(s) for departments.
+  humanURL: https://absentify.com/docs/en/api-reference/introduction
+  baseURL: https://api.absentify.com/api/v1
+  tags:
+  - Departments
+  properties:
+  - type: OpenAPI
+    url: openapi/absentify-departments-api-openapi.yml
+  - type: Documentation
+    url: https://absentify.com/docs/en/api-reference/introduction
+  - type: JSONSchema
+    url: json-schema/absentify-member-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-department-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-leave-type-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-request-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-absence-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-workspace-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-public-holiday-calendar-schema.json
+  - type: JSONStructure
+    url: json-structure/absentify-member-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-department-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-leave-type-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-request-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-absence-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-workspace-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-public-holiday-calendar-structure.json
+  - type: JSONLD
+    url: json-ld/absentify-context.jsonld
+  - type: Examples
+    url: examples/absentify-member-example.json
+  - type: Examples
+    url: examples/absentify-department-example.json
+  - type: Examples
+    url: examples/absentify-leave-type-example.json
+  - type: Examples
+    url: examples/absentify-request-example.json
+  - type: Examples
+    url: examples/absentify-absence-example.json
+  - type: Examples
+    url: examples/absentify-workspace-example.json
+- aid: absentify:absentify-leave-types-api
+  name: Absentify Leave types API
+  description: The Leave types API from Absentify — 3 operation(s) for leave types.
+  humanURL: https://absentify.com/docs/en/api-reference/introduction
+  baseURL: https://api.absentify.com/api/v1
+  tags:
+  - Leave types
+  properties:
+  - type: OpenAPI
+    url: openapi/absentify-leave-types-api-openapi.yml
+  - type: Documentation
+    url: https://absentify.com/docs/en/api-reference/introduction
+  - type: JSONSchema
+    url: json-schema/absentify-member-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-department-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-leave-type-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-request-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-absence-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-workspace-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-public-holiday-calendar-schema.json
+  - type: JSONStructure
+    url: json-structure/absentify-member-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-department-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-leave-type-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-request-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-absence-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-workspace-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-public-holiday-calendar-structure.json
+  - type: JSONLD
+    url: json-ld/absentify-context.jsonld
+  - type: Examples
+    url: examples/absentify-member-example.json
+  - type: Examples
+    url: examples/absentify-department-example.json
+  - type: Examples
+    url: examples/absentify-leave-type-example.json
+  - type: Examples
+    url: examples/absentify-request-example.json
+  - type: Examples
+    url: examples/absentify-absence-example.json
+  - type: Examples
+    url: examples/absentify-workspace-example.json
+- aid: absentify:absentify-members-api
+  name: Absentify Members API
+  description: The Members API from Absentify — 10 operation(s) for members.
+  humanURL: https://absentify.com/docs/en/api-reference/introduction
+  baseURL: https://api.absentify.com/api/v1
+  tags:
+  - Members
+  properties:
+  - type: OpenAPI
+    url: openapi/absentify-members-api-openapi.yml
+  - type: Documentation
+    url: https://absentify.com/docs/en/api-reference/introduction
+  - type: JSONSchema
+    url: json-schema/absentify-member-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-department-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-leave-type-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-request-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-absence-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-workspace-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-public-holiday-calendar-schema.json
+  - type: JSONStructure
+    url: json-structure/absentify-member-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-department-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-leave-type-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-request-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-absence-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-workspace-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-public-holiday-calendar-structure.json
+  - type: JSONLD
+    url: json-ld/absentify-context.jsonld
+  - type: Examples
+    url: examples/absentify-member-example.json
+  - type: Examples
+    url: examples/absentify-department-example.json
+  - type: Examples
+    url: examples/absentify-leave-type-example.json
+  - type: Examples
+    url: examples/absentify-request-example.json
+  - type: Examples
+    url: examples/absentify-absence-example.json
+  - type: Examples
+    url: examples/absentify-workspace-example.json
+- aid: absentify:absentify-public-holidays-api
+  name: Absentify Public holidays API
+  description: The Public holidays API from Absentify — 2 operation(s) for public holidays.
+  humanURL: https://absentify.com/docs/en/api-reference/introduction
+  baseURL: https://api.absentify.com/api/v1
+  tags:
+  - Public holidays
+  properties:
+  - type: OpenAPI
+    url: openapi/absentify-public-holidays-api-openapi.yml
+  - type: Documentation
+    url: https://absentify.com/docs/en/api-reference/introduction
+  - type: JSONSchema
+    url: json-schema/absentify-member-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-department-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-leave-type-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-request-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-absence-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-workspace-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-public-holiday-calendar-schema.json
+  - type: JSONStructure
+    url: json-structure/absentify-member-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-department-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-leave-type-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-request-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-absence-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-workspace-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-public-holiday-calendar-structure.json
+  - type: JSONLD
+    url: json-ld/absentify-context.jsonld
+  - type: Examples
+    url: examples/absentify-member-example.json
+  - type: Examples
+    url: examples/absentify-department-example.json
+  - type: Examples
+    url: examples/absentify-leave-type-example.json
+  - type: Examples
+    url: examples/absentify-request-example.json
+  - type: Examples
+    url: examples/absentify-absence-example.json
+  - type: Examples
+    url: examples/absentify-workspace-example.json
+- aid: absentify:absentify-requests-api
+  name: Absentify Requests API
+  description: The Requests API from Absentify — 9 operation(s) for requests.
+  humanURL: https://absentify.com/docs/en/api-reference/introduction
+  baseURL: https://api.absentify.com/api/v1
+  tags:
+  - Requests
+  properties:
+  - type: OpenAPI
+    url: openapi/absentify-requests-api-openapi.yml
+  - type: Documentation
+    url: https://absentify.com/docs/en/api-reference/introduction
+  - type: JSONSchema
+    url: json-schema/absentify-member-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-department-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-leave-type-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-request-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-absence-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-workspace-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-public-holiday-calendar-schema.json
+  - type: JSONStructure
+    url: json-structure/absentify-member-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-department-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-leave-type-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-request-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-absence-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-workspace-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-public-holiday-calendar-structure.json
+  - type: JSONLD
+    url: json-ld/absentify-context.jsonld
+  - type: Examples
+    url: examples/absentify-member-example.json
+  - type: Examples
+    url: examples/absentify-department-example.json
+  - type: Examples
+    url: examples/absentify-leave-type-example.json
+  - type: Examples
+    url: examples/absentify-request-example.json
+  - type: Examples
+    url: examples/absentify-absence-example.json
+  - type: Examples
+    url: examples/absentify-workspace-example.json
+- aid: absentify:absentify-workspace-api
+  name: Absentify Workspace API
+  description: The Workspace API from Absentify — 1 operation(s) for workspace.
+  humanURL: https://absentify.com/docs/en/api-reference/introduction
+  baseURL: https://api.absentify.com/api/v1
+  tags:
+  - Workspace
+  properties:
+  - type: OpenAPI
+    url: openapi/absentify-workspace-api-openapi.yml
+  - type: Documentation
+    url: https://absentify.com/docs/en/api-reference/introduction
+  - type: JSONSchema
+    url: json-schema/absentify-member-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-department-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-leave-type-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-request-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-absence-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-workspace-schema.json
+  - type: JSONSchema
+    url: json-schema/absentify-public-holiday-calendar-schema.json
+  - type: JSONStructure
+    url: json-structure/absentify-member-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-department-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-leave-type-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-request-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-absence-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-workspace-structure.json
+  - type: JSONStructure
+    url: json-structure/absentify-public-holiday-calendar-structure.json
+  - type: JSONLD
+    url: json-ld/absentify-context.jsonld
+  - type: Examples
+    url: examples/absentify-member-example.json
+  - type: Examples
+    url: examples/absentify-department-example.json
+  - type: Examples
+    url: examples/absentify-leave-type-example.json
+  - type: Examples
+    url: examples/absentify-request-example.json
+  - type: Examples
+    url: examples/absentify-absence-example.json
+  - type: Examples
+    url: examples/absentify-workspace-example.json
 common:
+  - type: PostmanWorkspace
+    url: https://www.postman.com/kinlaneapi/absentify/overview
   - type: AgenticAccess
     url: agentic-access/absentify-agentic-access.yml
   - type: TrustCenter
