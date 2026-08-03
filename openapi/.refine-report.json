@@ -1,0 +1,26 @@
+{
+  "provider": "absentify",
+  "sources": [
+    "absentify-absences-api-openapi.yml",
+    "absentify-departments-api-openapi.yml",
+    "absentify-leave-types-api-openapi.yml",
+    "absentify-members-api-openapi.yml",
+    "absentify-public-holidays-api-openapi.yml",
+    "absentify-requests-api-openapi.yml",
+    "absentify-workspace-api-openapi.yml"
+  ],
+  "outputs": [
+    "absentify-absences-api-openapi.yml",
+    "absentify-departments-api-openapi.yml",
+    "absentify-leave-types-api-openapi.yml",
+    "absentify-members-api-openapi.yml",
+    "absentify-public-holidays-api-openapi.yml",
+    "absentify-requests-api-openapi.yml",
+    "absentify-workspace-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

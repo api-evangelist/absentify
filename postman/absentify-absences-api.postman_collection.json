@@ -1,0 +1,472 @@
+{
+  "info": {
+    "_postman_id": "1c05670d-77e7-4f2a-8360-e93074a83adb",
+    "name": "Absentify Absences API",
+    "description": "The Absentify REST API provides comprehensive absence management capabilities for Microsoft 365-integrated organizations. Manage members, departments, leave types, requests, allowances, public holidays, and workspace settings. The API requires the Plus plan and uses API key authentication. Rate limit: 150 requests per second per IP.\n\nContact Support:\n Email: support@absentify.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T00:27:49.000Z",
+    "updatedAt": "2026-07-28T00:27:50.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-1c05670d-77e7-4f2a-8360-e93074a83adb"
+  },
+  "item": [
+    {
+      "name": "absences_per_day",
+      "item": [
+        {
+          "name": "Absentify Get All Requests and Public Holiday Per Member Per Day",
+          "id": "c8c16764-d8a0-48d2-a575-3149fb3d7bf2",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-API-KEY",
+                  "type": "string"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/absences_per_day?start=<string>&end=<string>&request_member_ids=<string>&department_ids=<string>",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "absences_per_day"
+              ],
+              "query": [
+                {
+                  "description": "(Required) ",
+                  "key": "start",
+                  "value": "<string>"
+                },
+                {
+                  "description": "(Required) ",
+                  "key": "end",
+                  "value": "<string>"
+                },
+                {
+                  "key": "request_member_ids",
+                  "value": "<string>"
+                },
+                {
+                  "key": "department_ids",
+                  "value": "<string>"
+                }
+              ]
+            },
+            "description": "Get all requests and public holiday per member per day"
+          },
+          "response": [
+            {
+              "id": "bb4766c7-326f-4701-889a-86e21b9a4a87",
+              "name": "Successful response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/absences_per_day?start=<string>&end=<string>&request_member_ids=<string>&department_ids=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "absences_per_day"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) ",
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) ",
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "[\n  {\n    \"type\": \"request\",\n    \"member\": {\n      \"id\": \"<string>\",\n      \"custom_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\"\n    },\n    \"date\": \"<string>\",\n    \"start_at\": \"afternoon\",\n    \"end_at\": \"lunchtime\",\n    \"request\": {\n      \"id\": \"<string>\",\n      \"duration\": \"<number>\",\n      \"workday_absence_duration\": \"<number>\",\n      \"status\": \"<string>\",\n      \"take_from_allowance\": \"<boolean>\",\n      \"allowance_type\": {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"ignore_allowance_limit\": \"<boolean>\",\n        \"allowance_unit\": \"days\"\n      },\n      \"leave_type\": {\n        \"name\": \"<string>\",\n        \"id\": \"<string>\",\n        \"leave_unit\": \"hours\"\n      }\n    },\n    \"public_holiday_day\": {\n      \"id\": \"<string>\",\n      \"duration\": \"<string>\",\n      \"names\": [\n        {\n          \"language\": \"<string>\",\n          \"name\": \"<string>\"\n        },\n        {\n          \"language\": \"<string>\",\n          \"name\": \"<string>\"\n        }\n      ]\n    }\n  },\n  {\n    \"type\": \"public_holiday\",\n    \"member\": {\n      \"id\": \"<string>\",\n      \"custom_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\"\n    },\n    \"date\": \"<string>\",\n    \"start_at\": \"afternoon\",\n    \"end_at\": \"lunchtime\",\n    \"request\": {\n      \"id\": \"<string>\",\n      \"duration\": \"<number>\",\n      \"workday_absence_duration\": \"<number>\",\n      \"status\": \"<string>\",\n      \"take_from_allowance\": \"<boolean>\",\n      \"allowance_type\": {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"ignore_allowance_limit\": \"<boolean>\",\n        \"allowance_unit\": \"hours\"\n      },\n      \"leave_type\": {\n        \"name\": \"<string>\",\n        \"id\": \"<string>\",\n        \"leave_unit\": \"minutes_1\"\n      }\n    },\n    \"public_holiday_day\": {\n      \"id\": \"<string>\",\n      \"duration\": \"<string>\",\n      \"names\": [\n        {\n          \"language\": \"<string>\",\n          \"name\": \"<string>\"\n        },\n        {\n          \"language\": \"<string>\",\n          \"name\": \"<string>\"\n        }\n      ]\n    }\n  }\n]",
+              "createdAt": "2026-07-28T00:27:50.000Z",
+              "updatedAt": "2026-07-28T00:27:50.000Z",
+              "uid": "35240-bb4766c7-326f-4701-889a-86e21b9a4a87"
+            },
+            {
+              "id": "9821ce03-fa14-4af4-8194-38641dbaed1d",
+              "name": "Invalid input data",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/absences_per_day?start=<string>&end=<string>&request_member_ids=<string>&department_ids=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "absences_per_day"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) ",
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) ",
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:27:50.000Z",
+              "updatedAt": "2026-07-28T00:27:50.000Z",
+              "uid": "35240-9821ce03-fa14-4af4-8194-38641dbaed1d"
+            },
+            {
+              "id": "5d4b8e90-07c9-461e-85c5-c66b2501917a",
+              "name": "Authorization not provided",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/absences_per_day?start=<string>&end=<string>&request_member_ids=<string>&department_ids=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "absences_per_day"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) ",
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) ",
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:27:50.000Z",
+              "updatedAt": "2026-07-28T00:27:50.000Z",
+              "uid": "35240-5d4b8e90-07c9-461e-85c5-c66b2501917a"
+            },
+            {
+              "id": "6dea5d95-19ef-4e53-86fe-9d7ead9eddb8",
+              "name": "Insufficient access",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/absences_per_day?start=<string>&end=<string>&request_member_ids=<string>&department_ids=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "absences_per_day"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) ",
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) ",
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:27:50.000Z",
+              "updatedAt": "2026-07-28T00:27:50.000Z",
+              "uid": "35240-6dea5d95-19ef-4e53-86fe-9d7ead9eddb8"
+            },
+            {
+              "id": "58edadad-7665-4b28-ae38-105ea5b0174a",
+              "name": "Not found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/absences_per_day?start=<string>&end=<string>&request_member_ids=<string>&department_ids=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "absences_per_day"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) ",
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) ",
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:27:50.000Z",
+              "updatedAt": "2026-07-28T00:27:50.000Z",
+              "uid": "35240-58edadad-7665-4b28-ae38-105ea5b0174a"
+            },
+            {
+              "id": "dbd87754-bae8-4253-83ee-8138dc33868b",
+              "name": "Internal server error",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/absences_per_day?start=<string>&end=<string>&request_member_ids=<string>&department_ids=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "absences_per_day"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) ",
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) ",
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:27:50.000Z",
+              "updatedAt": "2026-07-28T00:27:50.000Z",
+              "uid": "35240-dbd87754-bae8-4253-83ee-8138dc33868b"
+            }
+          ],
+          "createdAt": "2026-07-28T00:27:50.000Z",
+          "updatedAt": "2026-07-28T00:27:50.000Z",
+          "uid": "35240-c8c16764-d8a0-48d2-a575-3149fb3d7bf2"
+        }
+      ],
+      "id": "139470ea-623e-48d7-9f43-e5f9c095ef14",
+      "createdAt": "2026-07-28T00:27:50.000Z",
+      "updatedAt": "2026-07-28T00:27:50.000Z",
+      "uid": "35240-139470ea-623e-48d7-9f43-e5f9c095ef14"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.absentify.com/api/v1"
+    }
+  ]
+}

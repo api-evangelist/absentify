@@ -1,0 +1,2276 @@
+{
+  "info": {
+    "_postman_id": "fae9e610-f06d-4c96-a536-fc38ba746050",
+    "name": "Absentify Absences Leave types API",
+    "description": "The Absentify REST API provides comprehensive absence management capabilities for Microsoft 365-integrated organizations. Manage members, departments, leave types, requests, allowances, public holidays, and workspace settings. The API requires the Plus plan and uses API key authentication. Rate limit: 150 requests per second per IP.\n\nContact Support:\n Email: support@absentify.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T00:28:01.000Z",
+    "updatedAt": "2026-07-28T00:28:01.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-fae9e610-f06d-4c96-a536-fc38ba746050"
+  },
+  "item": [
+    {
+      "name": "leave_types",
+      "item": [
+        {
+          "name": "{id}",
+          "item": [
+            {
+              "name": "restore",
+              "item": [
+                {
+                  "name": "Absentify Restore an Archived Leave Type",
+                  "id": "c13ff383-a0cc-4140-acf9-b3b633374905",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "apikey",
+                      "apikey": [
+                        {
+                          "key": "key",
+                          "value": "X-API-KEY",
+                          "type": "string"
+                        },
+                        {
+                          "key": "value",
+                          "value": "{{apiKey}}",
+                          "type": "string"
+                        },
+                        {
+                          "key": "in",
+                          "value": "header",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/leave_types/:id/restore",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "leave_types",
+                        ":id",
+                        "restore"
+                      ],
+                      "variable": [
+                        {
+                          "id": "5ba8d3ae-0fa1-4e9a-985b-72ca52bacc60",
+                          "key": "id",
+                          "value": "bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "description": "Restore an archived leave type to make it available for user selection in the UI again"
+                  },
+                  "response": [
+                    {
+                      "id": "95e47b13-66d0-4472-b316-f228f73dfd0c",
+                      "name": "Successful response",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/leave_types/:id/restore",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "leave_types",
+                            ":id",
+                            "restore"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09",
+                      "createdAt": "2026-07-28T00:28:02.000Z",
+                      "updatedAt": "2026-07-28T00:28:02.000Z",
+                      "uid": "35240-95e47b13-66d0-4472-b316-f228f73dfd0c"
+                    },
+                    {
+                      "id": "ee94fd14-3545-4e8f-934b-a4eec95f5da9",
+                      "name": "Invalid input data",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/leave_types/:id/restore",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "leave_types",
+                            ":id",
+                            "restore"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:02.000Z",
+                      "updatedAt": "2026-07-28T00:28:02.000Z",
+                      "uid": "35240-ee94fd14-3545-4e8f-934b-a4eec95f5da9"
+                    },
+                    {
+                      "id": "74f47a00-0485-4e0e-a95a-93f50eee6137",
+                      "name": "Authorization not provided",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/leave_types/:id/restore",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "leave_types",
+                            ":id",
+                            "restore"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:02.000Z",
+                      "updatedAt": "2026-07-28T00:28:02.000Z",
+                      "uid": "35240-74f47a00-0485-4e0e-a95a-93f50eee6137"
+                    },
+                    {
+                      "id": "4d760d10-5657-461e-b1b3-5237a6ff0249",
+                      "name": "Insufficient access",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/leave_types/:id/restore",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "leave_types",
+                            ":id",
+                            "restore"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:02.000Z",
+                      "updatedAt": "2026-07-28T00:28:02.000Z",
+                      "uid": "35240-4d760d10-5657-461e-b1b3-5237a6ff0249"
+                    },
+                    {
+                      "id": "741dccab-509e-4118-81e9-b2378f62fb3d",
+                      "name": "Not found",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/leave_types/:id/restore",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "leave_types",
+                            ":id",
+                            "restore"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:02.000Z",
+                      "updatedAt": "2026-07-28T00:28:02.000Z",
+                      "uid": "35240-741dccab-509e-4118-81e9-b2378f62fb3d"
+                    },
+                    {
+                      "id": "c7411a11-1736-410c-803c-a444528daef9",
+                      "name": "Internal server error",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/leave_types/:id/restore",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "leave_types",
+                            ":id",
+                            "restore"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:02.000Z",
+                      "updatedAt": "2026-07-28T00:28:02.000Z",
+                      "uid": "35240-c7411a11-1736-410c-803c-a444528daef9"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T00:28:02.000Z",
+                  "updatedAt": "2026-07-28T00:28:02.000Z",
+                  "uid": "35240-c13ff383-a0cc-4140-acf9-b3b633374905"
+                }
+              ],
+              "id": "4919cbcc-5d95-4a21-81e8-c68111a33247",
+              "createdAt": "2026-07-28T00:28:02.000Z",
+              "updatedAt": "2026-07-28T00:28:02.000Z",
+              "uid": "35240-4919cbcc-5d95-4a21-81e8-c68111a33247"
+            },
+            {
+              "name": "Absentify Read a Leave Type by Id",
+              "id": "9f4929a5-5028-4ed2-9976-83875b3ba23c",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "key",
+                      "value": "X-API-KEY",
+                      "type": "string"
+                    },
+                    {
+                      "key": "value",
+                      "value": "{{apiKey}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/leave_types/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "leave_types",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "id": "c6572979-7367-411b-8305-5eb3f882492d",
+                      "key": "id",
+                      "value": "bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "description": "Read a leave type by id"
+              },
+              "response": [
+                {
+                  "id": "a9251456-4855-4a77-9392-a7edd09a951b",
+                  "name": "Successful response",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/leave_types/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "leave_types",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"createdAt\": \"<string>\",\n  \"updatedAt\": \"<string>\",\n  \"color\": \"<string>\",\n  \"icon\": \"<string>\",\n  \"needs_approval\": \"<boolean>\",\n  \"deleted\": \"<boolean>\",\n  \"deleted_at\": \"<string>\",\n  \"deleted_by\": {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"email\": \"<string>\"\n  },\n  \"maximum_absent\": \"<boolean>\",\n  \"leave_unit\": \"minutes_5\",\n  \"position\": \"<number>\",\n  \"take_from_allowance\": \"<boolean>\",\n  \"privacy_hide_leavetype\": \"<boolean>\",\n  \"outlook_synchronization_show_as\": \"unknown\",\n  \"outlook_synchronization_subject\": \"<string>\",\n  \"allowance_type\": {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"ignore_allowance_limit\": \"<boolean>\",\n    \"allowance_unit\": \"days\"\n  },\n  \"counts_as_leave\": \"<boolean>\"\n}",
+                  "createdAt": "2026-07-28T00:28:02.000Z",
+                  "updatedAt": "2026-07-28T00:28:02.000Z",
+                  "uid": "35240-a9251456-4855-4a77-9392-a7edd09a951b"
+                },
+                {
+                  "id": "b977010b-b20f-4107-b23d-ed32ed9b28d3",
+                  "name": "Invalid input data",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/leave_types/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "leave_types",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:02.000Z",
+                  "updatedAt": "2026-07-28T00:28:02.000Z",
+                  "uid": "35240-b977010b-b20f-4107-b23d-ed32ed9b28d3"
+                },
+                {
+                  "id": "0d2261e6-a334-4778-b05d-08080774842d",
+                  "name": "Authorization not provided",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/leave_types/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "leave_types",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:02.000Z",
+                  "updatedAt": "2026-07-28T00:28:02.000Z",
+                  "uid": "35240-0d2261e6-a334-4778-b05d-08080774842d"
+                },
+                {
+                  "id": "8dfa050d-cbb8-42bc-bb01-0281a01448f9",
+                  "name": "Insufficient access",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/leave_types/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "leave_types",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:02.000Z",
+                  "updatedAt": "2026-07-28T00:28:02.000Z",
+                  "uid": "35240-8dfa050d-cbb8-42bc-bb01-0281a01448f9"
+                },
+                {
+                  "id": "536da89d-0f8e-432d-a210-8db6020d6730",
+                  "name": "Not found",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/leave_types/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "leave_types",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:02.000Z",
+                  "updatedAt": "2026-07-28T00:28:02.000Z",
+                  "uid": "35240-536da89d-0f8e-432d-a210-8db6020d6730"
+                },
+                {
+                  "id": "8b0f5232-4c4e-4837-b514-1fc21c1138ff",
+                  "name": "Internal server error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/leave_types/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "leave_types",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:02.000Z",
+                  "updatedAt": "2026-07-28T00:28:02.000Z",
+                  "uid": "35240-8b0f5232-4c4e-4837-b514-1fc21c1138ff"
+                }
+              ],
+              "createdAt": "2026-07-28T00:28:02.000Z",
+              "updatedAt": "2026-07-28T00:28:02.000Z",
+              "uid": "35240-9f4929a5-5028-4ed2-9976-83875b3ba23c"
+            },
+            {
+              "name": "Absentify Update a Leave Type",
+              "id": "88a8fd63-07a4-4299-9c7e-60ade5f89811",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "key",
+                      "value": "X-API-KEY",
+                      "type": "string"
+                    },
+                    {
+                      "key": "value",
+                      "value": "{{apiKey}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"color\": \"<string>\",\n  \"needs_approval\": \"<boolean>\",\n  \"maximum_absent\": \"<boolean>\",\n  \"leave_unit\": \"minutes_5\",\n  \"position\": \"<integer>\",\n  \"take_from_allowance\": \"<boolean>\",\n  \"privacy_hide_leavetype\": \"<boolean>\",\n  \"outlook_synchronization_show_as\": \"free\",\n  \"outlook_synchronization_subject\": \"<string>\",\n  \"icon\": \"Frown\",\n  \"reason_mandatory\": \"<boolean>\",\n  \"reason_hint_text\": \"<string>\",\n  \"allowance_type_id\": \"<string>\",\n  \"sync_option\": \"Disabled\",\n  \"counts_as_leave\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/leave_types/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "leave_types",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "id": "53a1109d-98be-4c26-97d8-6f399f431e96",
+                      "key": "id",
+                      "value": "bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "description": "Update a leave type"
+              },
+              "response": [
+                {
+                  "id": "5dc33636-51b9-4500-92f6-796bfd42fba5",
+                  "name": "Successful response",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"<string>\",\n  \"color\": \"<string>\",\n  \"needs_approval\": \"<boolean>\",\n  \"maximum_absent\": \"<boolean>\",\n  \"leave_unit\": \"minutes_5\",\n  \"position\": \"<integer>\",\n  \"take_from_allowance\": \"<boolean>\",\n  \"privacy_hide_leavetype\": \"<boolean>\",\n  \"outlook_synchronization_show_as\": \"free\",\n  \"outlook_synchronization_subject\": \"<string>\",\n  \"icon\": \"Frown\",\n  \"reason_mandatory\": \"<boolean>\",\n  \"reason_hint_text\": \"<string>\",\n  \"allowance_type_id\": \"<string>\",\n  \"sync_option\": \"Disabled\",\n  \"counts_as_leave\": \"<boolean>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/leave_types/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "leave_types",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09",
+                  "createdAt": "2026-07-28T00:28:02.000Z",
+                  "updatedAt": "2026-07-28T00:28:02.000Z",
+                  "uid": "35240-5dc33636-51b9-4500-92f6-796bfd42fba5"
+                },
+                {
+                  "id": "92863b2a-aa24-4f9e-a197-9b743e4564a6",
+                  "name": "Invalid input data",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"<string>\",\n  \"color\": \"<string>\",\n  \"needs_approval\": \"<boolean>\",\n  \"maximum_absent\": \"<boolean>\",\n  \"leave_unit\": \"minutes_5\",\n  \"position\": \"<integer>\",\n  \"take_from_allowance\": \"<boolean>\",\n  \"privacy_hide_leavetype\": \"<boolean>\",\n  \"outlook_synchronization_show_as\": \"free\",\n  \"outlook_synchronization_subject\": \"<string>\",\n  \"icon\": \"Frown\",\n  \"reason_mandatory\": \"<boolean>\",\n  \"reason_hint_text\": \"<string>\",\n  \"allowance_type_id\": \"<string>\",\n  \"sync_option\": \"Disabled\",\n  \"counts_as_leave\": \"<boolean>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/leave_types/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "leave_types",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:02.000Z",
+                  "updatedAt": "2026-07-28T00:28:02.000Z",
+                  "uid": "35240-92863b2a-aa24-4f9e-a197-9b743e4564a6"
+                },
+                {
+                  "id": "d2941dbf-b022-400d-80ca-6399d8d5b5e7",
+                  "name": "Authorization not provided",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"<string>\",\n  \"color\": \"<string>\",\n  \"needs_approval\": \"<boolean>\",\n  \"maximum_absent\": \"<boolean>\",\n  \"leave_unit\": \"minutes_5\",\n  \"position\": \"<integer>\",\n  \"take_from_allowance\": \"<boolean>\",\n  \"privacy_hide_leavetype\": \"<boolean>\",\n  \"outlook_synchronization_show_as\": \"free\",\n  \"outlook_synchronization_subject\": \"<string>\",\n  \"icon\": \"Frown\",\n  \"reason_mandatory\": \"<boolean>\",\n  \"reason_hint_text\": \"<string>\",\n  \"allowance_type_id\": \"<string>\",\n  \"sync_option\": \"Disabled\",\n  \"counts_as_leave\": \"<boolean>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/leave_types/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "leave_types",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:02.000Z",
+                  "updatedAt": "2026-07-28T00:28:02.000Z",
+                  "uid": "35240-d2941dbf-b022-400d-80ca-6399d8d5b5e7"
+                },
+                {
+                  "id": "def98dab-80bc-46f3-9675-dc930db55452",
+                  "name": "Insufficient access",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"<string>\",\n  \"color\": \"<string>\",\n  \"needs_approval\": \"<boolean>\",\n  \"maximum_absent\": \"<boolean>\",\n  \"leave_unit\": \"minutes_5\",\n  \"position\": \"<integer>\",\n  \"take_from_allowance\": \"<boolean>\",\n  \"privacy_hide_leavetype\": \"<boolean>\",\n  \"outlook_synchronization_show_as\": \"free\",\n  \"outlook_synchronization_subject\": \"<string>\",\n  \"icon\": \"Frown\",\n  \"reason_mandatory\": \"<boolean>\",\n  \"reason_hint_text\": \"<string>\",\n  \"allowance_type_id\": \"<string>\",\n  \"sync_option\": \"Disabled\",\n  \"counts_as_leave\": \"<boolean>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/leave_types/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "leave_types",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:02.000Z",
+                  "updatedAt": "2026-07-28T00:28:02.000Z",
+                  "uid": "35240-def98dab-80bc-46f3-9675-dc930db55452"
+                },
+                {
+                  "id": "de54b265-6ddd-4c15-b67d-4b3a3e1e359f",
+                  "name": "Not found",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"<string>\",\n  \"color\": \"<string>\",\n  \"needs_approval\": \"<boolean>\",\n  \"maximum_absent\": \"<boolean>\",\n  \"leave_unit\": \"minutes_5\",\n  \"position\": \"<integer>\",\n  \"take_from_allowance\": \"<boolean>\",\n  \"privacy_hide_leavetype\": \"<boolean>\",\n  \"outlook_synchronization_show_as\": \"free\",\n  \"outlook_synchronization_subject\": \"<string>\",\n  \"icon\": \"Frown\",\n  \"reason_mandatory\": \"<boolean>\",\n  \"reason_hint_text\": \"<string>\",\n  \"allowance_type_id\": \"<string>\",\n  \"sync_option\": \"Disabled\",\n  \"counts_as_leave\": \"<boolean>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/leave_types/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "leave_types",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:02.000Z",
+                  "updatedAt": "2026-07-28T00:28:02.000Z",
+                  "uid": "35240-de54b265-6ddd-4c15-b67d-4b3a3e1e359f"
+                },
+                {
+                  "id": "08588f6c-7734-4abf-937f-82b926d057f7",
+                  "name": "Internal server error",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"<string>\",\n  \"color\": \"<string>\",\n  \"needs_approval\": \"<boolean>\",\n  \"maximum_absent\": \"<boolean>\",\n  \"leave_unit\": \"minutes_5\",\n  \"position\": \"<integer>\",\n  \"take_from_allowance\": \"<boolean>\",\n  \"privacy_hide_leavetype\": \"<boolean>\",\n  \"outlook_synchronization_show_as\": \"free\",\n  \"outlook_synchronization_subject\": \"<string>\",\n  \"icon\": \"Frown\",\n  \"reason_mandatory\": \"<boolean>\",\n  \"reason_hint_text\": \"<string>\",\n  \"allowance_type_id\": \"<string>\",\n  \"sync_option\": \"Disabled\",\n  \"counts_as_leave\": \"<boolean>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/leave_types/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "leave_types",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:02.000Z",
+                  "updatedAt": "2026-07-28T00:28:02.000Z",
+                  "uid": "35240-08588f6c-7734-4abf-937f-82b926d057f7"
+                }
+              ],
+              "createdAt": "2026-07-28T00:28:02.000Z",
+              "updatedAt": "2026-07-28T00:28:02.000Z",
+              "uid": "35240-88a8fd63-07a4-4299-9c7e-60ade5f89811"
+            },
+            {
+              "name": "Absentify Delete a Leave Type",
+              "id": "db712cfa-dabc-44dc-9eb4-04bd72867f01",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "key",
+                      "value": "X-API-KEY",
+                      "type": "string"
+                    },
+                    {
+                      "key": "value",
+                      "value": "{{apiKey}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/leave_types/:id?deleted=<boolean>&deleted_by_member_id=bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "leave_types",
+                    ":id"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) ",
+                      "key": "deleted",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "description": "(Required) ",
+                      "key": "deleted_by_member_id",
+                      "value": "bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "id": "6575671a-05b3-4218-80ee-66d89b10a85c",
+                      "key": "id",
+                      "value": "bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "description": "Delete a leave type"
+              },
+              "response": [
+                {
+                  "id": "3fa39c21-c8a0-4e48-b759-536204484347",
+                  "name": "Successful response",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/leave_types/:id?deleted=<boolean>&deleted_by_member_id=bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "leave_types",
+                        ":id"
+                      ],
+                      "query": [
+                        {
+                          "description": "(Required) ",
+                          "key": "deleted",
+                          "value": "<boolean>"
+                        },
+                        {
+                          "description": "(Required) ",
+                          "key": "deleted_by_member_id",
+                          "value": "bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "<null>",
+                  "createdAt": "2026-07-28T00:28:02.000Z",
+                  "updatedAt": "2026-07-28T00:28:02.000Z",
+                  "uid": "35240-3fa39c21-c8a0-4e48-b759-536204484347"
+                },
+                {
+                  "id": "7782b4e3-161e-4319-830d-666376c43aaf",
+                  "name": "Invalid input data",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/leave_types/:id?deleted=<boolean>&deleted_by_member_id=bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "leave_types",
+                        ":id"
+                      ],
+                      "query": [
+                        {
+                          "description": "(Required) ",
+                          "key": "deleted",
+                          "value": "<boolean>"
+                        },
+                        {
+                          "description": "(Required) ",
+                          "key": "deleted_by_member_id",
+                          "value": "bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:02.000Z",
+                  "updatedAt": "2026-07-28T00:28:02.000Z",
+                  "uid": "35240-7782b4e3-161e-4319-830d-666376c43aaf"
+                },
+                {
+                  "id": "1569a323-5336-49dd-bc52-ff91c9872a29",
+                  "name": "Authorization not provided",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/leave_types/:id?deleted=<boolean>&deleted_by_member_id=bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "leave_types",
+                        ":id"
+                      ],
+                      "query": [
+                        {
+                          "description": "(Required) ",
+                          "key": "deleted",
+                          "value": "<boolean>"
+                        },
+                        {
+                          "description": "(Required) ",
+                          "key": "deleted_by_member_id",
+                          "value": "bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:02.000Z",
+                  "updatedAt": "2026-07-28T00:28:02.000Z",
+                  "uid": "35240-1569a323-5336-49dd-bc52-ff91c9872a29"
+                },
+                {
+                  "id": "95caf1f3-2977-4c04-ad5d-fb5ad98d800b",
+                  "name": "Insufficient access",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/leave_types/:id?deleted=<boolean>&deleted_by_member_id=bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "leave_types",
+                        ":id"
+                      ],
+                      "query": [
+                        {
+                          "description": "(Required) ",
+                          "key": "deleted",
+                          "value": "<boolean>"
+                        },
+                        {
+                          "description": "(Required) ",
+                          "key": "deleted_by_member_id",
+                          "value": "bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:02.000Z",
+                  "updatedAt": "2026-07-28T00:28:02.000Z",
+                  "uid": "35240-95caf1f3-2977-4c04-ad5d-fb5ad98d800b"
+                },
+                {
+                  "id": "93d519a2-951e-44b1-ac6b-1cf3f8629e01",
+                  "name": "Not found",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/leave_types/:id?deleted=<boolean>&deleted_by_member_id=bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "leave_types",
+                        ":id"
+                      ],
+                      "query": [
+                        {
+                          "description": "(Required) ",
+                          "key": "deleted",
+                          "value": "<boolean>"
+                        },
+                        {
+                          "description": "(Required) ",
+                          "key": "deleted_by_member_id",
+                          "value": "bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:02.000Z",
+                  "updatedAt": "2026-07-28T00:28:02.000Z",
+                  "uid": "35240-93d519a2-951e-44b1-ac6b-1cf3f8629e01"
+                },
+                {
+                  "id": "2162ec54-0042-49dc-86ec-2bc332f3ff4f",
+                  "name": "Internal server error",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/leave_types/:id?deleted=<boolean>&deleted_by_member_id=bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "leave_types",
+                        ":id"
+                      ],
+                      "query": [
+                        {
+                          "description": "(Required) ",
+                          "key": "deleted",
+                          "value": "<boolean>"
+                        },
+                        {
+                          "description": "(Required) ",
+                          "key": "deleted_by_member_id",
+                          "value": "bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:02.000Z",
+                  "updatedAt": "2026-07-28T00:28:02.000Z",
+                  "uid": "35240-2162ec54-0042-49dc-86ec-2bc332f3ff4f"
+                }
+              ],
+              "createdAt": "2026-07-28T00:28:02.000Z",
+              "updatedAt": "2026-07-28T00:28:02.000Z",
+              "uid": "35240-db712cfa-dabc-44dc-9eb4-04bd72867f01"
+            }
+          ],
+          "id": "c4d9717b-8243-4790-baf8-259628a4c52f",
+          "createdAt": "2026-07-28T00:28:02.000Z",
+          "updatedAt": "2026-07-28T00:28:02.000Z",
+          "uid": "35240-c4d9717b-8243-4790-baf8-259628a4c52f"
+        },
+        {
+          "name": "Absentify Get All Leave Types",
+          "id": "6ce2b744-9b4b-4e1e-87e7-a4612f049def",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-API-KEY",
+                  "type": "string"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/leave_types",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "leave_types"
+              ]
+            },
+            "description": "Get all leave types"
+          },
+          "response": [
+            {
+              "id": "4fe6ccb5-deea-43a8-9fb5-613a729b6e22",
+              "name": "Successful response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/leave_types",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "leave_types"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "[\n  {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"createdAt\": \"<string>\",\n    \"updatedAt\": \"<string>\",\n    \"color\": \"<string>\",\n    \"icon\": \"<string>\",\n    \"needs_approval\": \"<boolean>\",\n    \"deleted\": \"<boolean>\",\n    \"deleted_at\": \"<string>\",\n    \"deleted_by\": {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\"\n    },\n    \"maximum_absent\": \"<boolean>\",\n    \"leave_unit\": \"minutes_5\",\n    \"position\": \"<number>\",\n    \"take_from_allowance\": \"<boolean>\",\n    \"privacy_hide_leavetype\": \"<boolean>\",\n    \"outlook_synchronization_show_as\": \"busy\",\n    \"outlook_synchronization_subject\": \"<string>\",\n    \"allowance_type\": {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"ignore_allowance_limit\": \"<boolean>\",\n      \"allowance_unit\": \"hours\"\n    },\n    \"counts_as_leave\": \"<boolean>\"\n  },\n  {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"createdAt\": \"<string>\",\n    \"updatedAt\": \"<string>\",\n    \"color\": \"<string>\",\n    \"icon\": \"<string>\",\n    \"needs_approval\": \"<boolean>\",\n    \"deleted\": \"<boolean>\",\n    \"deleted_at\": \"<string>\",\n    \"deleted_by\": {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\"\n    },\n    \"maximum_absent\": \"<boolean>\",\n    \"leave_unit\": \"minutes_10\",\n    \"position\": \"<number>\",\n    \"take_from_allowance\": \"<boolean>\",\n    \"privacy_hide_leavetype\": \"<boolean>\",\n    \"outlook_synchronization_show_as\": \"tentative\",\n    \"outlook_synchronization_subject\": \"<string>\",\n    \"allowance_type\": {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"ignore_allowance_limit\": \"<boolean>\",\n      \"allowance_unit\": \"days\"\n    },\n    \"counts_as_leave\": \"<boolean>\"\n  }\n]",
+              "createdAt": "2026-07-28T00:28:02.000Z",
+              "updatedAt": "2026-07-28T00:28:02.000Z",
+              "uid": "35240-4fe6ccb5-deea-43a8-9fb5-613a729b6e22"
+            },
+            {
+              "id": "bf4f0c00-6f4d-415e-8601-642c32df389c",
+              "name": "Invalid input data",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/leave_types",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "leave_types"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:02.000Z",
+              "updatedAt": "2026-07-28T00:28:02.000Z",
+              "uid": "35240-bf4f0c00-6f4d-415e-8601-642c32df389c"
+            },
+            {
+              "id": "c4e2e5f7-cae5-4bb1-a50f-0672ffda12f4",
+              "name": "Authorization not provided",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/leave_types",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "leave_types"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:02.000Z",
+              "updatedAt": "2026-07-28T00:28:02.000Z",
+              "uid": "35240-c4e2e5f7-cae5-4bb1-a50f-0672ffda12f4"
+            },
+            {
+              "id": "fdec89aa-0f51-42b7-ac4d-e2eacb4af4d4",
+              "name": "Insufficient access",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/leave_types",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "leave_types"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:02.000Z",
+              "updatedAt": "2026-07-28T00:28:02.000Z",
+              "uid": "35240-fdec89aa-0f51-42b7-ac4d-e2eacb4af4d4"
+            },
+            {
+              "id": "4efd1913-452e-41d6-9074-441317c32ac9",
+              "name": "Not found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/leave_types",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "leave_types"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:02.000Z",
+              "updatedAt": "2026-07-28T00:28:02.000Z",
+              "uid": "35240-4efd1913-452e-41d6-9074-441317c32ac9"
+            },
+            {
+              "id": "95344e26-9d2a-45c3-962d-af725f89d991",
+              "name": "Internal server error",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/leave_types",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "leave_types"
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:02.000Z",
+              "updatedAt": "2026-07-28T00:28:02.000Z",
+              "uid": "35240-95344e26-9d2a-45c3-962d-af725f89d991"
+            }
+          ],
+          "createdAt": "2026-07-28T00:28:02.000Z",
+          "updatedAt": "2026-07-28T00:28:02.000Z",
+          "uid": "35240-6ce2b744-9b4b-4e1e-87e7-a4612f049def"
+        },
+        {
+          "name": "Absentify Create a Leave Type",
+          "id": "f677033c-d7c6-4ec4-ac0a-babfa0d7dabc",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-API-KEY",
+                  "type": "string"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"color\": \"<string>\",\n  \"needs_approval\": \"<boolean>\",\n  \"maximum_absent\": \"<boolean>\",\n  \"leave_unit\": \"minutes_1\",\n  \"position\": \"<number>\",\n  \"take_from_allowance\": \"<boolean>\",\n  \"privacy_hide_leavetype\": \"<boolean>\",\n  \"outlook_synchronization_show_as\": \"oof\",\n  \"outlook_synchronization_subject\": \"<string>\",\n  \"icon\": \"Users\",\n  \"reason_mandatory\": \"<boolean>\",\n  \"reason_hint_text\": \"<string>\",\n  \"allowance_type_id\": \"<string>\",\n  \"ignore_schedule\": \"<boolean>\",\n  \"sync_option\": \"All\",\n  \"ignore_public_holidays\": \"<boolean>\",\n  \"reason_visibility_public\": \"<boolean>\",\n  \"counts_as_leave\": true\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/leave_types",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "leave_types"
+              ]
+            },
+            "description": "Create a leave type"
+          },
+          "response": [
+            {
+              "id": "1dbe3f5f-fcdd-4996-b0e1-2608a4606f2c",
+              "name": "Successful response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"color\": \"<string>\",\n  \"needs_approval\": \"<boolean>\",\n  \"maximum_absent\": \"<boolean>\",\n  \"leave_unit\": \"minutes_1\",\n  \"position\": \"<number>\",\n  \"take_from_allowance\": \"<boolean>\",\n  \"privacy_hide_leavetype\": \"<boolean>\",\n  \"outlook_synchronization_show_as\": \"oof\",\n  \"outlook_synchronization_subject\": \"<string>\",\n  \"icon\": \"Users\",\n  \"reason_mandatory\": \"<boolean>\",\n  \"reason_hint_text\": \"<string>\",\n  \"allowance_type_id\": \"<string>\",\n  \"ignore_schedule\": \"<boolean>\",\n  \"sync_option\": \"All\",\n  \"ignore_public_holidays\": \"<boolean>\",\n  \"reason_visibility_public\": \"<boolean>\",\n  \"counts_as_leave\": true\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/leave_types",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "leave_types"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "bcCDdf13-a6c4-589d-A9bb-a9eFf1eA1B09",
+              "createdAt": "2026-07-28T00:28:02.000Z",
+              "updatedAt": "2026-07-28T00:28:02.000Z",
+              "uid": "35240-1dbe3f5f-fcdd-4996-b0e1-2608a4606f2c"
+            },
+            {
+              "id": "049b3cde-757b-4a1e-b279-790a8154009d",
+              "name": "Invalid input data",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"color\": \"<string>\",\n  \"needs_approval\": \"<boolean>\",\n  \"maximum_absent\": \"<boolean>\",\n  \"leave_unit\": \"minutes_1\",\n  \"position\": \"<number>\",\n  \"take_from_allowance\": \"<boolean>\",\n  \"privacy_hide_leavetype\": \"<boolean>\",\n  \"outlook_synchronization_show_as\": \"oof\",\n  \"outlook_synchronization_subject\": \"<string>\",\n  \"icon\": \"Users\",\n  \"reason_mandatory\": \"<boolean>\",\n  \"reason_hint_text\": \"<string>\",\n  \"allowance_type_id\": \"<string>\",\n  \"ignore_schedule\": \"<boolean>\",\n  \"sync_option\": \"All\",\n  \"ignore_public_holidays\": \"<boolean>\",\n  \"reason_visibility_public\": \"<boolean>\",\n  \"counts_as_leave\": true\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/leave_types",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "leave_types"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:02.000Z",
+              "updatedAt": "2026-07-28T00:28:02.000Z",
+              "uid": "35240-049b3cde-757b-4a1e-b279-790a8154009d"
+            },
+            {
+              "id": "e18d722b-a300-46c7-b6e9-93f03131c36c",
+              "name": "Authorization not provided",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"color\": \"<string>\",\n  \"needs_approval\": \"<boolean>\",\n  \"maximum_absent\": \"<boolean>\",\n  \"leave_unit\": \"minutes_1\",\n  \"position\": \"<number>\",\n  \"take_from_allowance\": \"<boolean>\",\n  \"privacy_hide_leavetype\": \"<boolean>\",\n  \"outlook_synchronization_show_as\": \"oof\",\n  \"outlook_synchronization_subject\": \"<string>\",\n  \"icon\": \"Users\",\n  \"reason_mandatory\": \"<boolean>\",\n  \"reason_hint_text\": \"<string>\",\n  \"allowance_type_id\": \"<string>\",\n  \"ignore_schedule\": \"<boolean>\",\n  \"sync_option\": \"All\",\n  \"ignore_public_holidays\": \"<boolean>\",\n  \"reason_visibility_public\": \"<boolean>\",\n  \"counts_as_leave\": true\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/leave_types",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "leave_types"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:02.000Z",
+              "updatedAt": "2026-07-28T00:28:02.000Z",
+              "uid": "35240-e18d722b-a300-46c7-b6e9-93f03131c36c"
+            },
+            {
+              "id": "abadcf9c-b198-4582-bf4d-306c21d4ff5b",
+              "name": "Insufficient access",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"color\": \"<string>\",\n  \"needs_approval\": \"<boolean>\",\n  \"maximum_absent\": \"<boolean>\",\n  \"leave_unit\": \"minutes_1\",\n  \"position\": \"<number>\",\n  \"take_from_allowance\": \"<boolean>\",\n  \"privacy_hide_leavetype\": \"<boolean>\",\n  \"outlook_synchronization_show_as\": \"oof\",\n  \"outlook_synchronization_subject\": \"<string>\",\n  \"icon\": \"Users\",\n  \"reason_mandatory\": \"<boolean>\",\n  \"reason_hint_text\": \"<string>\",\n  \"allowance_type_id\": \"<string>\",\n  \"ignore_schedule\": \"<boolean>\",\n  \"sync_option\": \"All\",\n  \"ignore_public_holidays\": \"<boolean>\",\n  \"reason_visibility_public\": \"<boolean>\",\n  \"counts_as_leave\": true\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/leave_types",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "leave_types"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:02.000Z",
+              "updatedAt": "2026-07-28T00:28:02.000Z",
+              "uid": "35240-abadcf9c-b198-4582-bf4d-306c21d4ff5b"
+            },
+            {
+              "id": "f4aeb942-d4b0-47a1-a421-6e402fe3e43a",
+              "name": "Internal server error",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"color\": \"<string>\",\n  \"needs_approval\": \"<boolean>\",\n  \"maximum_absent\": \"<boolean>\",\n  \"leave_unit\": \"minutes_1\",\n  \"position\": \"<number>\",\n  \"take_from_allowance\": \"<boolean>\",\n  \"privacy_hide_leavetype\": \"<boolean>\",\n  \"outlook_synchronization_show_as\": \"oof\",\n  \"outlook_synchronization_subject\": \"<string>\",\n  \"icon\": \"Users\",\n  \"reason_mandatory\": \"<boolean>\",\n  \"reason_hint_text\": \"<string>\",\n  \"allowance_type_id\": \"<string>\",\n  \"ignore_schedule\": \"<boolean>\",\n  \"sync_option\": \"All\",\n  \"ignore_public_holidays\": \"<boolean>\",\n  \"reason_visibility_public\": \"<boolean>\",\n  \"counts_as_leave\": true\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/leave_types",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "leave_types"
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:02.000Z",
+              "updatedAt": "2026-07-28T00:28:02.000Z",
+              "uid": "35240-f4aeb942-d4b0-47a1-a421-6e402fe3e43a"
+            }
+          ],
+          "createdAt": "2026-07-28T00:28:02.000Z",
+          "updatedAt": "2026-07-28T00:28:02.000Z",
+          "uid": "35240-f677033c-d7c6-4ec4-ac0a-babfa0d7dabc"
+        }
+      ],
+      "id": "3ad8bf34-14cd-4a35-8b38-f9a52c274191",
+      "createdAt": "2026-07-28T00:28:02.000Z",
+      "updatedAt": "2026-07-28T00:28:02.000Z",
+      "uid": "35240-3ad8bf34-14cd-4a35-8b38-f9a52c274191"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.absentify.com/api/v1"
+    }
+  ]
+}

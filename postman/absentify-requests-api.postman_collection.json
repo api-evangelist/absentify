@@ -1,0 +1,3869 @@
+{
+  "info": {
+    "_postman_id": "d6e67e71-a035-4f47-96f8-b56b7d3eee6d",
+    "name": "Absentify Absences Requests API",
+    "description": "The Absentify REST API provides comprehensive absence management capabilities for Microsoft 365-integrated organizations. Manage members, departments, leave types, requests, allowances, public holidays, and workspace settings. The API requires the Plus plan and uses API key authentication. Rate limit: 150 requests per second per IP.\n\nContact Support:\n Email: support@absentify.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T00:28:05.000Z",
+    "updatedAt": "2026-07-28T00:28:06.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-d6e67e71-a035-4f47-96f8-b56b7d3eee6d"
+  },
+  "item": [
+    {
+      "name": "requests",
+      "item": [
+        {
+          "name": "{id}",
+          "item": [
+            {
+              "name": "approve",
+              "item": [
+                {
+                  "name": "Absentify Approve a Request",
+                  "id": "1c13c511-7a26-4e00-a880-3da5cc7c7e8e",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "apikey",
+                      "apikey": [
+                        {
+                          "key": "key",
+                          "value": "X-API-KEY",
+                          "type": "string"
+                        },
+                        {
+                          "key": "value",
+                          "value": "{{apiKey}}",
+                          "type": "string"
+                        },
+                        {
+                          "key": "in",
+                          "value": "header",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/requests/:id/approve",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "requests",
+                        ":id",
+                        "approve"
+                      ],
+                      "variable": [
+                        {
+                          "id": "7e3c0e62-9229-4b52-a116-55c51998225e",
+                          "key": "id",
+                          "value": "00000000-0000-0000-0000-000000000000",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "description": "Approve a pending request on behalf of the user who created the API token. The API automatically finds the next pending approval and approves it."
+                  },
+                  "response": [
+                    {
+                      "id": "464645ec-5f15-41e2-89e4-854f80bddf0c",
+                      "name": "Successful response",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/approve",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "approve"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"success\": \"<boolean>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-464645ec-5f15-41e2-89e4-854f80bddf0c"
+                    },
+                    {
+                      "id": "90659f32-6bce-43de-a6aa-02f3aa50d85b",
+                      "name": "Invalid input data",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/approve",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "approve"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-90659f32-6bce-43de-a6aa-02f3aa50d85b"
+                    },
+                    {
+                      "id": "87a2d3d2-1fa4-4013-86a4-6a9e71c17c93",
+                      "name": "Authorization not provided",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/approve",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "approve"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-87a2d3d2-1fa4-4013-86a4-6a9e71c17c93"
+                    },
+                    {
+                      "id": "05cb529e-d689-4361-a1de-639d26e34359",
+                      "name": "Insufficient access",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/approve",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "approve"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-05cb529e-d689-4361-a1de-639d26e34359"
+                    },
+                    {
+                      "id": "7d5d2ffd-c2d4-4f28-ace0-7899d0e484c4",
+                      "name": "Internal server error",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/approve",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "approve"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-7d5d2ffd-c2d4-4f28-ace0-7899d0e484c4"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T00:28:06.000Z",
+                  "updatedAt": "2026-07-28T00:28:06.000Z",
+                  "uid": "35240-1c13c511-7a26-4e00-a880-3da5cc7c7e8e"
+                }
+              ],
+              "id": "5e5d7090-d78b-49a2-a759-1626c6179524",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-5e5d7090-d78b-49a2-a759-1626c6179524"
+            },
+            {
+              "name": "decline",
+              "item": [
+                {
+                  "name": "Absentify Decline a Request",
+                  "id": "20b1f3fd-71c7-42eb-94e3-b9bac339d29e",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "apikey",
+                      "apikey": [
+                        {
+                          "key": "key",
+                          "value": "X-API-KEY",
+                          "type": "string"
+                        },
+                        {
+                          "key": "value",
+                          "value": "{{apiKey}}",
+                          "type": "string"
+                        },
+                        {
+                          "key": "in",
+                          "value": "header",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"decline_reason\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/requests/:id/decline",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "requests",
+                        ":id",
+                        "decline"
+                      ],
+                      "variable": [
+                        {
+                          "id": "563a9514-2e9b-462a-93fa-948d88c08307",
+                          "key": "id",
+                          "value": "00000000-0000-0000-0000-000000000000",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "description": "Decline a pending request on behalf of the user who created the API token. The API automatically finds the next pending approval and declines it with the provided reason."
+                  },
+                  "response": [
+                    {
+                      "id": "0f87af98-5d89-443f-9246-0565a58775b2",
+                      "name": "Successful response",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"decline_reason\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/decline",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "decline"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"success\": \"<boolean>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-0f87af98-5d89-443f-9246-0565a58775b2"
+                    },
+                    {
+                      "id": "4a5f485f-14a9-4768-b6f8-1b5fedf6fb98",
+                      "name": "Invalid input data",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"decline_reason\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/decline",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "decline"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-4a5f485f-14a9-4768-b6f8-1b5fedf6fb98"
+                    },
+                    {
+                      "id": "260f2f5a-9404-4818-971c-bbddc4b438c4",
+                      "name": "Authorization not provided",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"decline_reason\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/decline",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "decline"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-260f2f5a-9404-4818-971c-bbddc4b438c4"
+                    },
+                    {
+                      "id": "4e3ead4b-af34-4cdb-b9b4-f7c23d2639b6",
+                      "name": "Insufficient access",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"decline_reason\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/decline",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "decline"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-4e3ead4b-af34-4cdb-b9b4-f7c23d2639b6"
+                    },
+                    {
+                      "id": "a8aab02c-8898-4bc0-9751-e4810470be14",
+                      "name": "Internal server error",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"decline_reason\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/decline",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "decline"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-a8aab02c-8898-4bc0-9751-e4810470be14"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T00:28:06.000Z",
+                  "updatedAt": "2026-07-28T00:28:06.000Z",
+                  "uid": "35240-20b1f3fd-71c7-42eb-94e3-b9bac339d29e"
+                }
+              ],
+              "id": "e50f0fe7-78c7-4f23-b21b-21f523d53b04",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-e50f0fe7-78c7-4f23-b21b-21f523d53b04"
+            },
+            {
+              "name": "approve_representative",
+              "item": [
+                {
+                  "name": "Absentify Approve a Request as a Representative",
+                  "id": "75ccb89c-436c-4b11-a738-6b8320ae9d35",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "apikey",
+                      "apikey": [
+                        {
+                          "key": "key",
+                          "value": "X-API-KEY",
+                          "type": "string"
+                        },
+                        {
+                          "key": "value",
+                          "value": "{{apiKey}}",
+                          "type": "string"
+                        },
+                        {
+                          "key": "in",
+                          "value": "header",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/requests/:id/approve_representative",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "requests",
+                        ":id",
+                        "approve_representative"
+                      ],
+                      "variable": [
+                        {
+                          "id": "e11ae714-9f20-4025-8364-98633f9c5ca5",
+                          "key": "id",
+                          "value": "00000000-0000-0000-0000-000000000000",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "description": "Approve a request as a representative/substitute on behalf of the user who created the API token. The API automatically finds the pending representative approval."
+                  },
+                  "response": [
+                    {
+                      "id": "7672caa0-8ced-4c99-a6db-fc97d193db46",
+                      "name": "Successful response",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/approve_representative",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "approve_representative"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"success\": \"<boolean>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-7672caa0-8ced-4c99-a6db-fc97d193db46"
+                    },
+                    {
+                      "id": "94292da5-3b33-4704-afa9-e18dea608444",
+                      "name": "Invalid input data",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/approve_representative",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "approve_representative"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-94292da5-3b33-4704-afa9-e18dea608444"
+                    },
+                    {
+                      "id": "be6c4841-33f1-4dcc-b9e1-312d47638f26",
+                      "name": "Authorization not provided",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/approve_representative",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "approve_representative"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-be6c4841-33f1-4dcc-b9e1-312d47638f26"
+                    },
+                    {
+                      "id": "0e51cd87-3e04-476e-8774-a2bb7d5a4fe0",
+                      "name": "Insufficient access",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/approve_representative",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "approve_representative"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-0e51cd87-3e04-476e-8774-a2bb7d5a4fe0"
+                    },
+                    {
+                      "id": "ede8e979-1ca1-4653-88cb-1879cad7035b",
+                      "name": "Internal server error",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/approve_representative",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "approve_representative"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-ede8e979-1ca1-4653-88cb-1879cad7035b"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T00:28:06.000Z",
+                  "updatedAt": "2026-07-28T00:28:06.000Z",
+                  "uid": "35240-75ccb89c-436c-4b11-a738-6b8320ae9d35"
+                }
+              ],
+              "id": "eab13954-20fd-4ec3-84ab-71304f0ca1b2",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-eab13954-20fd-4ec3-84ab-71304f0ca1b2"
+            },
+            {
+              "name": "decline_representative",
+              "item": [
+                {
+                  "name": "Absentify Decline a Request as a Representative",
+                  "id": "621fae2c-6ccd-4e76-8968-dcfd3128459a",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "apikey",
+                      "apikey": [
+                        {
+                          "key": "key",
+                          "value": "X-API-KEY",
+                          "type": "string"
+                        },
+                        {
+                          "key": "value",
+                          "value": "{{apiKey}}",
+                          "type": "string"
+                        },
+                        {
+                          "key": "in",
+                          "value": "header",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"reason\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/requests/:id/decline_representative",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "requests",
+                        ":id",
+                        "decline_representative"
+                      ],
+                      "variable": [
+                        {
+                          "id": "76f004cc-2810-4f32-8834-42c85cda7205",
+                          "key": "id",
+                          "value": "00000000-0000-0000-0000-000000000000",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "description": "Decline a request as a representative/substitute on behalf of the user who created the API token. The API automatically finds the pending representative approval."
+                  },
+                  "response": [
+                    {
+                      "id": "07ac4b5f-3f0a-4cbd-9d73-9ea3310647eb",
+                      "name": "Successful response",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"reason\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/decline_representative",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "decline_representative"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"success\": \"<boolean>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-07ac4b5f-3f0a-4cbd-9d73-9ea3310647eb"
+                    },
+                    {
+                      "id": "7574aaba-5afd-4787-b527-973783ceb50c",
+                      "name": "Invalid input data",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"reason\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/decline_representative",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "decline_representative"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-7574aaba-5afd-4787-b527-973783ceb50c"
+                    },
+                    {
+                      "id": "c43396d8-7933-45d7-ae6f-34fa0fa858ea",
+                      "name": "Authorization not provided",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"reason\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/decline_representative",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "decline_representative"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-c43396d8-7933-45d7-ae6f-34fa0fa858ea"
+                    },
+                    {
+                      "id": "e9d68176-bbec-4ae5-acc6-c8628580ffc6",
+                      "name": "Insufficient access",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"reason\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/decline_representative",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "decline_representative"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-e9d68176-bbec-4ae5-acc6-c8628580ffc6"
+                    },
+                    {
+                      "id": "7b51191a-4019-4427-b816-56669ed9c0b7",
+                      "name": "Internal server error",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"reason\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/decline_representative",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "decline_representative"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-7b51191a-4019-4427-b816-56669ed9c0b7"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T00:28:06.000Z",
+                  "updatedAt": "2026-07-28T00:28:06.000Z",
+                  "uid": "35240-621fae2c-6ccd-4e76-8968-dcfd3128459a"
+                }
+              ],
+              "id": "95d95e3e-8179-4306-a005-74211860df00",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-95d95e3e-8179-4306-a005-74211860df00"
+            },
+            {
+              "name": "cancel",
+              "item": [
+                {
+                  "name": "Absentify Cancel a Request",
+                  "id": "3dec479a-51ba-4993-b8db-a65db54a4dc0",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "apikey",
+                      "apikey": [
+                        {
+                          "key": "key",
+                          "value": "X-API-KEY",
+                          "type": "string"
+                        },
+                        {
+                          "key": "value",
+                          "value": "{{apiKey}}",
+                          "type": "string"
+                        },
+                        {
+                          "key": "in",
+                          "value": "header",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"cancel_reason\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/requests/:id/cancel",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "requests",
+                        ":id",
+                        "cancel"
+                      ],
+                      "variable": [
+                        {
+                          "id": "d5d79137-4d2c-4315-84ca-444911fa5655",
+                          "key": "id",
+                          "value": "00000000-0000-0000-0000-000000000000",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "description": "Cancel a request on behalf of the user who created the API token. The user must be the requester, an admin, or a department manager with appropriate permissions."
+                  },
+                  "response": [
+                    {
+                      "id": "9adabd0b-0e07-42a4-b72c-642faabdb4f8",
+                      "name": "Successful response",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"cancel_reason\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/cancel",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "cancel"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"success\": \"<boolean>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-9adabd0b-0e07-42a4-b72c-642faabdb4f8"
+                    },
+                    {
+                      "id": "1bc5238c-81b2-4023-b934-1d3129edd46e",
+                      "name": "Invalid input data",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"cancel_reason\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/cancel",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "cancel"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-1bc5238c-81b2-4023-b934-1d3129edd46e"
+                    },
+                    {
+                      "id": "5533f32e-e7f3-4111-b9b9-f93dc4b28f2a",
+                      "name": "Authorization not provided",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"cancel_reason\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/cancel",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "cancel"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-5533f32e-e7f3-4111-b9b9-f93dc4b28f2a"
+                    },
+                    {
+                      "id": "6b98c57e-94d0-4fe8-b465-341315e09781",
+                      "name": "Insufficient access",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"cancel_reason\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/cancel",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "cancel"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-6b98c57e-94d0-4fe8-b465-341315e09781"
+                    },
+                    {
+                      "id": "935f6d62-7797-4cc6-b8c0-21b98d4b5301",
+                      "name": "Internal server error",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-KEY",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"cancel_reason\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/requests/:id/cancel",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "requests",
+                            ":id",
+                            "cancel"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T00:28:06.000Z",
+                      "updatedAt": "2026-07-28T00:28:06.000Z",
+                      "uid": "35240-935f6d62-7797-4cc6-b8c0-21b98d4b5301"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T00:28:06.000Z",
+                  "updatedAt": "2026-07-28T00:28:06.000Z",
+                  "uid": "35240-3dec479a-51ba-4993-b8db-a65db54a4dc0"
+                }
+              ],
+              "id": "7e10a35e-a0f8-46aa-afcc-5a7ca1248e32",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-7e10a35e-a0f8-46aa-afcc-5a7ca1248e32"
+            },
+            {
+              "name": "Absentify Read a Request by Id",
+              "id": "e7230a53-5a0d-43a8-9d81-c4e6a42cbf3b",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "key",
+                      "value": "X-API-KEY",
+                      "type": "string"
+                    },
+                    {
+                      "key": "value",
+                      "value": "{{apiKey}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/requests/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "requests",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "id": "76b3db7c-3f53-45cf-b5d9-e9bbad3f668c",
+                      "key": "id",
+                      "value": "00000000-0000-0000-0000-000000000000",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "description": "Read a request by id"
+              },
+              "response": [
+                {
+                  "id": "799df284-799a-42ce-a1c8-6a7d93a8a320",
+                  "name": "Successful response",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/requests/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "requests",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"createdAt\": \"<string>\",\n  \"updatedAt\": \"<string>\",\n  \"end\": \"<string>\",\n  \"start\": \"<string>\",\n  \"start_at\": \"morning\",\n  \"end_at\": \"end_of_day\",\n  \"leave_unit\": \"minutes_1\",\n  \"request_creator_member\": {\n    \"id\": \"<string>\",\n    \"custom_id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"email\": \"<string>\"\n  },\n  \"leave_type\": {\n    \"name\": \"<string>\",\n    \"id\": \"<string>\",\n    \"leave_unit\": \"minutes_30\"\n  },\n  \"approval_process\": \"Parallel_one_has_to_agree\",\n  \"cancel_reason\": \"<string>\",\n  \"canceld_by_member\": {\n    \"id\": \"<string>\",\n    \"custom_id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"email\": \"<string>\"\n  },\n  \"requester_member\": {\n    \"id\": \"<string>\",\n    \"custom_id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"email\": \"<string>\"\n  },\n  \"take_from_allowance\": \"<boolean>\",\n  \"allowance_type\": {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"ignore_allowance_limit\": \"<boolean>\",\n    \"allowance_unit\": \"days\"\n  },\n  \"reason\": \"<string>\",\n  \"workday_absence_duration\": \"<number>\",\n  \"duration\": \"<number>\",\n  \"status\": \"<string>\",\n  \"canceld_date\": \"<string>\",\n  \"request_approvers\": [\n    {\n      \"reason\": \"<string>\",\n      \"status\": \"PENDING\",\n      \"status_changed_by_member\": {\n        \"id\": \"<string>\",\n        \"custom_id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"email\": \"<string>\"\n      },\n      \"status_changed_date\": \"<string>\",\n      \"approver_member\": {\n        \"id\": \"<string>\",\n        \"custom_id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"email\": \"<string>\"\n      },\n      \"predecessor_request_member_approver_id\": \"<string>\"\n    },\n    {\n      \"reason\": \"<string>\",\n      \"status\": \"DECLINED_BY_ANOTHER_MANAGER\",\n      \"status_changed_by_member\": {\n        \"id\": \"<string>\",\n        \"custom_id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"email\": \"<string>\"\n      },\n      \"status_changed_date\": \"<string>\",\n      \"approver_member\": {\n        \"id\": \"<string>\",\n        \"custom_id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"email\": \"<string>\"\n      },\n      \"predecessor_request_member_approver_id\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:06.000Z",
+                  "updatedAt": "2026-07-28T00:28:06.000Z",
+                  "uid": "35240-799df284-799a-42ce-a1c8-6a7d93a8a320"
+                },
+                {
+                  "id": "7e0fca7e-2922-4cb9-b0cb-38e175666da3",
+                  "name": "Invalid input data",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/requests/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "requests",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:06.000Z",
+                  "updatedAt": "2026-07-28T00:28:06.000Z",
+                  "uid": "35240-7e0fca7e-2922-4cb9-b0cb-38e175666da3"
+                },
+                {
+                  "id": "f68aca0c-1550-4dc6-8e6e-785d5054b620",
+                  "name": "Authorization not provided",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/requests/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "requests",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:06.000Z",
+                  "updatedAt": "2026-07-28T00:28:06.000Z",
+                  "uid": "35240-f68aca0c-1550-4dc6-8e6e-785d5054b620"
+                },
+                {
+                  "id": "356f732d-e4bf-4d53-81dc-c6a801347b86",
+                  "name": "Insufficient access",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/requests/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "requests",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:06.000Z",
+                  "updatedAt": "2026-07-28T00:28:06.000Z",
+                  "uid": "35240-356f732d-e4bf-4d53-81dc-c6a801347b86"
+                },
+                {
+                  "id": "64a265a8-306c-4bc3-85e7-3fef0d3750de",
+                  "name": "Not found",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/requests/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "requests",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:06.000Z",
+                  "updatedAt": "2026-07-28T00:28:06.000Z",
+                  "uid": "35240-64a265a8-306c-4bc3-85e7-3fef0d3750de"
+                },
+                {
+                  "id": "de49a764-c7f9-4995-abe2-f4f95229d3e9",
+                  "name": "Internal server error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/requests/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "requests",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:06.000Z",
+                  "updatedAt": "2026-07-28T00:28:06.000Z",
+                  "uid": "35240-de49a764-c7f9-4995-abe2-f4f95229d3e9"
+                }
+              ],
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-e7230a53-5a0d-43a8-9d81-c4e6a42cbf3b"
+            }
+          ],
+          "id": "570eaf8f-603e-4562-b24e-370e7d2756f6",
+          "createdAt": "2026-07-28T00:28:06.000Z",
+          "updatedAt": "2026-07-28T00:28:06.000Z",
+          "uid": "35240-570eaf8f-603e-4562-b24e-370e7d2756f6"
+        },
+        {
+          "name": "recurring",
+          "item": [
+            {
+              "name": "Absentify Create Recurring Requests",
+              "id": "002e59b8-32d3-4a50-899e-a242c0c61628",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "key",
+                      "value": "X-API-KEY",
+                      "type": "string"
+                    },
+                    {
+                      "key": "value",
+                      "value": "{{apiKey}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"leave_type_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"requester_member_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"repeat\": \"weekly\",\n  \"interval\": \"<integer>\",\n  \"from\": \"<string>\",\n  \"until\": \"<string>\",\n  \"count\": \"<integer>\",\n  \"weekDays\": \"<string>\",\n  \"day\": \"<integer>\",\n  \"month\": \"<integer>\",\n  \"pos\": \"<integer>\",\n  \"reason\": \"<string>\",\n  \"start_time\": {\n    \"hour\": \"<integer>\",\n    \"minute\": \"<integer>\"\n  },\n  \"end_time\": {\n    \"hour\": \"<integer>\",\n    \"minute\": \"<integer>\"\n  },\n  \"half_day\": \"full_day\",\n  \"exDates\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"files\": [\n    \"9d073CA0-D47D-5e54-a1C6-bB82BdD21CEE\",\n    \"ffffffff-ffff-ffff-ffff-ffffffffffff\"\n  ],\n  \"representative_member_ids\": [\n    \"1d6df27F-5E7D-8de4-9084-5cec43C91BF8\",\n    \"ffffffff-ffff-ffff-ffff-ffffffffffff\"\n  ],\n  \"ignoreMaximumAbsence\": \"<boolean>\",\n  \"admin_approval_option\": \"go_through_the_normal_approval_process\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/requests/recurring",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "requests",
+                    "recurring"
+                  ]
+                },
+                "description": "Create multiple recurring requests based on a recurrence pattern"
+              },
+              "response": [
+                {
+                  "id": "4f8ecae0-f5b0-42da-a9e5-d83d45854eef",
+                  "name": "Successful response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"leave_type_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"requester_member_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"repeat\": \"weekly\",\n  \"interval\": \"<integer>\",\n  \"from\": \"<string>\",\n  \"until\": \"<string>\",\n  \"count\": \"<integer>\",\n  \"weekDays\": \"<string>\",\n  \"day\": \"<integer>\",\n  \"month\": \"<integer>\",\n  \"pos\": \"<integer>\",\n  \"reason\": \"<string>\",\n  \"start_time\": {\n    \"hour\": \"<integer>\",\n    \"minute\": \"<integer>\"\n  },\n  \"end_time\": {\n    \"hour\": \"<integer>\",\n    \"minute\": \"<integer>\"\n  },\n  \"half_day\": \"full_day\",\n  \"exDates\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"files\": [\n    \"9d073CA0-D47D-5e54-a1C6-bB82BdD21CEE\",\n    \"ffffffff-ffff-ffff-ffff-ffffffffffff\"\n  ],\n  \"representative_member_ids\": [\n    \"1d6df27F-5E7D-8de4-9084-5cec43C91BF8\",\n    \"ffffffff-ffff-ffff-ffff-ffffffffffff\"\n  ],\n  \"ignoreMaximumAbsence\": \"<boolean>\",\n  \"admin_approval_option\": \"go_through_the_normal_approval_process\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/requests/recurring",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "requests",
+                        "recurring"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"created\": \"<number>\",\n  \"requestIds\": [\n    \"ffffffff-ffff-ffff-ffff-ffffffffffff\",\n    \"00000000-0000-0000-0000-000000000000\"\n  ],\n  \"recurrenceId\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T00:28:06.000Z",
+                  "updatedAt": "2026-07-28T00:28:06.000Z",
+                  "uid": "35240-4f8ecae0-f5b0-42da-a9e5-d83d45854eef"
+                },
+                {
+                  "id": "2f160365-e350-455a-8843-cb31031bbe15",
+                  "name": "Invalid input data",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"leave_type_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"requester_member_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"repeat\": \"weekly\",\n  \"interval\": \"<integer>\",\n  \"from\": \"<string>\",\n  \"until\": \"<string>\",\n  \"count\": \"<integer>\",\n  \"weekDays\": \"<string>\",\n  \"day\": \"<integer>\",\n  \"month\": \"<integer>\",\n  \"pos\": \"<integer>\",\n  \"reason\": \"<string>\",\n  \"start_time\": {\n    \"hour\": \"<integer>\",\n    \"minute\": \"<integer>\"\n  },\n  \"end_time\": {\n    \"hour\": \"<integer>\",\n    \"minute\": \"<integer>\"\n  },\n  \"half_day\": \"full_day\",\n  \"exDates\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"files\": [\n    \"9d073CA0-D47D-5e54-a1C6-bB82BdD21CEE\",\n    \"ffffffff-ffff-ffff-ffff-ffffffffffff\"\n  ],\n  \"representative_member_ids\": [\n    \"1d6df27F-5E7D-8de4-9084-5cec43C91BF8\",\n    \"ffffffff-ffff-ffff-ffff-ffffffffffff\"\n  ],\n  \"ignoreMaximumAbsence\": \"<boolean>\",\n  \"admin_approval_option\": \"go_through_the_normal_approval_process\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/requests/recurring",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "requests",
+                        "recurring"
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:06.000Z",
+                  "updatedAt": "2026-07-28T00:28:06.000Z",
+                  "uid": "35240-2f160365-e350-455a-8843-cb31031bbe15"
+                },
+                {
+                  "id": "48c50f80-9ee5-49a0-bb93-f04f1dab42c4",
+                  "name": "Authorization not provided",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"leave_type_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"requester_member_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"repeat\": \"weekly\",\n  \"interval\": \"<integer>\",\n  \"from\": \"<string>\",\n  \"until\": \"<string>\",\n  \"count\": \"<integer>\",\n  \"weekDays\": \"<string>\",\n  \"day\": \"<integer>\",\n  \"month\": \"<integer>\",\n  \"pos\": \"<integer>\",\n  \"reason\": \"<string>\",\n  \"start_time\": {\n    \"hour\": \"<integer>\",\n    \"minute\": \"<integer>\"\n  },\n  \"end_time\": {\n    \"hour\": \"<integer>\",\n    \"minute\": \"<integer>\"\n  },\n  \"half_day\": \"full_day\",\n  \"exDates\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"files\": [\n    \"9d073CA0-D47D-5e54-a1C6-bB82BdD21CEE\",\n    \"ffffffff-ffff-ffff-ffff-ffffffffffff\"\n  ],\n  \"representative_member_ids\": [\n    \"1d6df27F-5E7D-8de4-9084-5cec43C91BF8\",\n    \"ffffffff-ffff-ffff-ffff-ffffffffffff\"\n  ],\n  \"ignoreMaximumAbsence\": \"<boolean>\",\n  \"admin_approval_option\": \"go_through_the_normal_approval_process\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/requests/recurring",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "requests",
+                        "recurring"
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:06.000Z",
+                  "updatedAt": "2026-07-28T00:28:06.000Z",
+                  "uid": "35240-48c50f80-9ee5-49a0-bb93-f04f1dab42c4"
+                },
+                {
+                  "id": "126d238c-f61c-4cd3-af04-061daee2bc16",
+                  "name": "Insufficient access",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"leave_type_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"requester_member_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"repeat\": \"weekly\",\n  \"interval\": \"<integer>\",\n  \"from\": \"<string>\",\n  \"until\": \"<string>\",\n  \"count\": \"<integer>\",\n  \"weekDays\": \"<string>\",\n  \"day\": \"<integer>\",\n  \"month\": \"<integer>\",\n  \"pos\": \"<integer>\",\n  \"reason\": \"<string>\",\n  \"start_time\": {\n    \"hour\": \"<integer>\",\n    \"minute\": \"<integer>\"\n  },\n  \"end_time\": {\n    \"hour\": \"<integer>\",\n    \"minute\": \"<integer>\"\n  },\n  \"half_day\": \"full_day\",\n  \"exDates\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"files\": [\n    \"9d073CA0-D47D-5e54-a1C6-bB82BdD21CEE\",\n    \"ffffffff-ffff-ffff-ffff-ffffffffffff\"\n  ],\n  \"representative_member_ids\": [\n    \"1d6df27F-5E7D-8de4-9084-5cec43C91BF8\",\n    \"ffffffff-ffff-ffff-ffff-ffffffffffff\"\n  ],\n  \"ignoreMaximumAbsence\": \"<boolean>\",\n  \"admin_approval_option\": \"go_through_the_normal_approval_process\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/requests/recurring",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "requests",
+                        "recurring"
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:06.000Z",
+                  "updatedAt": "2026-07-28T00:28:06.000Z",
+                  "uid": "35240-126d238c-f61c-4cd3-af04-061daee2bc16"
+                },
+                {
+                  "id": "45a7fce5-fdf3-4b46-a535-163af848578e",
+                  "name": "Internal server error",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"leave_type_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"requester_member_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"repeat\": \"weekly\",\n  \"interval\": \"<integer>\",\n  \"from\": \"<string>\",\n  \"until\": \"<string>\",\n  \"count\": \"<integer>\",\n  \"weekDays\": \"<string>\",\n  \"day\": \"<integer>\",\n  \"month\": \"<integer>\",\n  \"pos\": \"<integer>\",\n  \"reason\": \"<string>\",\n  \"start_time\": {\n    \"hour\": \"<integer>\",\n    \"minute\": \"<integer>\"\n  },\n  \"end_time\": {\n    \"hour\": \"<integer>\",\n    \"minute\": \"<integer>\"\n  },\n  \"half_day\": \"full_day\",\n  \"exDates\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"files\": [\n    \"9d073CA0-D47D-5e54-a1C6-bB82BdD21CEE\",\n    \"ffffffff-ffff-ffff-ffff-ffffffffffff\"\n  ],\n  \"representative_member_ids\": [\n    \"1d6df27F-5E7D-8de4-9084-5cec43C91BF8\",\n    \"ffffffff-ffff-ffff-ffff-ffffffffffff\"\n  ],\n  \"ignoreMaximumAbsence\": \"<boolean>\",\n  \"admin_approval_option\": \"go_through_the_normal_approval_process\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/requests/recurring",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "requests",
+                        "recurring"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:06.000Z",
+                  "updatedAt": "2026-07-28T00:28:06.000Z",
+                  "uid": "35240-45a7fce5-fdf3-4b46-a535-163af848578e"
+                }
+              ],
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-002e59b8-32d3-4a50-899e-a242c0c61628"
+            }
+          ],
+          "id": "e6919e3f-3dd4-4156-ae16-6c5b87487359",
+          "createdAt": "2026-07-28T00:28:06.000Z",
+          "updatedAt": "2026-07-28T00:28:06.000Z",
+          "uid": "35240-e6919e3f-3dd4-4156-ae16-6c5b87487359"
+        },
+        {
+          "name": "Absentify Get All Requests",
+          "id": "2b96d0a9-39ab-4b99-8be0-f660b2569656",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-API-KEY",
+                  "type": "string"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/requests?start=<string>&end=<string>&status=DECLINED&request_member_ids=<string>&department_ids=<string>",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "requests"
+              ],
+              "query": [
+                {
+                  "description": "(Required) ",
+                  "key": "start",
+                  "value": "<string>"
+                },
+                {
+                  "description": "(Required) ",
+                  "key": "end",
+                  "value": "<string>"
+                },
+                {
+                  "key": "status",
+                  "value": "DECLINED"
+                },
+                {
+                  "key": "request_member_ids",
+                  "value": "<string>"
+                },
+                {
+                  "key": "department_ids",
+                  "value": "<string>"
+                }
+              ]
+            },
+            "description": "Get all requests"
+          },
+          "response": [
+            {
+              "id": "07ac1c12-3224-4465-ac62-0336ba192856",
+              "name": "Successful response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/requests?start=<string>&end=<string>&status=DECLINED&request_member_ids=<string>&department_ids=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "requests"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) ",
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) ",
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "DECLINED"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "[\n  {\n    \"id\": \"<string>\",\n    \"createdAt\": \"<string>\",\n    \"updatedAt\": \"<string>\",\n    \"end\": \"<string>\",\n    \"start\": \"<string>\",\n    \"start_at\": \"afternoon\",\n    \"end_at\": \"lunchtime\",\n    \"leave_unit\": \"minutes_10\",\n    \"request_creator_member\": {\n      \"id\": \"<string>\",\n      \"custom_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\"\n    },\n    \"leave_type\": {\n      \"name\": \"<string>\",\n      \"id\": \"<string>\",\n      \"leave_unit\": \"half_days\"\n    },\n    \"approval_process\": \"Parallel_one_has_to_agree\",\n    \"cancel_reason\": \"<string>\",\n    \"canceld_by_member\": {\n      \"id\": \"<string>\",\n      \"custom_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\"\n    },\n    \"requester_member\": {\n      \"id\": \"<string>\",\n      \"custom_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\"\n    },\n    \"reason\": \"<string>\",\n    \"take_from_allowance\": \"<boolean>\",\n    \"allowance_type\": {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"ignore_allowance_limit\": \"<boolean>\",\n      \"allowance_unit\": \"hours\"\n    },\n    \"workday_absence_duration\": \"<number>\",\n    \"duration\": \"<number>\",\n    \"status\": \"<string>\",\n    \"canceld_date\": \"<string>\",\n    \"request_approvers\": [\n      {\n        \"reason\": \"<string>\",\n        \"status\": \"CANCELED\",\n        \"status_changed_by_member\": {\n          \"id\": \"<string>\",\n          \"custom_id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"email\": \"<string>\"\n        },\n        \"status_changed_date\": \"<string>\",\n        \"approver_member\": {\n          \"id\": \"<string>\",\n          \"custom_id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"email\": \"<string>\"\n        }\n      },\n      {\n        \"reason\": \"<string>\",\n        \"status\": \"PENDING\",\n        \"status_changed_by_member\": {\n          \"id\": \"<string>\",\n          \"custom_id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"email\": \"<string>\"\n        },\n        \"status_changed_date\": \"<string>\",\n        \"approver_member\": {\n          \"id\": \"<string>\",\n          \"custom_id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"email\": \"<string>\"\n        }\n      }\n    ]\n  },\n  {\n    \"id\": \"<string>\",\n    \"createdAt\": \"<string>\",\n    \"updatedAt\": \"<string>\",\n    \"end\": \"<string>\",\n    \"start\": \"<string>\",\n    \"start_at\": \"afternoon\",\n    \"end_at\": \"lunchtime\",\n    \"leave_unit\": \"hours\",\n    \"request_creator_member\": {\n      \"id\": \"<string>\",\n      \"custom_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\"\n    },\n    \"leave_type\": {\n      \"name\": \"<string>\",\n      \"id\": \"<string>\",\n      \"leave_unit\": \"minutes_15\"\n    },\n    \"approval_process\": \"Parallel_all_have_to_agree\",\n    \"cancel_reason\": \"<string>\",\n    \"canceld_by_member\": {\n      \"id\": \"<string>\",\n      \"custom_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\"\n    },\n    \"requester_member\": {\n      \"id\": \"<string>\",\n      \"custom_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\"\n    },\n    \"reason\": \"<string>\",\n    \"take_from_allowance\": \"<boolean>\",\n    \"allowance_type\": {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"ignore_allowance_limit\": \"<boolean>\",\n      \"allowance_unit\": \"hours\"\n    },\n    \"workday_absence_duration\": \"<number>\",\n    \"duration\": \"<number>\",\n    \"status\": \"<string>\",\n    \"canceld_date\": \"<string>\",\n    \"request_approvers\": [\n      {\n        \"reason\": \"<string>\",\n        \"status\": \"APPROVED\",\n        \"status_changed_by_member\": {\n          \"id\": \"<string>\",\n          \"custom_id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"email\": \"<string>\"\n        },\n        \"status_changed_date\": \"<string>\",\n        \"approver_member\": {\n          \"id\": \"<string>\",\n          \"custom_id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"email\": \"<string>\"\n        }\n      },\n      {\n        \"reason\": \"<string>\",\n        \"status\": \"APPROVED_BY_ANOTHER_MANAGER\",\n        \"status_changed_by_member\": {\n          \"id\": \"<string>\",\n          \"custom_id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"email\": \"<string>\"\n        },\n        \"status_changed_date\": \"<string>\",\n        \"approver_member\": {\n          \"id\": \"<string>\",\n          \"custom_id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"email\": \"<string>\"\n        }\n      }\n    ]\n  }\n]",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-07ac1c12-3224-4465-ac62-0336ba192856"
+            },
+            {
+              "id": "0f2a892d-eb03-43d5-9cc8-b100fffe948d",
+              "name": "Invalid input data",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/requests?start=<string>&end=<string>&status=DECLINED&request_member_ids=<string>&department_ids=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "requests"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) ",
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) ",
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "DECLINED"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-0f2a892d-eb03-43d5-9cc8-b100fffe948d"
+            },
+            {
+              "id": "7f925469-7e0e-412b-aba5-dd8ba63df12b",
+              "name": "Authorization not provided",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/requests?start=<string>&end=<string>&status=DECLINED&request_member_ids=<string>&department_ids=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "requests"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) ",
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) ",
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "DECLINED"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-7f925469-7e0e-412b-aba5-dd8ba63df12b"
+            },
+            {
+              "id": "1c37ac62-b20b-4ad0-aa6c-67e4d70392b9",
+              "name": "Insufficient access",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/requests?start=<string>&end=<string>&status=DECLINED&request_member_ids=<string>&department_ids=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "requests"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) ",
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) ",
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "DECLINED"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-1c37ac62-b20b-4ad0-aa6c-67e4d70392b9"
+            },
+            {
+              "id": "861bf3c4-7859-4ae8-bd29-06dc1ee89a58",
+              "name": "Not found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/requests?start=<string>&end=<string>&status=DECLINED&request_member_ids=<string>&department_ids=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "requests"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) ",
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) ",
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "DECLINED"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-861bf3c4-7859-4ae8-bd29-06dc1ee89a58"
+            },
+            {
+              "id": "5c6bd0ec-b691-40bf-ab94-83b8ca46e112",
+              "name": "Internal server error",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/requests?start=<string>&end=<string>&status=DECLINED&request_member_ids=<string>&department_ids=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "requests"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) ",
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) ",
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "DECLINED"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-5c6bd0ec-b691-40bf-ab94-83b8ca46e112"
+            }
+          ],
+          "createdAt": "2026-07-28T00:28:06.000Z",
+          "updatedAt": "2026-07-28T00:28:06.000Z",
+          "uid": "35240-2b96d0a9-39ab-4b99-8be0-f660b2569656"
+        },
+        {
+          "name": "Absentify Create a Request",
+          "id": "6b5a8684-d7b1-4b98-bbad-a32651df8cb9",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-API-KEY",
+                  "type": "string"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"end\": \"<string>\",\n  \"start\": \"<string>\",\n  \"leave_type_id\": \"ffffffff-ffff-ffff-ffff-ffffffffffff\",\n  \"requester_member_id\": \"DdaDC3E4-f9B0-7d99-bD1c-0DBa3F31FC98\",\n  \"start_at\": \"afternoon\",\n  \"end_at\": \"end_of_day\",\n  \"reason\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "requests"
+              ]
+            },
+            "description": "Create a leave request.\n\n**Date/Time Format:** All dates must be in ISO 8601 format with UTC timezone (e.g., '2024-01-15T09:00:00Z').\n\n**Day-based leave types (leave_unit: days):**\n- Use start_at: 'morning' or 'afternoon' to specify when the absence starts\n- Use end_at: 'lunchtime' or 'end_of_day' to specify when the absence ends\n- Example full day: start='2024-01-15T00:00:00Z', end='2024-01-15T00:00:00Z', start_at='morning', end_at='end_of_day'\n- Example half day (morning): start='2024-01-15T00:00:00Z', end='2024-01-15T00:00:00Z', start_at='morning', end_at='lunchtime'\n\n**Hour-based leave types (leave_unit: hours):**\n- Include the exact time in the start and end timestamps\n- The start_at and end_at parameters are ignored\n- Example: start='2024-01-15T09:00:00Z', end='2024-01-15T12:30:00Z' for a 9:00-12:30 UTC absence"
+          },
+          "response": [
+            {
+              "id": "00764445-70f1-4311-9230-aa6b008c5240",
+              "name": "Successful response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"end\": \"<string>\",\n  \"start\": \"<string>\",\n  \"leave_type_id\": \"ffffffff-ffff-ffff-ffff-ffffffffffff\",\n  \"requester_member_id\": \"DdaDC3E4-f9B0-7d99-bD1c-0DBa3F31FC98\",\n  \"start_at\": \"afternoon\",\n  \"end_at\": \"end_of_day\",\n  \"reason\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/requests",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "requests"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "00000000-0000-0000-0000-000000000000",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-00764445-70f1-4311-9230-aa6b008c5240"
+            },
+            {
+              "id": "05587e56-8ce7-4b9d-b4b5-b88f8fd54d1f",
+              "name": "Invalid input data",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"end\": \"<string>\",\n  \"start\": \"<string>\",\n  \"leave_type_id\": \"ffffffff-ffff-ffff-ffff-ffffffffffff\",\n  \"requester_member_id\": \"DdaDC3E4-f9B0-7d99-bD1c-0DBa3F31FC98\",\n  \"start_at\": \"afternoon\",\n  \"end_at\": \"end_of_day\",\n  \"reason\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/requests",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "requests"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-05587e56-8ce7-4b9d-b4b5-b88f8fd54d1f"
+            },
+            {
+              "id": "d0428d16-b7b8-49d4-a004-15e5788544fd",
+              "name": "Authorization not provided",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"end\": \"<string>\",\n  \"start\": \"<string>\",\n  \"leave_type_id\": \"ffffffff-ffff-ffff-ffff-ffffffffffff\",\n  \"requester_member_id\": \"DdaDC3E4-f9B0-7d99-bD1c-0DBa3F31FC98\",\n  \"start_at\": \"afternoon\",\n  \"end_at\": \"end_of_day\",\n  \"reason\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/requests",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "requests"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-d0428d16-b7b8-49d4-a004-15e5788544fd"
+            },
+            {
+              "id": "a1806ee2-0257-4421-9657-50799eebd521",
+              "name": "Insufficient access",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"end\": \"<string>\",\n  \"start\": \"<string>\",\n  \"leave_type_id\": \"ffffffff-ffff-ffff-ffff-ffffffffffff\",\n  \"requester_member_id\": \"DdaDC3E4-f9B0-7d99-bD1c-0DBa3F31FC98\",\n  \"start_at\": \"afternoon\",\n  \"end_at\": \"end_of_day\",\n  \"reason\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/requests",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "requests"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-a1806ee2-0257-4421-9657-50799eebd521"
+            },
+            {
+              "id": "183e5444-6fee-43f7-b024-9834204288cc",
+              "name": "Internal server error",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"end\": \"<string>\",\n  \"start\": \"<string>\",\n  \"leave_type_id\": \"ffffffff-ffff-ffff-ffff-ffffffffffff\",\n  \"requester_member_id\": \"DdaDC3E4-f9B0-7d99-bD1c-0DBa3F31FC98\",\n  \"start_at\": \"afternoon\",\n  \"end_at\": \"end_of_day\",\n  \"reason\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/requests",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "requests"
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-183e5444-6fee-43f7-b024-9834204288cc"
+            }
+          ],
+          "createdAt": "2026-07-28T00:28:06.000Z",
+          "updatedAt": "2026-07-28T00:28:06.000Z",
+          "uid": "35240-6b5a8684-d7b1-4b98-bbad-a32651df8cb9"
+        }
+      ],
+      "id": "cc925df6-8a48-499e-a4cb-a1ac091ba5bb",
+      "createdAt": "2026-07-28T00:28:06.000Z",
+      "updatedAt": "2026-07-28T00:28:06.000Z",
+      "uid": "35240-cc925df6-8a48-499e-a4cb-a1ac091ba5bb"
+    },
+    {
+      "name": "requests_per_day",
+      "item": [
+        {
+          "name": "Absentify Get All Requests Per Day",
+          "id": "b019810a-51b4-4761-878a-f56312d138c9",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-API-KEY",
+                  "type": "string"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/requests_per_day?start=<string>&end=<string>&status=DECLINED&request_member_ids=<string>&department_ids=<string>",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "requests_per_day"
+              ],
+              "query": [
+                {
+                  "description": "(Required) ",
+                  "key": "start",
+                  "value": "<string>"
+                },
+                {
+                  "description": "(Required) ",
+                  "key": "end",
+                  "value": "<string>"
+                },
+                {
+                  "key": "status",
+                  "value": "DECLINED"
+                },
+                {
+                  "key": "request_member_ids",
+                  "value": "<string>"
+                },
+                {
+                  "key": "department_ids",
+                  "value": "<string>"
+                }
+              ]
+            },
+            "description": "Get all requests per day"
+          },
+          "response": [
+            {
+              "id": "e68adcc2-a6f6-4919-8175-b4dd43128725",
+              "name": "Successful response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/requests_per_day?start=<string>&end=<string>&status=DECLINED&request_member_ids=<string>&department_ids=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "requests_per_day"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) ",
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) ",
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "DECLINED"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "[\n  {\n    \"id\": \"<string>\",\n    \"createdAt\": \"<string>\",\n    \"updatedAt\": \"<string>\",\n    \"end\": \"<string>\",\n    \"start\": \"<string>\",\n    \"start_at\": \"morning\",\n    \"end_at\": \"lunchtime\",\n    \"leave_unit\": \"minutes_5\",\n    \"day\": \"<string>\",\n    \"month\": \"<string>\",\n    \"weekday\": \"<string>\",\n    \"fullday\": \"<string>\",\n    \"request_creator_member\": {\n      \"id\": \"<string>\",\n      \"custom_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\"\n    },\n    \"leave_type\": {\n      \"name\": \"<string>\",\n      \"id\": \"<string>\",\n      \"leave_unit\": \"minutes_1\"\n    },\n    \"approval_process\": \"Parallel_all_have_to_agree\",\n    \"cancel_reason\": \"<string>\",\n    \"canceld_by_member\": {\n      \"id\": \"<string>\",\n      \"custom_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\"\n    },\n    \"requester_member\": {\n      \"id\": \"<string>\",\n      \"custom_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\"\n    },\n    \"reason\": \"<string>\",\n    \"take_from_allowance\": \"<boolean>\",\n    \"allowance_type\": {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"ignore_allowance_limit\": \"<boolean>\",\n      \"allowance_unit\": \"hours\"\n    },\n    \"workday_absence_duration\": \"<number>\",\n    \"duration\": \"<number>\",\n    \"status\": \"<string>\",\n    \"canceld_date\": \"<string>\",\n    \"request_approvers\": [\n      {\n        \"reason\": \"<string>\",\n        \"status\": \"DECLINED\",\n        \"status_changed_by_member\": {\n          \"id\": \"<string>\",\n          \"custom_id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"email\": \"<string>\"\n        },\n        \"status_changed_date\": \"<string>\",\n        \"approver_member\": {\n          \"id\": \"<string>\",\n          \"custom_id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"email\": \"<string>\"\n        }\n      },\n      {\n        \"reason\": \"<string>\",\n        \"status\": \"PENDING\",\n        \"status_changed_by_member\": {\n          \"id\": \"<string>\",\n          \"custom_id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"email\": \"<string>\"\n        },\n        \"status_changed_date\": \"<string>\",\n        \"approver_member\": {\n          \"id\": \"<string>\",\n          \"custom_id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"email\": \"<string>\"\n        }\n      }\n    ]\n  },\n  {\n    \"id\": \"<string>\",\n    \"createdAt\": \"<string>\",\n    \"updatedAt\": \"<string>\",\n    \"end\": \"<string>\",\n    \"start\": \"<string>\",\n    \"start_at\": \"morning\",\n    \"end_at\": \"end_of_day\",\n    \"leave_unit\": \"half_days\",\n    \"day\": \"<string>\",\n    \"month\": \"<string>\",\n    \"weekday\": \"<string>\",\n    \"fullday\": \"<string>\",\n    \"request_creator_member\": {\n      \"id\": \"<string>\",\n      \"custom_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\"\n    },\n    \"leave_type\": {\n      \"name\": \"<string>\",\n      \"id\": \"<string>\",\n      \"leave_unit\": \"half_days\"\n    },\n    \"approval_process\": \"Parallel_one_has_to_agree\",\n    \"cancel_reason\": \"<string>\",\n    \"canceld_by_member\": {\n      \"id\": \"<string>\",\n      \"custom_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\"\n    },\n    \"requester_member\": {\n      \"id\": \"<string>\",\n      \"custom_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\"\n    },\n    \"reason\": \"<string>\",\n    \"take_from_allowance\": \"<boolean>\",\n    \"allowance_type\": {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"ignore_allowance_limit\": \"<boolean>\",\n      \"allowance_unit\": \"days\"\n    },\n    \"workday_absence_duration\": \"<number>\",\n    \"duration\": \"<number>\",\n    \"status\": \"<string>\",\n    \"canceld_date\": \"<string>\",\n    \"request_approvers\": [\n      {\n        \"reason\": \"<string>\",\n        \"status\": \"APPROVED\",\n        \"status_changed_by_member\": {\n          \"id\": \"<string>\",\n          \"custom_id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"email\": \"<string>\"\n        },\n        \"status_changed_date\": \"<string>\",\n        \"approver_member\": {\n          \"id\": \"<string>\",\n          \"custom_id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"email\": \"<string>\"\n        }\n      },\n      {\n        \"reason\": \"<string>\",\n        \"status\": \"PENDING\",\n        \"status_changed_by_member\": {\n          \"id\": \"<string>\",\n          \"custom_id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"email\": \"<string>\"\n        },\n        \"status_changed_date\": \"<string>\",\n        \"approver_member\": {\n          \"id\": \"<string>\",\n          \"custom_id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"email\": \"<string>\"\n        }\n      }\n    ]\n  }\n]",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-e68adcc2-a6f6-4919-8175-b4dd43128725"
+            },
+            {
+              "id": "3d93dfb7-a41d-4221-b2bb-c38b5e439333",
+              "name": "Invalid input data",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/requests_per_day?start=<string>&end=<string>&status=DECLINED&request_member_ids=<string>&department_ids=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "requests_per_day"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) ",
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) ",
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "DECLINED"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-3d93dfb7-a41d-4221-b2bb-c38b5e439333"
+            },
+            {
+              "id": "ba135585-00f3-4234-a10c-2d8ccd42c788",
+              "name": "Authorization not provided",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/requests_per_day?start=<string>&end=<string>&status=DECLINED&request_member_ids=<string>&department_ids=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "requests_per_day"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) ",
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) ",
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "DECLINED"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-ba135585-00f3-4234-a10c-2d8ccd42c788"
+            },
+            {
+              "id": "fecedda3-7a83-495b-a5de-80c8aaffec6d",
+              "name": "Insufficient access",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/requests_per_day?start=<string>&end=<string>&status=DECLINED&request_member_ids=<string>&department_ids=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "requests_per_day"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) ",
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) ",
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "DECLINED"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-fecedda3-7a83-495b-a5de-80c8aaffec6d"
+            },
+            {
+              "id": "535eeddf-6583-4183-8380-deb65442064a",
+              "name": "Not found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/requests_per_day?start=<string>&end=<string>&status=DECLINED&request_member_ids=<string>&department_ids=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "requests_per_day"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) ",
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) ",
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "DECLINED"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-535eeddf-6583-4183-8380-deb65442064a"
+            },
+            {
+              "id": "b4fbdb23-fab5-4538-a493-31455ff5bc9f",
+              "name": "Internal server error",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/requests_per_day?start=<string>&end=<string>&status=DECLINED&request_member_ids=<string>&department_ids=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "requests_per_day"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) ",
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) ",
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "DECLINED"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:06.000Z",
+              "updatedAt": "2026-07-28T00:28:06.000Z",
+              "uid": "35240-b4fbdb23-fab5-4538-a493-31455ff5bc9f"
+            }
+          ],
+          "createdAt": "2026-07-28T00:28:06.000Z",
+          "updatedAt": "2026-07-28T00:28:06.000Z",
+          "uid": "35240-b019810a-51b4-4761-878a-f56312d138c9"
+        }
+      ],
+      "id": "176212cb-5a91-4b2e-b664-3fe750d09e76",
+      "createdAt": "2026-07-28T00:28:06.000Z",
+      "updatedAt": "2026-07-28T00:28:06.000Z",
+      "uid": "35240-176212cb-5a91-4b2e-b664-3fe750d09e76"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.absentify.com/api/v1"
+    }
+  ]
+}

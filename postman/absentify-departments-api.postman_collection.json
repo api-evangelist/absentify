@@ -1,0 +1,1828 @@
+{
+  "info": {
+    "_postman_id": "6e4c3a98-9e36-4cb0-ae82-25b8317f009b",
+    "name": "Absentify Absences Departments API",
+    "description": "The Absentify REST API provides comprehensive absence management capabilities for Microsoft 365-integrated organizations. Manage members, departments, leave types, requests, allowances, public holidays, and workspace settings. The API requires the Plus plan and uses API key authentication. Rate limit: 150 requests per second per IP.\n\nContact Support:\n Email: support@absentify.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T00:28:00.000Z",
+    "updatedAt": "2026-07-28T00:28:00.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-6e4c3a98-9e36-4cb0-ae82-25b8317f009b"
+  },
+  "item": [
+    {
+      "name": "departments",
+      "item": [
+        {
+          "name": "{id}",
+          "item": [
+            {
+              "name": "Absentify Read a Department by Id",
+              "id": "27f5a5cf-d37c-4f81-8ef0-8e4c36cc0da0",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "key",
+                      "value": "X-API-KEY",
+                      "type": "string"
+                    },
+                    {
+                      "key": "value",
+                      "value": "{{apiKey}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/departments/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "departments",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "id": "214ebbb2-e4f8-499a-8ef8-de40c4560ccb",
+                      "key": "id",
+                      "value": "01962CfD-e572-3Fcf-9DEd-842C325A2BAD",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "description": "Read a department by id"
+              },
+              "response": [
+                {
+                  "id": "5e574b4e-db48-4be7-91a0-091a747ceb0b",
+                  "name": "Successful response",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/departments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "departments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"custom_id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"createdAt\": \"<string>\",\n  \"updatedAt\": \"<string>\",\n  \"approval_process\": \"Parallel_one_has_to_agree\",\n  \"maximum_absent\": \"<integer>\",\n  \"members\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\",\n      \"custom_id\": \"<string>\",\n      \"manager_type\": \"Manager\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\",\n      \"custom_id\": \"<string>\",\n      \"manager_type\": \"Manager\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:00.000Z",
+                  "updatedAt": "2026-07-28T00:28:00.000Z",
+                  "uid": "35240-5e574b4e-db48-4be7-91a0-091a747ceb0b"
+                },
+                {
+                  "id": "5059fe34-90b3-4525-914b-6d1880787054",
+                  "name": "Invalid input data",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/departments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "departments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:00.000Z",
+                  "updatedAt": "2026-07-28T00:28:00.000Z",
+                  "uid": "35240-5059fe34-90b3-4525-914b-6d1880787054"
+                },
+                {
+                  "id": "a3b9da1f-20ce-4b9c-a04a-ddddb26f7cf7",
+                  "name": "Authorization not provided",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/departments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "departments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:00.000Z",
+                  "updatedAt": "2026-07-28T00:28:00.000Z",
+                  "uid": "35240-a3b9da1f-20ce-4b9c-a04a-ddddb26f7cf7"
+                },
+                {
+                  "id": "62767f93-e1f1-41f0-af24-7c01f1cabd27",
+                  "name": "Insufficient access",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/departments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "departments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:00.000Z",
+                  "updatedAt": "2026-07-28T00:28:00.000Z",
+                  "uid": "35240-62767f93-e1f1-41f0-af24-7c01f1cabd27"
+                },
+                {
+                  "id": "794a844e-ec1a-4ee6-bea5-288025fd30c8",
+                  "name": "Not found",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/departments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "departments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:00.000Z",
+                  "updatedAt": "2026-07-28T00:28:00.000Z",
+                  "uid": "35240-794a844e-ec1a-4ee6-bea5-288025fd30c8"
+                },
+                {
+                  "id": "c1903f20-2bf0-4029-90ea-7a6f9e3d9fba",
+                  "name": "Internal server error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/departments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "departments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:00.000Z",
+                  "updatedAt": "2026-07-28T00:28:00.000Z",
+                  "uid": "35240-c1903f20-2bf0-4029-90ea-7a6f9e3d9fba"
+                }
+              ],
+              "createdAt": "2026-07-28T00:28:00.000Z",
+              "updatedAt": "2026-07-28T00:28:00.000Z",
+              "uid": "35240-27f5a5cf-d37c-4f81-8ef0-8e4c36cc0da0"
+            },
+            {
+              "name": "Absentify Update a Department",
+              "id": "8b08455a-39c1-432a-a151-e1f9f4c6cb2b",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "key",
+                      "value": "X-API-KEY",
+                      "type": "string"
+                    },
+                    {
+                      "key": "value",
+                      "value": "{{apiKey}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"default_department_allowances\": [\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    }\n  ],\n  \"custom_id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"maximum_absent\": \"<integer>\",\n  \"approval_process\": \"Linear_all_have_to_agree\",\n  \"manager_member\": [\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    },\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/departments/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "departments",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "id": "2e94f3b2-0dce-4cc1-a066-c49d9c62a20e",
+                      "key": "id",
+                      "value": "01962CfD-e572-3Fcf-9DEd-842C325A2BAD",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "description": "Update a department"
+              },
+              "response": [
+                {
+                  "id": "024982e5-593c-4710-8faf-0e75a2236404",
+                  "name": "Successful response",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"default_department_allowances\": [\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    }\n  ],\n  \"custom_id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"maximum_absent\": \"<integer>\",\n  \"approval_process\": \"Linear_all_have_to_agree\",\n  \"manager_member\": [\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    },\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    }\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/departments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "departments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "01962CfD-e572-3Fcf-9DEd-842C325A2BAD",
+                  "createdAt": "2026-07-28T00:28:00.000Z",
+                  "updatedAt": "2026-07-28T00:28:00.000Z",
+                  "uid": "35240-024982e5-593c-4710-8faf-0e75a2236404"
+                },
+                {
+                  "id": "a4778b9b-921b-4637-85af-eb93014b6267",
+                  "name": "Invalid input data",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"default_department_allowances\": [\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    }\n  ],\n  \"custom_id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"maximum_absent\": \"<integer>\",\n  \"approval_process\": \"Linear_all_have_to_agree\",\n  \"manager_member\": [\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    },\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    }\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/departments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "departments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:00.000Z",
+                  "updatedAt": "2026-07-28T00:28:00.000Z",
+                  "uid": "35240-a4778b9b-921b-4637-85af-eb93014b6267"
+                },
+                {
+                  "id": "94f86893-cec7-4368-9b3c-bb784f338d74",
+                  "name": "Authorization not provided",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"default_department_allowances\": [\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    }\n  ],\n  \"custom_id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"maximum_absent\": \"<integer>\",\n  \"approval_process\": \"Linear_all_have_to_agree\",\n  \"manager_member\": [\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    },\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    }\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/departments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "departments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:00.000Z",
+                  "updatedAt": "2026-07-28T00:28:00.000Z",
+                  "uid": "35240-94f86893-cec7-4368-9b3c-bb784f338d74"
+                },
+                {
+                  "id": "784387b2-b8dc-474f-8414-621cbf594120",
+                  "name": "Insufficient access",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"default_department_allowances\": [\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    }\n  ],\n  \"custom_id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"maximum_absent\": \"<integer>\",\n  \"approval_process\": \"Linear_all_have_to_agree\",\n  \"manager_member\": [\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    },\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    }\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/departments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "departments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:00.000Z",
+                  "updatedAt": "2026-07-28T00:28:00.000Z",
+                  "uid": "35240-784387b2-b8dc-474f-8414-621cbf594120"
+                },
+                {
+                  "id": "f86e098c-539c-43a6-bb1d-b38e07fc553a",
+                  "name": "Not found",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"default_department_allowances\": [\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    }\n  ],\n  \"custom_id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"maximum_absent\": \"<integer>\",\n  \"approval_process\": \"Linear_all_have_to_agree\",\n  \"manager_member\": [\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    },\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    }\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/departments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "departments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:00.000Z",
+                  "updatedAt": "2026-07-28T00:28:00.000Z",
+                  "uid": "35240-f86e098c-539c-43a6-bb1d-b38e07fc553a"
+                },
+                {
+                  "id": "85b82946-9341-482e-a0ac-112daa5a79d9",
+                  "name": "Internal server error",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"default_department_allowances\": [\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    }\n  ],\n  \"custom_id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"maximum_absent\": \"<integer>\",\n  \"approval_process\": \"Linear_all_have_to_agree\",\n  \"manager_member\": [\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    },\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    }\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/departments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "departments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:00.000Z",
+                  "updatedAt": "2026-07-28T00:28:00.000Z",
+                  "uid": "35240-85b82946-9341-482e-a0ac-112daa5a79d9"
+                }
+              ],
+              "createdAt": "2026-07-28T00:28:00.000Z",
+              "updatedAt": "2026-07-28T00:28:00.000Z",
+              "uid": "35240-8b08455a-39c1-432a-a151-e1f9f4c6cb2b"
+            },
+            {
+              "name": "Absentify Delete a Department",
+              "id": "4af32471-03aa-4eaf-bb41-3dc9714ebc49",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "key",
+                      "value": "X-API-KEY",
+                      "type": "string"
+                    },
+                    {
+                      "key": "value",
+                      "value": "{{apiKey}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/departments/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "departments",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "id": "683eb80c-94e1-47be-976c-2f4871866646",
+                      "key": "id",
+                      "value": "01962CfD-e572-3Fcf-9DEd-842C325A2BAD",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "description": "Delete a department"
+              },
+              "response": [
+                {
+                  "id": "92fd256d-39ec-4af5-a996-7c4ba3fb25cd",
+                  "name": "Successful response",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/departments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "departments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "<null>",
+                  "createdAt": "2026-07-28T00:28:00.000Z",
+                  "updatedAt": "2026-07-28T00:28:00.000Z",
+                  "uid": "35240-92fd256d-39ec-4af5-a996-7c4ba3fb25cd"
+                },
+                {
+                  "id": "673adfd9-92a6-4198-a7ed-b9e8e3786d66",
+                  "name": "Invalid input data",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/departments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "departments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:00.000Z",
+                  "updatedAt": "2026-07-28T00:28:00.000Z",
+                  "uid": "35240-673adfd9-92a6-4198-a7ed-b9e8e3786d66"
+                },
+                {
+                  "id": "8f65343a-eb8b-4bd5-81cc-04c0d41f0cf8",
+                  "name": "Authorization not provided",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/departments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "departments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:00.000Z",
+                  "updatedAt": "2026-07-28T00:28:00.000Z",
+                  "uid": "35240-8f65343a-eb8b-4bd5-81cc-04c0d41f0cf8"
+                },
+                {
+                  "id": "67ccda9b-eed7-447e-a089-c93bf14b4c8e",
+                  "name": "Insufficient access",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/departments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "departments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:00.000Z",
+                  "updatedAt": "2026-07-28T00:28:00.000Z",
+                  "uid": "35240-67ccda9b-eed7-447e-a089-c93bf14b4c8e"
+                },
+                {
+                  "id": "3470c5b8-a19b-4ca7-a000-16692be5e3e8",
+                  "name": "Not found",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/departments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "departments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:00.000Z",
+                  "updatedAt": "2026-07-28T00:28:00.000Z",
+                  "uid": "35240-3470c5b8-a19b-4ca7-a000-16692be5e3e8"
+                },
+                {
+                  "id": "aa101058-37bc-4b1c-910d-6a5d3fed56f5",
+                  "name": "Internal server error",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "X-API-KEY",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/departments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "departments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T00:28:00.000Z",
+                  "updatedAt": "2026-07-28T00:28:00.000Z",
+                  "uid": "35240-aa101058-37bc-4b1c-910d-6a5d3fed56f5"
+                }
+              ],
+              "createdAt": "2026-07-28T00:28:00.000Z",
+              "updatedAt": "2026-07-28T00:28:00.000Z",
+              "uid": "35240-4af32471-03aa-4eaf-bb41-3dc9714ebc49"
+            }
+          ],
+          "id": "7f9c39c5-d499-4a7e-9c19-d798ea3d9e02",
+          "createdAt": "2026-07-28T00:28:00.000Z",
+          "updatedAt": "2026-07-28T00:28:00.000Z",
+          "uid": "35240-7f9c39c5-d499-4a7e-9c19-d798ea3d9e02"
+        },
+        {
+          "name": "Absentify Get All Departments",
+          "id": "67029b75-5a42-42ba-803c-1d8d53009215",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-API-KEY",
+                  "type": "string"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/departments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "departments"
+              ]
+            },
+            "description": "Get all departments"
+          },
+          "response": [
+            {
+              "id": "6b2b0372-38a2-468b-9921-22fc72b08746",
+              "name": "Successful response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/departments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "departments"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "[\n  {\n    \"id\": \"<string>\",\n    \"custom_id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"createdAt\": \"<string>\",\n    \"updatedAt\": \"<string>\",\n    \"approval_process\": \"Linear_all_have_to_agree\",\n    \"maximum_absent\": \"<integer>\",\n    \"members\": [\n      {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"email\": \"<string>\",\n        \"custom_id\": \"<string>\",\n        \"manager_type\": \"Manager\"\n      },\n      {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"email\": \"<string>\",\n        \"custom_id\": \"<string>\",\n        \"manager_type\": \"Manager\"\n      }\n    ]\n  },\n  {\n    \"id\": \"<string>\",\n    \"custom_id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"createdAt\": \"<string>\",\n    \"updatedAt\": \"<string>\",\n    \"approval_process\": \"Parallel_one_has_to_agree\",\n    \"maximum_absent\": \"<integer>\",\n    \"members\": [\n      {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"email\": \"<string>\",\n        \"custom_id\": \"<string>\",\n        \"manager_type\": \"Member\"\n      },\n      {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"email\": \"<string>\",\n        \"custom_id\": \"<string>\",\n        \"manager_type\": \"Member\"\n      }\n    ]\n  }\n]",
+              "createdAt": "2026-07-28T00:28:00.000Z",
+              "updatedAt": "2026-07-28T00:28:00.000Z",
+              "uid": "35240-6b2b0372-38a2-468b-9921-22fc72b08746"
+            },
+            {
+              "id": "3ebd4133-d96f-490a-9bd6-f47cc6f12bf9",
+              "name": "Invalid input data",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/departments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "departments"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:00.000Z",
+              "updatedAt": "2026-07-28T00:28:00.000Z",
+              "uid": "35240-3ebd4133-d96f-490a-9bd6-f47cc6f12bf9"
+            },
+            {
+              "id": "66871dbc-6957-4e36-a39f-0787d65677d7",
+              "name": "Authorization not provided",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/departments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "departments"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:00.000Z",
+              "updatedAt": "2026-07-28T00:28:00.000Z",
+              "uid": "35240-66871dbc-6957-4e36-a39f-0787d65677d7"
+            },
+            {
+              "id": "9b2e074e-25fb-4b0b-9c05-6313e4780e6e",
+              "name": "Insufficient access",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/departments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "departments"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:00.000Z",
+              "updatedAt": "2026-07-28T00:28:00.000Z",
+              "uid": "35240-9b2e074e-25fb-4b0b-9c05-6313e4780e6e"
+            },
+            {
+              "id": "b36f0196-3e9f-4709-81a0-dca8e5718aa2",
+              "name": "Not found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/departments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "departments"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:00.000Z",
+              "updatedAt": "2026-07-28T00:28:00.000Z",
+              "uid": "35240-b36f0196-3e9f-4709-81a0-dca8e5718aa2"
+            },
+            {
+              "id": "a0a322fa-5f44-478d-95f2-4dc8bd23343b",
+              "name": "Internal server error",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/departments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "departments"
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:00.000Z",
+              "updatedAt": "2026-07-28T00:28:00.000Z",
+              "uid": "35240-a0a322fa-5f44-478d-95f2-4dc8bd23343b"
+            }
+          ],
+          "createdAt": "2026-07-28T00:28:00.000Z",
+          "updatedAt": "2026-07-28T00:28:00.000Z",
+          "uid": "35240-67029b75-5a42-42ba-803c-1d8d53009215"
+        },
+        {
+          "name": "Absentify Create a Department",
+          "id": "e60a3c59-c70c-4533-9721-3ebad338c1da",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-API-KEY",
+                  "type": "string"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"custom_id\": \"<string>\",\n  \"default_allowance\": \"<number>\",\n  \"maximum_absent\": \"<number>\",\n  \"approval_process\": \"Parallel_all_have_to_agree\",\n  \"manager_member\": [\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    },\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    }\n  ],\n  \"default_department_allowances\": [\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/departments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "departments"
+              ]
+            },
+            "description": "Create a department"
+          },
+          "response": [
+            {
+              "id": "f862a8fe-5513-4365-8260-f6091e1c1cc4",
+              "name": "Successful response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"custom_id\": \"<string>\",\n  \"default_allowance\": \"<number>\",\n  \"maximum_absent\": \"<number>\",\n  \"approval_process\": \"Parallel_all_have_to_agree\",\n  \"manager_member\": [\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    },\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    }\n  ],\n  \"default_department_allowances\": [\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/departments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "departments"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "01962CfD-e572-3Fcf-9DEd-842C325A2BAD",
+              "createdAt": "2026-07-28T00:28:00.000Z",
+              "updatedAt": "2026-07-28T00:28:00.000Z",
+              "uid": "35240-f862a8fe-5513-4365-8260-f6091e1c1cc4"
+            },
+            {
+              "id": "55049ecd-b089-4aee-8ac1-622489c647a3",
+              "name": "Invalid input data",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"custom_id\": \"<string>\",\n  \"default_allowance\": \"<number>\",\n  \"maximum_absent\": \"<number>\",\n  \"approval_process\": \"Parallel_all_have_to_agree\",\n  \"manager_member\": [\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    },\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    }\n  ],\n  \"default_department_allowances\": [\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/departments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "departments"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:00.000Z",
+              "updatedAt": "2026-07-28T00:28:00.000Z",
+              "uid": "35240-55049ecd-b089-4aee-8ac1-622489c647a3"
+            },
+            {
+              "id": "8a462584-ab1d-4b59-9dae-505b9d7a2006",
+              "name": "Authorization not provided",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"custom_id\": \"<string>\",\n  \"default_allowance\": \"<number>\",\n  \"maximum_absent\": \"<number>\",\n  \"approval_process\": \"Parallel_all_have_to_agree\",\n  \"manager_member\": [\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    },\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    }\n  ],\n  \"default_department_allowances\": [\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/departments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "departments"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:00.000Z",
+              "updatedAt": "2026-07-28T00:28:00.000Z",
+              "uid": "35240-8a462584-ab1d-4b59-9dae-505b9d7a2006"
+            },
+            {
+              "id": "32200774-e033-4638-9142-3ff97a4a613a",
+              "name": "Insufficient access",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"custom_id\": \"<string>\",\n  \"default_allowance\": \"<number>\",\n  \"maximum_absent\": \"<number>\",\n  \"approval_process\": \"Parallel_all_have_to_agree\",\n  \"manager_member\": [\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    },\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    }\n  ],\n  \"default_department_allowances\": [\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/departments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "departments"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:00.000Z",
+              "updatedAt": "2026-07-28T00:28:00.000Z",
+              "uid": "35240-32200774-e033-4638-9142-3ff97a4a613a"
+            },
+            {
+              "id": "67ee957b-d0eb-4db9-bfe8-ab1b19d7e603",
+              "name": "Internal server error",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"custom_id\": \"<string>\",\n  \"default_allowance\": \"<number>\",\n  \"maximum_absent\": \"<number>\",\n  \"approval_process\": \"Parallel_all_have_to_agree\",\n  \"manager_member\": [\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    },\n    {\n      \"member_id\": \"<string>\",\n      \"predecessor_manager_id\": \"<string>\"\n    }\n  ],\n  \"default_department_allowances\": [\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"value\": \"<number>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/departments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "departments"
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"code\": \"<string>\",\n  \"issues\": [\n    {\n      \"message\": \"<string>\"\n    },\n    {\n      \"message\": \"<string>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T00:28:00.000Z",
+              "updatedAt": "2026-07-28T00:28:00.000Z",
+              "uid": "35240-67ee957b-d0eb-4db9-bfe8-ab1b19d7e603"
+            }
+          ],
+          "createdAt": "2026-07-28T00:28:00.000Z",
+          "updatedAt": "2026-07-28T00:28:00.000Z",
+          "uid": "35240-e60a3c59-c70c-4533-9721-3ebad338c1da"
+        }
+      ],
+      "id": "a65449e6-b232-4f77-9af4-41fb63c01397",
+      "createdAt": "2026-07-28T00:28:00.000Z",
+      "updatedAt": "2026-07-28T00:28:00.000Z",
+      "uid": "35240-a65449e6-b232-4f77-9af4-41fb63c01397"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.absentify.com/api/v1"
+    }
+  ]
+}
