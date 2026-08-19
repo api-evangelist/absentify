@@ -30,7 +30,7 @@ kind: contract
 access: 3rd-Party
 created: '2025-02-17'
 modified: '2026-05-19'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
 - aid: absentify:absentify-absences-api
   name: Absentify Absences API
