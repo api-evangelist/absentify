@@ -1,0 +1,304 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Absentify Absences Requests API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Requests",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Absentify Get All Requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.absentify.com/api/v1/requests",
+            "params": [
+              {
+                "name": "start",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "request_member_ids",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "department_ids",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all requests"
+        },
+        {
+          "info": {
+            "name": "Absentify Create a Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.absentify.com/api/v1/requests",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create a leave request.\n\n**Date/Time Format:** All dates must be in ISO 8601 format with UTC timezone (e.g., '2024-01-15T09:00:00Z').\n\n**Day-based leave types (leave_unit: days):**\n- Use start_at: 'morning' or 'afternoon' to specify when the absence starts\n- Use end_at: 'lunchtime' or 'end_of_day' to specify when the absence ends\n- Example full day: start='2024-01-15T00:00:00Z', end='2024-01-15T00:00:00Z', start_at='morning', end_at='end_of_day'\n- Example half day (morning): start='2024-01-15T00"
+        },
+        {
+          "info": {
+            "name": "Absentify Get All Requests Per Day",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.absentify.com/api/v1/requests_per_day",
+            "params": [
+              {
+                "name": "start",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "request_member_ids",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "department_ids",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all requests per day"
+        },
+        {
+          "info": {
+            "name": "Absentify Read a Request by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.absentify.com/api/v1/requests/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Read a request by id"
+        },
+        {
+          "info": {
+            "name": "Absentify Create Recurring Requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.absentify.com/api/v1/requests/recurring",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create multiple recurring requests based on a recurrence pattern"
+        },
+        {
+          "info": {
+            "name": "Absentify Approve a Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.absentify.com/api/v1/requests/:id/approve",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Approve a pending request on behalf of the user who created the API token. The API automatically finds the next pending approval and approves it."
+        },
+        {
+          "info": {
+            "name": "Absentify Decline a Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.absentify.com/api/v1/requests/:id/decline",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Decline a pending request on behalf of the user who created the API token. The API automatically finds the next pending approval and declines it with the provided reason."
+        },
+        {
+          "info": {
+            "name": "Absentify Approve a Request as a Representative",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.absentify.com/api/v1/requests/:id/approve_representative",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Approve a request as a representative/substitute on behalf of the user who created the API token. The API automatically finds the pending representative approval."
+        },
+        {
+          "info": {
+            "name": "Absentify Decline a Request as a Representative",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.absentify.com/api/v1/requests/:id/decline_representative",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Decline a request as a representative/substitute on behalf of the user who created the API token. The API automatically finds the pending representative approval."
+        },
+        {
+          "info": {
+            "name": "Absentify Cancel a Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.absentify.com/api/v1/requests/:id/cancel",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Cancel a request on behalf of the user who created the API token. The user must be the requester, an admin, or a department manager with appropriate permissions."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

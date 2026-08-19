@@ -1,0 +1,57 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Absentify Absences API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Absences",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Absentify Get All Requests and Public Holiday Per Member Per Day",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.absentify.com/api/v1/absences_per_day",
+            "params": [
+              {
+                "name": "start",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "request_member_ids",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "department_ids",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all requests and public holiday per member per day"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

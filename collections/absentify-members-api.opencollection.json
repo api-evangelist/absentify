@@ -1,0 +1,450 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Absentify Absences Members API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Members",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Absentify Get All Members",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.absentify.com/api/v1/members",
+            "params": [
+              {
+                "name": "department_ids",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "employment_start_date_from",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "employment_start_date_to",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "employment_end_date_from",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "employment_end_date_to",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "is_admin",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "approval_process",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "has_approvers",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "allowance_type_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "birthday_month",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "manager_type",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all members with optional filters for departments, status, employment dates, admin status, approval process, approvers, allowance types, name, birthday month, and manager type"
+        },
+        {
+          "info": {
+            "name": "Absentify Invite a Member",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.absentify.com/api/v1/members",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Invite a member"
+        },
+        {
+          "info": {
+            "name": "Absentify Read a Member by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.absentify.com/api/v1/members/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Read a member by id"
+        },
+        {
+          "info": {
+            "name": "Absentify Update a Member",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.absentify.com/api/v1/members/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update a member"
+        },
+        {
+          "info": {
+            "name": "Absentify Delete a Member",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.absentify.com/api/v1/members/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete a member, all data will be deleted permanently"
+        },
+        {
+          "info": {
+            "name": "Absentify Read a Member by Microsoft User Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.absentify.com/api/v1/members/microsoft/:microsoft_user_id",
+            "params": [
+              {
+                "name": "microsoft_user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Read a member Microsoft user id"
+        },
+        {
+          "info": {
+            "name": "Absentify Read a Member by Email",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.absentify.com/api/v1/members/email/:email",
+            "params": [
+              {
+                "name": "email",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Read a member email"
+        },
+        {
+          "info": {
+            "name": "Absentify Read a Member by Custom_id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.absentify.com/api/v1/members/custom_id/:custom_id",
+            "params": [
+              {
+                "name": "custom_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Read a member by custom_id"
+        },
+        {
+          "info": {
+            "name": "Absentify Update Approvers for a Member",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.absentify.com/api/v1/members/:id/approvers",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n        This endpoint allows updating the approvers for a specific member based on the chosen approval process.\n        Depending on the provided configuration:\n        - If Microsoft profile managers are used, department and custom approvers are ignored.\n        - If department settings are used, Microsoft profile managers and custom approvers are ignored.\n        - If custom approvers are provided, Microsoft profile managers and department settings are ignored.\n\n        **No Approver (Self-Ap"
+        },
+        {
+          "info": {
+            "name": "Absentify Update a Member's Allowance",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.absentify.com/api/v1/members/:id/allowance/:allowance_type_id/:year",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "allowance_type_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "year",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update a member's allowance and optionally configure if this allowance type should be default or disabled for the member"
+        },
+        {
+          "info": {
+            "name": "Absentify Add a Member's Schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.absentify.com/api/v1/members/:id/schedule",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Add a member's schedule"
+        },
+        {
+          "info": {
+            "name": "Absentify Update a Member's Schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.absentify.com/api/v1/members/:member_id/schedule/:id",
+            "params": [
+              {
+                "name": "member_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update a member's schedule"
+        },
+        {
+          "info": {
+            "name": "Absentify Get a Member's Representative Settings and List",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.absentify.com/api/v1/members/:id/representatives",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Retrieves the representative configuration (such as approval process, ability to choose/reorder) and the list of representatives for a specific member."
+        },
+        {
+          "info": {
+            "name": "Absentify Update Representatives for a Member",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.absentify.com/api/v1/members/:id/representatives",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-KEY",
+              "value": "{{X-API-KEY}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n        This endpoint allows updating the representatives for a specific member.\n        It also configures how representative approvals work for this member.\n        The 'id', 'representative_approval_process', 'member_can_reorder_representatives',\n        'member_can_choose_representatives', 'required_representatives_count', and 'representatives' fields are always required.\n      "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,466 @@
+{
+  "item": [
+    {
+      "id": "c8cae6b1-d786-4d10-837e-dfb01def48ff",
+      "name": "Absences",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0de8b248-8037-40c8-8d3e-0ddd7856f7bd",
+          "name": "Absentify Get All Requests and Public Holiday Per Member Per Day",
+          "request": {
+            "name": "Absentify Get All Requests and Public Holiday Per Member Per Day",
+            "description": {
+              "content": "Get all requests and public holiday per member per day",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "absences_per_day"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "end",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "request_member_ids",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "department_ids",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-API-KEY"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ac00e014-b580-4bd0-a855-c0c162f57716",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "absences_per_day"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"type\": \"public_holiday\",\n    \"member\": {\n      \"id\": \"string\",\n      \"custom_id\": \"string\",\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"date\": \"string\",\n    \"start_at\": \"morning\",\n    \"end_at\": \"lunchtime\",\n    \"request\": {\n      \"id\": \"string\",\n      \"duration\": 7239.336280451622,\n      \"workday_absence_duration\": 4118.780289719473,\n      \"status\": \"string\",\n      \"take_from_allowance\": true,\n      \"allowance_type\": {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"ignore_allowance_limit\": false,\n        \"allowance_unit\": \"hours\"\n      },\n      \"leave_type\": {\n        \"name\": \"string\",\n        \"id\": \"string\",\n        \"leave_unit\": \"hours\"\n      }\n    },\n    \"public_holiday_day\": {\n      \"id\": \"string\",\n      \"duration\": \"string\",\n      \"names\": [\n        {\n          \"language\": \"string\",\n          \"name\": \"string\"\n        },\n        {\n          \"language\": \"string\",\n          \"name\": \"string\"\n        }\n      ]\n    }\n  },\n  {\n    \"type\": \"public_holiday\",\n    \"member\": {\n      \"id\": \"string\",\n      \"custom_id\": \"string\",\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"date\": \"string\",\n    \"start_at\": \"morning\",\n    \"end_at\": \"lunchtime\",\n    \"request\": {\n      \"id\": \"string\",\n      \"duration\": 4440.145311707603,\n      \"workday_absence_duration\": 9341.299064989062,\n      \"status\": \"string\",\n      \"take_from_allowance\": false,\n      \"allowance_type\": {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"ignore_allowance_limit\": false,\n        \"allowance_unit\": \"days\"\n      },\n      \"leave_type\": {\n        \"name\": \"string\",\n        \"id\": \"string\",\n        \"leave_unit\": \"minutes_10\"\n      }\n    },\n    \"public_holiday_day\": {\n      \"id\": \"string\",\n      \"duration\": \"string\",\n      \"names\": [\n        {\n          \"language\": \"string\",\n          \"name\": \"string\"\n        },\n        {\n          \"language\": \"string\",\n          \"name\": \"string\"\n        }\n      ]\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "58cd8d3b-e9aa-4461-ad86-d4cc8a2bb4a6",
+              "name": "Invalid input data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "absences_per_day"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"BAD_REQUEST\",\n  \"message\": \"Invalid input data\",\n  \"issues\": []\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "05472cdd-d38d-4382-be08-5666fd22e38c",
+              "name": "Authorization not provided",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "absences_per_day"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"UNAUTHORIZED\",\n  \"message\": \"Authorization not provided\",\n  \"issues\": []\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f2e80424-555f-4860-bb0f-5919ea0b0996",
+              "name": "Insufficient access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "absences_per_day"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"FORBIDDEN\",\n  \"message\": \"Insufficient access\",\n  \"issues\": []\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "22ec42c3-86eb-4ec4-bc17-424b3f81978a",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "absences_per_day"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"NOT_FOUND\",\n  \"message\": \"Not found\",\n  \"issues\": []\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "204037ce-1896-4258-a83f-fd8197a7d0a7",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "absences_per_day"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "request_member_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "department_ids",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"INTERNAL_SERVER_ERROR\",\n  \"message\": \"Internal server error\",\n  \"issues\": []\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.absentify.com/api/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "a3e66a07-74e1-4923-8abf-b26a529741a2",
+    "name": "Absentify Absences API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Absentify REST API provides comprehensive absence management capabilities for Microsoft 365-integrated organizations. Manage members, departments, leave types, requests, allowances, public holidays, and workspace settings. The API requires the Plus plan and uses API key authentication. Rate limit: 150 requests per second per IP.\n\nContact Support:\n Email: support@absentify.com",
+      "type": "text/plain"
+    }
+  }
+}
