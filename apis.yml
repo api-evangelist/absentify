@@ -6,6 +6,18 @@ description: >-
   track and manage employee absences, leave requests, approvals, and team schedules. Built by BrainCore Solutions GmbH,
   it provides a REST API for integrating absence management into custom workflows, HR systems, and business automation
   tools.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
