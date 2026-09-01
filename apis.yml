@@ -266,7 +266,7 @@ apis:
   humanURL: https://absentify.com/docs/en/api-reference/introduction
   baseURL: https://api.absentify.com/api/v1
   tags:
-  - Public holidays
+  - Public Holidays
   tags_raw:
   - Public holidays
   properties:
