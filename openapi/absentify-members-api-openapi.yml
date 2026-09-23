@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Absentify Absences Members API
+  title: Absentify Members API
   description: 'The Absentify REST API provides comprehensive absence management capabilities for Microsoft 365-integrated organizations. Manage members, departments, leave types, requests, allowances, public holidays, and workspace settings. The API requires the Plus plan and uses API key authentication. Rate limit: 150 requests per second per IP.'
   version: 1.0.0
   contact:
@@ -2436,7 +2436,27 @@ paths:
     put:
       operationId: member-updateMemberApprovers
       summary: Absentify Update Approvers for a Member
-      description: "\n        This endpoint allows updating the approvers for a specific member based on the chosen approval process.\n        Depending on the provided configuration:\n        - If Microsoft profile managers are used, department and custom approvers are ignored.\n        - If department settings are used, Microsoft profile managers and custom approvers are ignored.\n        - If custom approvers are provided, Microsoft profile managers and department settings are ignored.\n\n        **No Approver (Self-Approval):**\n        To set \"no approver\" for a member, provide an empty array: `approvers: []`.\n        The system will automatically configure the member as their own approver (self-approval),\n        which is internally recognized as \"no approver\" throughout the application.\n\n        The 'id' and 'approval_process' fields are always required.\n      "
+      description: 'This endpoint allows updating the approvers for a specific member based on the chosen approval process.
+
+        Depending on the provided configuration:
+
+        - If Microsoft profile managers are used, department and custom approvers are ignored.
+
+        - If department settings are used, Microsoft profile managers and custom approvers are ignored.
+
+        - If custom approvers are provided, Microsoft profile managers and department settings are ignored.
+
+
+        **No Approver (Self-Approval):**
+
+        To set "no approver" for a member, provide an empty array: `approvers: []`.
+
+        The system will automatically configure the member as their own approver (self-approval),
+
+        which is internally recognized as "no approver" throughout the application.
+
+
+        The ''id'' and ''approval_process'' fields are always required.'
       tags:
       - Members
       security:
@@ -3081,7 +3101,13 @@ paths:
     put:
       operationId: member-updateMemberRepresentatives
       summary: Absentify Update Representatives for a Member
-      description: "\n        This endpoint allows updating the representatives for a specific member.\n        It also configures how representative approvals work for this member.\n        The 'id', 'representative_approval_process', 'member_can_reorder_representatives',\n        'member_can_choose_representatives', 'required_representatives_count', and 'representatives' fields are always required.\n      "
+      description: 'This endpoint allows updating the representatives for a specific member.
+
+        It also configures how representative approvals work for this member.
+
+        The ''id'', ''representative_approval_process'', ''member_can_reorder_representatives'',
+
+        ''member_can_choose_representatives'', ''required_representatives_count'', and ''representatives'' fields are always required.'
       tags:
       - Members
       security:
@@ -3272,72 +3298,6 @@ paths:
         dispatcher: FALLBACK
 components:
   schemas:
-    error.BAD_REQUEST:
-      title: Invalid input data error (400)
-      description: The error information
-      example:
-        code: BAD_REQUEST
-        message: Invalid input data
-        issues: []
-      type: object
-      properties:
-        message:
-          description: The error message
-          example: Invalid input data
-          type: string
-        code:
-          description: The error code
-          example: BAD_REQUEST
-          type: string
-        issues:
-          description: An array of issues that were responsible for the error
-          example: []
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-            additionalProperties: false
-      required:
-      - message
-      - code
-      additionalProperties: false
-    error.UNAUTHORIZED:
-      title: Authorization not provided error (401)
-      description: The error information
-      example:
-        code: UNAUTHORIZED
-        message: Authorization not provided
-        issues: []
-      type: object
-      properties:
-        message:
-          description: The error message
-          example: Authorization not provided
-          type: string
-        code:
-          description: The error code
-          example: UNAUTHORIZED
-          type: string
-        issues:
-          description: An array of issues that were responsible for the error
-          example: []
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-            additionalProperties: false
-      required:
-      - message
-      - code
-      additionalProperties: false
     error.NOT_FOUND:
       title: Not found error (404)
       description: The error information
@@ -3371,6 +3331,39 @@ components:
       - message
       - code
       additionalProperties: false
+    error.BAD_REQUEST:
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Invalid input data
+          type: string
+        code:
+          description: The error code
+          example: BAD_REQUEST
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
     error.INTERNAL_SERVER_ERROR:
       title: Internal server error error (500)
       description: The error information
@@ -3387,6 +3380,39 @@ components:
         code:
           description: The error code
           example: INTERNAL_SERVER_ERROR
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.UNAUTHORIZED:
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Authorization not provided
+          type: string
+        code:
+          description: The error code
+          example: UNAUTHORIZED
           type: string
         issues:
           description: An array of issues that were responsible for the error
