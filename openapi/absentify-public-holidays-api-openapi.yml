@@ -278,39 +278,6 @@ paths:
         dispatcher: FALLBACK
 components:
   schemas:
-    error.INTERNAL_SERVER_ERROR:
-      title: Internal server error error (500)
-      description: The error information
-      example:
-        code: INTERNAL_SERVER_ERROR
-        message: Internal server error
-        issues: []
-      type: object
-      properties:
-        message:
-          description: The error message
-          example: Internal server error
-          type: string
-        code:
-          description: The error code
-          example: INTERNAL_SERVER_ERROR
-          type: string
-        issues:
-          description: An array of issues that were responsible for the error
-          example: []
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-            additionalProperties: false
-      required:
-      - message
-      - code
-      additionalProperties: false
     error.UNAUTHORIZED:
       title: Authorization not provided error (401)
       description: The error information
@@ -344,22 +311,55 @@ components:
       - message
       - code
       additionalProperties: false
-    error.BAD_REQUEST:
-      title: Invalid input data error (400)
+    error.NOT_FOUND:
+      title: Not found error (404)
       description: The error information
       example:
-        code: BAD_REQUEST
-        message: Invalid input data
+        code: NOT_FOUND
+        message: Not found
         issues: []
       type: object
       properties:
         message:
           description: The error message
-          example: Invalid input data
+          example: Not found
           type: string
         code:
           description: The error code
-          example: BAD_REQUEST
+          example: NOT_FOUND
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.INTERNAL_SERVER_ERROR:
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Internal server error
+          type: string
+        code:
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
           type: string
         issues:
           description: An array of issues that were responsible for the error
@@ -410,22 +410,22 @@ components:
       - message
       - code
       additionalProperties: false
-    error.NOT_FOUND:
-      title: Not found error (404)
+    error.BAD_REQUEST:
+      title: Invalid input data error (400)
       description: The error information
       example:
-        code: NOT_FOUND
-        message: Not found
+        code: BAD_REQUEST
+        message: Invalid input data
         issues: []
       type: object
       properties:
         message:
           description: The error message
-          example: Not found
+          example: Invalid input data
           type: string
         code:
           description: The error code
-          example: NOT_FOUND
+          example: BAD_REQUEST
           type: string
         issues:
           description: An array of issues that were responsible for the error
