@@ -164,6 +164,8 @@ apis:
   humanURL: https://absentify.com/docs/en/api-reference/introduction
   baseURL: https://api.absentify.com/api/v1
   tags:
+  - Leave Types
+  tags_raw:
   - Leave types
   properties:
   - type: OpenAPI
@@ -431,6 +433,9 @@ apis:
   - type: Examples
     url: examples/absentify-workspace-example.json
 common:
+  - type: CapabilityMap
+    url: capabilities/absentify-capability-edges.yml
+    name: Absentify Business Capability Map
   - type: Website
     url: https://www.absentify.com/
   - type: PostmanWorkspace
