@@ -531,22 +531,55 @@ paths:
         dispatcher: FALLBACK
 components:
   schemas:
-    error.UNAUTHORIZED:
-      title: Authorization not provided error (401)
+    error.BAD_REQUEST:
+      title: Invalid input data error (400)
       description: The error information
       example:
-        code: UNAUTHORIZED
-        message: Authorization not provided
+        code: BAD_REQUEST
+        message: Invalid input data
         issues: []
       type: object
       properties:
         message:
           description: The error message
-          example: Authorization not provided
+          example: Invalid input data
           type: string
         code:
           description: The error code
-          example: UNAUTHORIZED
+          example: BAD_REQUEST
+          type: string
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+    error.FORBIDDEN:
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+      type: object
+      properties:
+        message:
+          description: The error message
+          example: Insufficient access
+          type: string
+        code:
+          description: The error code
+          example: FORBIDDEN
           type: string
         issues:
           description: An array of issues that were responsible for the error
@@ -630,55 +663,22 @@ components:
       - message
       - code
       additionalProperties: false
-    error.FORBIDDEN:
-      title: Insufficient access error (403)
+    error.UNAUTHORIZED:
+      title: Authorization not provided error (401)
       description: The error information
       example:
-        code: FORBIDDEN
-        message: Insufficient access
+        code: UNAUTHORIZED
+        message: Authorization not provided
         issues: []
       type: object
       properties:
         message:
           description: The error message
-          example: Insufficient access
+          example: Authorization not provided
           type: string
         code:
           description: The error code
-          example: FORBIDDEN
-          type: string
-        issues:
-          description: An array of issues that were responsible for the error
-          example: []
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-            additionalProperties: false
-      required:
-      - message
-      - code
-      additionalProperties: false
-    error.BAD_REQUEST:
-      title: Invalid input data error (400)
-      description: The error information
-      example:
-        code: BAD_REQUEST
-        message: Invalid input data
-        issues: []
-      type: object
-      properties:
-        message:
-          description: The error message
-          example: Invalid input data
-          type: string
-        code:
-          description: The error code
-          example: BAD_REQUEST
+          example: UNAUTHORIZED
           type: string
         issues:
           description: An array of issues that were responsible for the error
