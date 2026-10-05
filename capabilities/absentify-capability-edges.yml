@@ -1,0 +1,53 @@
+slug: absentify
+provider: Absentify
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 4
+edges:
+- tag: Members
+  spec_file: absentify-members-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.8
+  evidence: '"Absentify Invite a Member", "Read a Member by Email", "Update Approvers for a Member", "Update
+    a Member''s Allowance", "Add a Member''s Schedule"'
+  reason: Employee master records, approver hierarchy, leave allowances and work schedules — HR records
+    administration and service delivery.
+- tag: Requests
+  spec_file: absentify-requests-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.8
+  evidence: '"Absentify Create a Request", "Approve a Request", "Decline a Request", "Create Recurring
+    Requests", "Cancel a Request"'
+  reason: Leave request submission and approval workflow for employees — HR operations / time-off administration
+    within the employee lifecycle.
+- tag: Absences
+  spec_file: absentify-absences-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.75
+  evidence: GET /absences_per_day — "Get All Requests and Public Holiday Per Member Per Day"; vendor is
+    "an absence management platform ... track and manage employee absences"
+  reason: Employee absence/time-off records per member per day are core HR administrative operations.
+- tag: Departments
+  spec_file: absentify-departments-api-openapi.yml
+  capability_id: BC-300
+  capability_id_l1: BC-300
+  capability_name: Human Capital Management
+  confidence: 0.7
+  evidence: '"Absentify Get All Departments", "Absentify Create a Department", "Absentify Update a Department"'
+  reason: CRUD over organisational departments inside an HR absence platform — organisational/HR master
+    structure. Evidence does not pin a specific HCM sub-capability, so L1 only.
