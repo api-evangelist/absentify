@@ -1,15 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Absentify Requests API
-  description: 'The Absentify REST API provides comprehensive absence management capabilities for Microsoft 365-integrated organizations. Manage members, departments, leave types, requests, allowances, public holidays, and workspace settings. The API requires the Plus plan and uses API key authentication. Rate limit: 150 requests per second per IP.'
+  title: absentify CRUD Requests API
+  description: OpenAPI compliant REST API
   version: 1.0.0
-  contact:
-    url: https://absentify.com/docs
-    email: support@absentify.com
-  license:
-    name: Proprietary
-    url: https://absentify.com/terms-and-conditions
-  x-generated-from: official-openapi-spec
 servers:
 - url: https://api.absentify.com/api/v1
 tags:
@@ -18,8 +11,11 @@ paths:
   /requests:
     get:
       operationId: request-getRequests
-      summary: Absentify Get All Requests
-      description: Get all requests
+      summary: Get all requests
+      description: 'Get all requests that overlap the `start`…`end` window.
+
+
+        The window between `start` and `end` may span at most 1826 days (5 years). Wider ranges are rejected with a 400 response, so page through longer periods in smaller windows.'
       tags:
       - Requests
       security:
@@ -28,13 +24,17 @@ paths:
       - in: query
         name: start
         schema:
+          description: Date/time in ISO 8601 format, e.g. `2026-06-01` (interpreted as UTC midnight) or `2026-06-01T09:00:00Z`. Always include a time zone designator (`Z` for UTC) when sending a time of day. Localized formats such as `01.06.2026` or `06/01/2026` are misinterpreted and must not be used. The window between `start` and `end` may span at most 1826 days (5 years). Wider ranges are rejected with a 400 response, so page through longer periods in smaller windows.
           type: string
         required: true
+        description: Date/time in ISO 8601 format, e.g. `2026-06-01` (interpreted as UTC midnight) or `2026-06-01T09:00:00Z`. Always include a time zone designator (`Z` for UTC) when sending a time of day. Localized formats such as `01.06.2026` or `06/01/2026` are misinterpreted and must not be used. The window between `start` and `end` may span at most 1826 days (5 years). Wider ranges are rejected with a 400 response, so page through longer periods in smaller windows.
       - in: query
         name: end
         schema:
+          description: Date/time in ISO 8601 format, e.g. `2026-06-01` (interpreted as UTC midnight) or `2026-06-01T09:00:00Z`. Always include a time zone designator (`Z` for UTC) when sending a time of day. Localized formats such as `01.06.2026` or `06/01/2026` are misinterpreted and must not be used. The window between `start` and `end` may span at most 1826 days (5 years). Wider ranges are rejected with a 400 response, so page through longer periods in smaller windows.
           type: string
         required: true
+        description: Date/time in ISO 8601 format, e.g. `2026-06-01` (interpreted as UTC midnight) or `2026-06-01T09:00:00Z`. Always include a time zone designator (`Z` for UTC) when sending a time of day. Localized formats such as `01.06.2026` or `06/01/2026` are misinterpreted and must not be used. The window between `start` and `end` may span at most 1826 days (5 years). Wider ranges are rejected with a 400 response, so page through longer periods in smaller windows.
       - in: query
         name: status
         schema:
@@ -52,6 +52,22 @@ paths:
         name: department_ids
         schema:
           type: string
+      - in: query
+        name: locale
+        schema:
+          type: string
+          enum:
+          - en
+          - de
+          - fr
+          - hu
+          - it
+          - pl
+          - pt
+          - ru
+          - es
+          - tr
+          - uk
       responses:
         '200':
           description: Successful response
@@ -78,11 +94,13 @@ paths:
                         enum:
                         - morning
                         - afternoon
+                        description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
                       end_at:
                         type: string
                         enum:
                         - lunchtime
                         - end_of_day
+                        description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
                       leave_unit:
                         type: string
                         enum:
@@ -94,6 +112,206 @@ paths:
                         - minutes_10
                         - minutes_5
                         - minutes_1
+                        description: 'The unit stored on this request. It governs duration and workday_absence_duration: day and half-day units use days; hour and minute units use minutes. It may differ from leave_type.leave_unit after the leave type changes.'
+                      revision:
+                        type: integer
+                        minimum: -9007199254740991
+                        maximum: 9007199254740991
+                        description: Counts the versions of the request. Starts at 1 and goes up with every applied change. A pending, declined or withdrawn change does not change it.
+                      last_changed_at:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                        description: When the request was last changed, or null if it never was.
+                      pending_change:
+                        anyOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: integer
+                              minimum: -9007199254740991
+                              maximum: 9007199254740991
+                            revision:
+                              anyOf:
+                              - type: integer
+                                minimum: -9007199254740991
+                                maximum: 9007199254740991
+                              - type: 'null'
+                              description: The revision the request gets when this change is applied. Null while the change is pending, declined or withdrawn.
+                            kind:
+                              type: string
+                              enum:
+                              - reason
+                              - shortened
+                              - extended
+                              - moved
+                              - leave_type
+                            status:
+                              type: string
+                              enum:
+                              - pending
+                              - approved
+                              - declined
+                              - withdrawn
+                              - applied
+                              description: '`pending` waits for approvers, `applied` is in force, `declined` and `withdrawn` never changed the request.'
+                            previous:
+                              type: object
+                              properties:
+                                start:
+                                  type: string
+                                end:
+                                  type: string
+                                start_at:
+                                  type: string
+                                  enum:
+                                  - morning
+                                  - afternoon
+                                  description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
+                                end_at:
+                                  type: string
+                                  enum:
+                                  - lunchtime
+                                  - end_of_day
+                                  description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
+                                leave_type:
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: string
+                                    name:
+                                      anyOf:
+                                      - type: string
+                                      - type: 'null'
+                                  required:
+                                  - id
+                                  - name
+                                  additionalProperties: false
+                                duration:
+                                  type: number
+                                workday_absence_duration:
+                                  type: number
+                                reason:
+                                  anyOf:
+                                  - type: string
+                                  - type: 'null'
+                              required:
+                              - start
+                              - end
+                              - start_at
+                              - end_at
+                              - leave_type
+                              - duration
+                              - workday_absence_duration
+                              - reason
+                              additionalProperties: false
+                              description: The request as it was before this change.
+                            proposed:
+                              type: object
+                              properties:
+                                start:
+                                  type: string
+                                end:
+                                  type: string
+                                start_at:
+                                  type: string
+                                  enum:
+                                  - morning
+                                  - afternoon
+                                  description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
+                                end_at:
+                                  type: string
+                                  enum:
+                                  - lunchtime
+                                  - end_of_day
+                                  description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
+                                leave_type:
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: string
+                                    name:
+                                      anyOf:
+                                      - type: string
+                                      - type: 'null'
+                                  required:
+                                  - id
+                                  - name
+                                  additionalProperties: false
+                                duration:
+                                  type: number
+                                workday_absence_duration:
+                                  type: number
+                                reason:
+                                  anyOf:
+                                  - type: string
+                                  - type: 'null'
+                              required:
+                              - start
+                              - end
+                              - start_at
+                              - end_at
+                              - leave_type
+                              - duration
+                              - workday_absence_duration
+                              - reason
+                              additionalProperties: false
+                              description: The request as this change wants it. Only for `applied` changes is this what is in force.
+                            changed_by:
+                              anyOf:
+                              - type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  name:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                required:
+                                - id
+                                - name
+                                additionalProperties: false
+                              - type: 'null'
+                            decided_by:
+                              anyOf:
+                              - type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  name:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                required:
+                                - id
+                                - name
+                                additionalProperties: false
+                              - type: 'null'
+                            created_at:
+                              type: string
+                            decided_at:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            decision_reason:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                          required:
+                          - id
+                          - revision
+                          - kind
+                          - status
+                          - previous
+                          - proposed
+                          - changed_by
+                          - decided_by
+                          - created_at
+                          - decided_at
+                          - decision_reason
+                          additionalProperties: false
+                        - type: 'null'
+                        description: The change that waits for a decision on an approved request, or null. The request fields still show the approved version until the change is applied.
                       request_creator_member:
                         anyOf:
                         - type: object
@@ -124,6 +342,10 @@ paths:
                         properties:
                           name:
                             type: string
+                            description: Translated into `locale` when one is given and a translation exists, otherwise the stored name. Webhook payloads always carry the stored name.
+                          default_name:
+                            type: string
+                            description: The stored name, without any translation applied.
                           id:
                             type: string
                           leave_unit:
@@ -137,8 +359,10 @@ paths:
                             - minutes_10
                             - minutes_5
                             - minutes_1
+                            description: The leave type's current unit for new requests. Historical requests may have a different leave_unit.
                         required:
                         - name
+                        - default_name
                         - id
                         - leave_unit
                         additionalProperties: false
@@ -149,6 +373,12 @@ paths:
                         - Linear_one_has_to_agree
                         - Parallel_all_have_to_agree
                         - Parallel_one_has_to_agree
+                        - Parallel_first_response_decides
+                      needs_approval:
+                        anyOf:
+                        - type: boolean
+                        - type: 'null'
+                        description: Whether the request needed approval, as recorded when it was created. When false, the approver rows were approved automatically. Null for requests created before this was recorded.
                       cancel_reason:
                         anyOf:
                         - type: string
@@ -217,6 +447,10 @@ paths:
                               type: string
                             name:
                               type: string
+                              description: Translated into `locale` when one is given and a translation exists, otherwise the stored name. Webhook payloads always carry the stored name.
+                            default_name:
+                              type: string
+                              description: The stored name, without any translation applied.
                             ignore_allowance_limit:
                               type: boolean
                             allowance_unit:
@@ -227,6 +461,7 @@ paths:
                           required:
                           - id
                           - name
+                          - default_name
                           - ignore_allowance_limit
                           - allowance_unit
                           additionalProperties: false
@@ -260,6 +495,7 @@ paths:
                               - APPROVED_BY_ANOTHER_MANAGER
                               - DECLINED_BY_ANOTHER_MANAGER
                               - CANCELED_BY_ANOTHER_MANAGER
+                              - SKIPPED_ANOTHER_USER_APPROVED
                             status_changed_by_member:
                               anyOf:
                               - type: object
@@ -321,6 +557,126 @@ paths:
                           - status_changed_date
                           - approver_member
                           additionalProperties: false
+                      request_representative_approvers:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            uuid:
+                              type: string
+                            reason:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            status:
+                              type: string
+                              enum:
+                              - PENDING
+                              - APPROVED
+                              - DECLINED
+                              - CANCELED
+                              - APPROVED_BY_ANOTHER_MANAGER
+                              - DECLINED_BY_ANOTHER_MANAGER
+                              - CANCELED_BY_ANOTHER_MANAGER
+                              - REPLACED
+                              - SKIPPED
+                              - SKIPPED_BY_ANOTHER_MANAGER
+                              - SKIPPED_ANOTHER_USER_APPROVED
+                              - SKIPPED_NOT_ENOUGH_REPRESENTATIVES
+                            status_changed_by_member:
+                              anyOf:
+                              - type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  custom_id:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  name:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  email:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                required:
+                                - id
+                                - custom_id
+                                - name
+                                - email
+                                additionalProperties: false
+                              - type: 'null'
+                              description: Who answered for this representative. On a PENDING row added by a replacement, who chose this representative. On a REPLACED row, who replaced them, unless replaced_after_decline is true. On a SKIPPED or CANCELED row, who closed it.
+                            status_changed_date:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                              description: When the representative answered. On a PENDING row added by a replacement, when it was chosen. On a REPLACED row, when they were replaced, unless replaced_after_decline is true. On a SKIPPED or CANCELED row, when it was closed.
+                            approver_member:
+                              anyOf:
+                              - type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  custom_id:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  name:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  email:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                required:
+                                - id
+                                - custom_id
+                                - name
+                                - email
+                                additionalProperties: false
+                              - type: 'null'
+                            replaced_to_member:
+                              anyOf:
+                              - type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  custom_id:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  name:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  email:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                required:
+                                - id
+                                - custom_id
+                                - name
+                                - email
+                                additionalProperties: false
+                              - type: 'null'
+                            replaced_after_decline:
+                              type: boolean
+                              description: When true, status_changed_by_member, status_changed_date and reason describe the representative's decline before they were replaced.
+                          required:
+                          - uuid
+                          - reason
+                          - status
+                          - status_changed_by_member
+                          - status_changed_date
+                          - approver_member
+                          - replaced_to_member
+                          - replaced_after_decline
+                          additionalProperties: false
                     required:
                     - id
                     - createdAt
@@ -330,9 +686,13 @@ paths:
                     - start_at
                     - end_at
                     - leave_unit
+                    - revision
+                    - last_changed_at
+                    - pending_change
                     - request_creator_member
                     - leave_type
                     - approval_process
+                    - needs_approval
                     - cancel_reason
                     - canceld_by_member
                     - requester_member
@@ -344,6 +704,7 @@ paths:
                     - status
                     - canceld_date
                     - request_approvers
+                    - request_representative_approvers
                     additionalProperties: false
                   - type: 'null'
         '400':
@@ -376,12 +737,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
     post:
       operationId: request-createRequest
-      summary: Absentify Create a Request
+      summary: Create a request
       description: 'Create a leave request.
 
 
@@ -398,6 +756,10 @@ paths:
 
         - Example half day (morning): start=''2024-01-15T00:00:00Z'', end=''2024-01-15T00:00:00Z'', start_at=''morning'', end_at=''lunchtime''
 
+        - If start_at/end_at are omitted, they default to ''morning''/''end_of_day'' (full day)
+
+        - For leave types with leave_unit ''days'' (full days only), start_at=''afternoon'' or end_at=''lunchtime'' is rejected (each on its own) — use a ''half_days'' leave type for half-day absences
+
 
         **Hour-based leave types (leave_unit: hours):**
 
@@ -405,7 +767,16 @@ paths:
 
         - The start_at and end_at parameters are ignored
 
-        - Example: start=''2024-01-15T09:00:00Z'', end=''2024-01-15T12:30:00Z'' for a 9:00-12:30 UTC absence'
+        - Example: start=''2024-01-15T09:00:00Z'', end=''2024-01-15T12:30:00Z'' for a 9:00-12:30 UTC absence
+
+
+        **Representatives:** If the leave type or member requires representatives, pass representative_member_ids. Admin API keys creating for another member may instead set ignoreRepresentativeRequirement: true.
+
+
+        **Employment period:** The absence must fall entirely inside the member''s employment period. A request starting before employment_start_date or ending after employment_end_date is rejected with 400. Both boundary dates are themselves bookable, and a null boundary means open ended on that side. A range that straddles a boundary is rejected rather than truncated.
+
+
+        The check compares **calendar days, not exact timestamps**. For an hour-based leave type, any time of day on employment_end_date is still inside the period (e.g. start=''2024-09-30T09:00:00Z'', end=''2024-09-30T17:00:00Z'' with employment_end_date ''2024-09-30'' is accepted) — midnight is not the cutoff. The same applies to employment_start_date.'
       tags:
       - Requests
       security:
@@ -418,16 +789,20 @@ paths:
             schema:
               type: object
               properties:
-                end:
-                  type: string
                 start:
+                  description: 'Start/end of the request in ISO 8601. For day-based leave types (`leave_unit: days`) send the date at midnight UTC (e.g. `2026-06-01T00:00:00Z`) and use `start_at` / `end_at` to set half-days. For hour-based leave types include the exact time of day (e.g. `2026-06-01T09:00:00Z`); `start_at` / `end_at` are then ignored.'
+                  type: string
+                end:
+                  description: 'Start/end of the request in ISO 8601. For day-based leave types (`leave_unit: days`) send the date at midnight UTC (e.g. `2026-06-01T00:00:00Z`) and use `start_at` / `end_at` to set half-days. For hour-based leave types include the exact time of day (e.g. `2026-06-01T09:00:00Z`); `start_at` / `end_at` are then ignored.'
                   type: string
                 start_at:
+                  description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
                   type: string
                   enum:
                   - morning
                   - afternoon
                 end_at:
+                  description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
                   type: string
                   enum:
                   - lunchtime
@@ -435,16 +810,26 @@ paths:
                 leave_type_id:
                   type: string
                   format: uuid
-                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
                 reason:
                   type: string
                 requester_member_id:
                   type: string
                   format: uuid
-                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                representative_member_ids:
+                  description: Member IDs to assign as representatives. Required for leave types that mandate representatives; omitting them returns REQUIRED_REPRESENTATIVES_COUNT_NOT_MET (as a 400 on create, as `rejection.code` on preview).
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                    pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                ignoreRepresentativeRequirement:
+                  description: Skip the representative requirement. Only honored when the API key's member is an admin and the request is created for another member.
+                  type: boolean
               required:
-              - end
               - start
+              - end
               - leave_type_id
               - requester_member_id
       responses:
@@ -455,7 +840,7 @@ paths:
               schema:
                 type: string
                 format: uuid
-                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
         '400':
           description: Invalid input data
           content:
@@ -480,14 +865,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /requests_per_day:
     get:
       operationId: request-getRequestsPerDay
-      summary: Absentify Get All Requests Per Day
-      description: Get all requests per day
+      summary: Get all requests per day
+      description: 'Get all requests that overlap the `start`…`end` window, split into one entry per day.
+
+
+        The window between `start` and `end` may span at most 1826 days (5 years). Wider ranges are rejected with a 400 response, so page through longer periods in smaller windows.'
       tags:
       - Requests
       security:
@@ -496,13 +881,17 @@ paths:
       - in: query
         name: start
         schema:
+          description: Date/time in ISO 8601 format, e.g. `2026-06-01` (interpreted as UTC midnight) or `2026-06-01T09:00:00Z`. Always include a time zone designator (`Z` for UTC) when sending a time of day. Localized formats such as `01.06.2026` or `06/01/2026` are misinterpreted and must not be used. The window between `start` and `end` may span at most 1826 days (5 years). Wider ranges are rejected with a 400 response, so page through longer periods in smaller windows.
           type: string
         required: true
+        description: Date/time in ISO 8601 format, e.g. `2026-06-01` (interpreted as UTC midnight) or `2026-06-01T09:00:00Z`. Always include a time zone designator (`Z` for UTC) when sending a time of day. Localized formats such as `01.06.2026` or `06/01/2026` are misinterpreted and must not be used. The window between `start` and `end` may span at most 1826 days (5 years). Wider ranges are rejected with a 400 response, so page through longer periods in smaller windows.
       - in: query
         name: end
         schema:
+          description: Date/time in ISO 8601 format, e.g. `2026-06-01` (interpreted as UTC midnight) or `2026-06-01T09:00:00Z`. Always include a time zone designator (`Z` for UTC) when sending a time of day. Localized formats such as `01.06.2026` or `06/01/2026` are misinterpreted and must not be used. The window between `start` and `end` may span at most 1826 days (5 years). Wider ranges are rejected with a 400 response, so page through longer periods in smaller windows.
           type: string
         required: true
+        description: Date/time in ISO 8601 format, e.g. `2026-06-01` (interpreted as UTC midnight) or `2026-06-01T09:00:00Z`. Always include a time zone designator (`Z` for UTC) when sending a time of day. Localized formats such as `01.06.2026` or `06/01/2026` are misinterpreted and must not be used. The window between `start` and `end` may span at most 1826 days (5 years). Wider ranges are rejected with a 400 response, so page through longer periods in smaller windows.
       - in: query
         name: status
         schema:
@@ -520,6 +909,22 @@ paths:
         name: department_ids
         schema:
           type: string
+      - in: query
+        name: locale
+        schema:
+          type: string
+          enum:
+          - en
+          - de
+          - fr
+          - hu
+          - it
+          - pl
+          - pt
+          - ru
+          - es
+          - tr
+          - uk
       responses:
         '200':
           description: Successful response
@@ -546,11 +951,13 @@ paths:
                         enum:
                         - morning
                         - afternoon
+                        description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
                       end_at:
                         type: string
                         enum:
                         - lunchtime
                         - end_of_day
+                        description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
                       leave_unit:
                         type: string
                         enum:
@@ -562,6 +969,7 @@ paths:
                         - minutes_10
                         - minutes_5
                         - minutes_1
+                        description: 'The unit stored on this request. It governs duration and workday_absence_duration: day and half-day units use days; hour and minute units use minutes. It may differ from leave_type.leave_unit after the leave type changes.'
                       day:
                         type: string
                       month:
@@ -600,6 +1008,8 @@ paths:
                         properties:
                           name:
                             type: string
+                          default_name:
+                            type: string
                           id:
                             type: string
                           leave_unit:
@@ -613,8 +1023,10 @@ paths:
                             - minutes_10
                             - minutes_5
                             - minutes_1
+                            description: The leave type's current unit for new requests. Historical requests may have a different leave_unit.
                         required:
                         - name
+                        - default_name
                         - id
                         - leave_unit
                         additionalProperties: false
@@ -625,6 +1037,12 @@ paths:
                         - Linear_one_has_to_agree
                         - Parallel_all_have_to_agree
                         - Parallel_one_has_to_agree
+                        - Parallel_first_response_decides
+                      needs_approval:
+                        anyOf:
+                        - type: boolean
+                        - type: 'null'
+                        description: Whether the request needed approval, as recorded when it was created. When false, the approver rows were approved automatically. Null for requests created before this was recorded.
                       cancel_reason:
                         anyOf:
                         - type: string
@@ -693,6 +1111,8 @@ paths:
                               type: string
                             name:
                               type: string
+                            default_name:
+                              type: string
                             ignore_allowance_limit:
                               type: boolean
                             allowance_unit:
@@ -703,6 +1123,7 @@ paths:
                           required:
                           - id
                           - name
+                          - default_name
                           - ignore_allowance_limit
                           - allowance_unit
                           additionalProperties: false
@@ -736,6 +1157,7 @@ paths:
                               - APPROVED_BY_ANOTHER_MANAGER
                               - DECLINED_BY_ANOTHER_MANAGER
                               - CANCELED_BY_ANOTHER_MANAGER
+                              - SKIPPED_ANOTHER_USER_APPROVED
                             status_changed_by_member:
                               anyOf:
                               - type: object
@@ -797,6 +1219,126 @@ paths:
                           - status_changed_date
                           - approver_member
                           additionalProperties: false
+                      request_representative_approvers:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            uuid:
+                              type: string
+                            reason:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            status:
+                              type: string
+                              enum:
+                              - PENDING
+                              - APPROVED
+                              - DECLINED
+                              - CANCELED
+                              - APPROVED_BY_ANOTHER_MANAGER
+                              - DECLINED_BY_ANOTHER_MANAGER
+                              - CANCELED_BY_ANOTHER_MANAGER
+                              - REPLACED
+                              - SKIPPED
+                              - SKIPPED_BY_ANOTHER_MANAGER
+                              - SKIPPED_ANOTHER_USER_APPROVED
+                              - SKIPPED_NOT_ENOUGH_REPRESENTATIVES
+                            status_changed_by_member:
+                              anyOf:
+                              - type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  custom_id:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  name:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  email:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                required:
+                                - id
+                                - custom_id
+                                - name
+                                - email
+                                additionalProperties: false
+                              - type: 'null'
+                              description: Who answered for this representative. On a PENDING row added by a replacement, who chose this representative. On a REPLACED row, who replaced them, unless replaced_after_decline is true. On a SKIPPED or CANCELED row, who closed it.
+                            status_changed_date:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                              description: When the representative answered. On a PENDING row added by a replacement, when it was chosen. On a REPLACED row, when they were replaced, unless replaced_after_decline is true. On a SKIPPED or CANCELED row, when it was closed.
+                            approver_member:
+                              anyOf:
+                              - type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  custom_id:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  name:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  email:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                required:
+                                - id
+                                - custom_id
+                                - name
+                                - email
+                                additionalProperties: false
+                              - type: 'null'
+                            replaced_to_member:
+                              anyOf:
+                              - type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  custom_id:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  name:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  email:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                required:
+                                - id
+                                - custom_id
+                                - name
+                                - email
+                                additionalProperties: false
+                              - type: 'null'
+                            replaced_after_decline:
+                              type: boolean
+                              description: When true, status_changed_by_member, status_changed_date and reason describe the representative's decline before they were replaced.
+                          required:
+                          - uuid
+                          - reason
+                          - status
+                          - status_changed_by_member
+                          - status_changed_date
+                          - approver_member
+                          - replaced_to_member
+                          - replaced_after_decline
+                          additionalProperties: false
                     required:
                     - id
                     - createdAt
@@ -813,6 +1355,7 @@ paths:
                     - request_creator_member
                     - leave_type
                     - approval_process
+                    - needs_approval
                     - cancel_reason
                     - canceld_by_member
                     - requester_member
@@ -824,6 +1367,7 @@ paths:
                     - status
                     - canceld_date
                     - request_approvers
+                    - request_representative_approvers
                     additionalProperties: false
                   - type: 'null'
         '400':
@@ -856,14 +1400,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /requests/{id}:
     get:
       operationId: request-getRequestById
-      summary: Absentify Read a Request by Id
-      description: Read a request by id
+      summary: Read a request by id
       tags:
       - Requests
       security:
@@ -874,8 +1414,24 @@ paths:
         schema:
           type: string
           format: uuid
-          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
         required: true
+      - in: query
+        name: locale
+        schema:
+          type: string
+          enum:
+          - en
+          - de
+          - fr
+          - hu
+          - it
+          - pl
+          - pt
+          - ru
+          - es
+          - tr
+          - uk
       responses:
         '200':
           description: Successful response
@@ -900,11 +1456,13 @@ paths:
                       enum:
                       - morning
                       - afternoon
+                      description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
                     end_at:
                       type: string
                       enum:
                       - lunchtime
                       - end_of_day
+                      description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
                     leave_unit:
                       type: string
                       enum:
@@ -916,6 +1474,206 @@ paths:
                       - minutes_10
                       - minutes_5
                       - minutes_1
+                      description: 'The unit stored on this request. It governs duration and workday_absence_duration: day and half-day units use days; hour and minute units use minutes. It may differ from leave_type.leave_unit after the leave type changes.'
+                    revision:
+                      type: integer
+                      minimum: -9007199254740991
+                      maximum: 9007199254740991
+                      description: Counts the versions of the request. Starts at 1 and goes up with every applied change. A pending, declined or withdrawn change does not change it.
+                    last_changed_at:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                      description: When the request was last changed, or null if it never was.
+                    pending_change:
+                      anyOf:
+                      - type: object
+                        properties:
+                          id:
+                            type: integer
+                            minimum: -9007199254740991
+                            maximum: 9007199254740991
+                          revision:
+                            anyOf:
+                            - type: integer
+                              minimum: -9007199254740991
+                              maximum: 9007199254740991
+                            - type: 'null'
+                            description: The revision the request gets when this change is applied. Null while the change is pending, declined or withdrawn.
+                          kind:
+                            type: string
+                            enum:
+                            - reason
+                            - shortened
+                            - extended
+                            - moved
+                            - leave_type
+                          status:
+                            type: string
+                            enum:
+                            - pending
+                            - approved
+                            - declined
+                            - withdrawn
+                            - applied
+                            description: '`pending` waits for approvers, `applied` is in force, `declined` and `withdrawn` never changed the request.'
+                          previous:
+                            type: object
+                            properties:
+                              start:
+                                type: string
+                              end:
+                                type: string
+                              start_at:
+                                type: string
+                                enum:
+                                - morning
+                                - afternoon
+                                description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
+                              end_at:
+                                type: string
+                                enum:
+                                - lunchtime
+                                - end_of_day
+                                description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
+                              leave_type:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  name:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                required:
+                                - id
+                                - name
+                                additionalProperties: false
+                              duration:
+                                type: number
+                              workday_absence_duration:
+                                type: number
+                              reason:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - start
+                            - end
+                            - start_at
+                            - end_at
+                            - leave_type
+                            - duration
+                            - workday_absence_duration
+                            - reason
+                            additionalProperties: false
+                            description: The request as it was before this change.
+                          proposed:
+                            type: object
+                            properties:
+                              start:
+                                type: string
+                              end:
+                                type: string
+                              start_at:
+                                type: string
+                                enum:
+                                - morning
+                                - afternoon
+                                description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
+                              end_at:
+                                type: string
+                                enum:
+                                - lunchtime
+                                - end_of_day
+                                description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
+                              leave_type:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  name:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                required:
+                                - id
+                                - name
+                                additionalProperties: false
+                              duration:
+                                type: number
+                              workday_absence_duration:
+                                type: number
+                              reason:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - start
+                            - end
+                            - start_at
+                            - end_at
+                            - leave_type
+                            - duration
+                            - workday_absence_duration
+                            - reason
+                            additionalProperties: false
+                            description: The request as this change wants it. Only for `applied` changes is this what is in force.
+                          changed_by:
+                            anyOf:
+                            - type: object
+                              properties:
+                                id:
+                                  type: string
+                                name:
+                                  anyOf:
+                                  - type: string
+                                  - type: 'null'
+                              required:
+                              - id
+                              - name
+                              additionalProperties: false
+                            - type: 'null'
+                          decided_by:
+                            anyOf:
+                            - type: object
+                              properties:
+                                id:
+                                  type: string
+                                name:
+                                  anyOf:
+                                  - type: string
+                                  - type: 'null'
+                              required:
+                              - id
+                              - name
+                              additionalProperties: false
+                            - type: 'null'
+                          created_at:
+                            type: string
+                          decided_at:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          decision_reason:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - id
+                        - revision
+                        - kind
+                        - status
+                        - previous
+                        - proposed
+                        - changed_by
+                        - decided_by
+                        - created_at
+                        - decided_at
+                        - decision_reason
+                        additionalProperties: false
+                      - type: 'null'
+                      description: The change that waits for a decision on an approved request, or null. The request fields still show the approved version until the change is applied.
                     request_creator_member:
                       anyOf:
                       - type: object
@@ -946,6 +1704,8 @@ paths:
                       properties:
                         name:
                           type: string
+                        default_name:
+                          type: string
                         id:
                           type: string
                         leave_unit:
@@ -959,8 +1719,10 @@ paths:
                           - minutes_10
                           - minutes_5
                           - minutes_1
+                          description: The leave type's current unit for new requests. Historical requests may have a different leave_unit.
                       required:
                       - name
+                      - default_name
                       - id
                       - leave_unit
                       additionalProperties: false
@@ -971,6 +1733,12 @@ paths:
                       - Linear_one_has_to_agree
                       - Parallel_all_have_to_agree
                       - Parallel_one_has_to_agree
+                      - Parallel_first_response_decides
+                    needs_approval:
+                      anyOf:
+                      - type: boolean
+                      - type: 'null'
+                      description: Whether the request needed approval, as recorded when it was created. When false, the approver rows were approved automatically. Null for requests created before this was recorded.
                     cancel_reason:
                       anyOf:
                       - type: string
@@ -1035,6 +1803,8 @@ paths:
                             type: string
                           name:
                             type: string
+                          default_name:
+                            type: string
                           ignore_allowance_limit:
                             type: boolean
                           allowance_unit:
@@ -1045,6 +1815,7 @@ paths:
                         required:
                         - id
                         - name
+                        - default_name
                         - ignore_allowance_limit
                         - allowance_unit
                         additionalProperties: false
@@ -1082,6 +1853,7 @@ paths:
                             - APPROVED_BY_ANOTHER_MANAGER
                             - DECLINED_BY_ANOTHER_MANAGER
                             - CANCELED_BY_ANOTHER_MANAGER
+                            - SKIPPED_ANOTHER_USER_APPROVED
                           status_changed_by_member:
                             anyOf:
                             - type: object
@@ -1148,6 +1920,126 @@ paths:
                         - approver_member
                         - predecessor_request_member_approver_id
                         additionalProperties: false
+                    request_representative_approvers:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          uuid:
+                            type: string
+                          reason:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          status:
+                            type: string
+                            enum:
+                            - PENDING
+                            - APPROVED
+                            - DECLINED
+                            - CANCELED
+                            - APPROVED_BY_ANOTHER_MANAGER
+                            - DECLINED_BY_ANOTHER_MANAGER
+                            - CANCELED_BY_ANOTHER_MANAGER
+                            - REPLACED
+                            - SKIPPED
+                            - SKIPPED_BY_ANOTHER_MANAGER
+                            - SKIPPED_ANOTHER_USER_APPROVED
+                            - SKIPPED_NOT_ENOUGH_REPRESENTATIVES
+                          status_changed_by_member:
+                            anyOf:
+                            - type: object
+                              properties:
+                                id:
+                                  type: string
+                                custom_id:
+                                  anyOf:
+                                  - type: string
+                                  - type: 'null'
+                                name:
+                                  anyOf:
+                                  - type: string
+                                  - type: 'null'
+                                email:
+                                  anyOf:
+                                  - type: string
+                                  - type: 'null'
+                              required:
+                              - id
+                              - custom_id
+                              - name
+                              - email
+                              additionalProperties: false
+                            - type: 'null'
+                            description: Who answered for this representative. On a PENDING row added by a replacement, who chose this representative. On a REPLACED row, who replaced them, unless replaced_after_decline is true. On a SKIPPED or CANCELED row, who closed it.
+                          status_changed_date:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                            description: When the representative answered. On a PENDING row added by a replacement, when it was chosen. On a REPLACED row, when they were replaced, unless replaced_after_decline is true. On a SKIPPED or CANCELED row, when it was closed.
+                          approver_member:
+                            anyOf:
+                            - type: object
+                              properties:
+                                id:
+                                  type: string
+                                custom_id:
+                                  anyOf:
+                                  - type: string
+                                  - type: 'null'
+                                name:
+                                  anyOf:
+                                  - type: string
+                                  - type: 'null'
+                                email:
+                                  anyOf:
+                                  - type: string
+                                  - type: 'null'
+                              required:
+                              - id
+                              - custom_id
+                              - name
+                              - email
+                              additionalProperties: false
+                            - type: 'null'
+                          replaced_to_member:
+                            anyOf:
+                            - type: object
+                              properties:
+                                id:
+                                  type: string
+                                custom_id:
+                                  anyOf:
+                                  - type: string
+                                  - type: 'null'
+                                name:
+                                  anyOf:
+                                  - type: string
+                                  - type: 'null'
+                                email:
+                                  anyOf:
+                                  - type: string
+                                  - type: 'null'
+                              required:
+                              - id
+                              - custom_id
+                              - name
+                              - email
+                              additionalProperties: false
+                            - type: 'null'
+                          replaced_after_decline:
+                            type: boolean
+                            description: When true, status_changed_by_member, status_changed_date and reason describe the representative's decline before they were replaced.
+                        required:
+                        - uuid
+                        - reason
+                        - status
+                        - status_changed_by_member
+                        - status_changed_date
+                        - approver_member
+                        - replaced_to_member
+                        - replaced_after_decline
+                        additionalProperties: false
                   required:
                   - id
                   - createdAt
@@ -1157,9 +2049,13 @@ paths:
                   - start_at
                   - end_at
                   - leave_unit
+                  - revision
+                  - last_changed_at
+                  - pending_change
                   - request_creator_member
                   - leave_type
                   - approval_process
+                  - needs_approval
                   - cancel_reason
                   - canceld_by_member
                   - requester_member
@@ -1171,6 +2067,7 @@ paths:
                   - status
                   - canceld_date
                   - request_approvers
+                  - request_representative_approvers
                   additionalProperties: false
                 - type: 'null'
         '400':
@@ -1203,14 +2100,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /requests/recurring:
     post:
       operationId: request-createRecurringRequests
-      summary: Absentify Create Recurring Requests
-      description: Create multiple recurring requests based on a recurrence pattern
+      summary: Create recurring requests
+      description: 'Create multiple recurring requests based on a recurrence pattern. Note: half_day=''morning''/''afternoon'' requires a leave type with leave_unit ''half_days'' — on a full-day-only ''days'' leave type it is rejected. Employment period: the series is created all-or-nothing, so a single occurrence that starts before employment_start_date or ends after employment_end_date rejects the whole series with 400 rather than skipping that occurrence. An occurrence straddling either boundary is rejected too, never truncated. The comparison is on calendar days, so both boundary dates are themselves bookable and a null boundary means open ended on that side.'
       tags:
       - Requests
       security:
@@ -1226,11 +2120,11 @@ paths:
                 leave_type_id:
                   type: string
                   format: uuid
-                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
                 requester_member_id:
                   type: string
                   format: uuid
-                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
                 reason:
                   type: string
                 repeat:
@@ -1244,10 +2138,12 @@ paths:
                   minimum: 1
                   maximum: 100
                 from:
+                  description: Date/time in ISO 8601 format, e.g. `2026-06-01` (interpreted as UTC midnight) or `2026-06-01T09:00:00Z`. Always include a time zone designator (`Z` for UTC) when sending a time of day. Localized formats such as `01.06.2026` or `06/01/2026` are misinterpreted and must not be used.
                   type: string
                 until:
                   anyOf:
-                  - type: string
+                  - description: Date/time in ISO 8601 format, e.g. `2026-06-01` (interpreted as UTC midnight) or `2026-06-01T09:00:00Z`. Always include a time zone designator (`Z` for UTC) when sending a time of day. Localized formats such as `01.06.2026` or `06/01/2026` are misinterpreted and must not be used.
+                    type: string
                   - type: 'null'
                 count:
                   anyOf:
@@ -1318,19 +2214,20 @@ paths:
                 exDates:
                   type: array
                   items:
+                    description: Date/time in ISO 8601 format, e.g. `2026-06-01` (interpreted as UTC midnight) or `2026-06-01T09:00:00Z`. Always include a time zone designator (`Z` for UTC) when sending a time of day. Localized formats such as `01.06.2026` or `06/01/2026` are misinterpreted and must not be used.
                     type: string
                 files:
                   type: array
                   items:
                     type: string
                     format: uuid
-                    pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                    pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
                 representative_member_ids:
                   type: array
                   items:
                     type: string
                     format: uuid
-                    pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                    pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
                 ignoreMaximumAbsence:
                   type: boolean
                 admin_approval_option:
@@ -1365,7 +2262,7 @@ paths:
                     items:
                       type: string
                       format: uuid
-                      pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                      pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
                   recurrenceId:
                     type: string
                 required:
@@ -1397,14 +2294,751 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
+  /requests/preview:
+    post:
+      operationId: request-previewRequest
+      summary: Preview a request (dry run)
+      description: 'Answer what POST /requests would do with this payload without creating anything: the workday duration, its split by fiscal year, whether the member''s allowance covers it, the existing requests it would collide with, and a single `can_create` verdict.
+
+
+        **Input:** identical to POST /requests, so one payload can be sent to both URLs. `reason`, `representative_member_ids` and `ignoreRepresentativeRequirement` are evaluated exactly as on create.
+
+
+        **Duration:** `duration.workday_absence_duration` uses the same days-vs-minutes rule as `workday_absence_duration` on GET /requests (days for day and half-day leave units, minutes for hour units); preview and created request always agree. For day-based leave types the time of day in `start` / `end` is ignored, exactly as on create.
+
+
+        **Allowance:** `is_allowance_sufficient: false` means POST /requests with this payload fails with the allowance error; `true` means it passes that check. Leave types that do not deduct return `takes_from_allowance: false`, `allowance_type: null` and `is_allowance_sufficient: true`.
+
+
+        **Conflicts:** `conflicts` lists the member''s existing requests that overlap this absence and would block creation. Every leave type counts, including informational ones such as home office; only declined or cancelled requests are ignored.
+
+
+        **Rejection:** the preview runs the same validations as POST /requests, in the same order, with one difference: an overlapping request is not a rejection but goes to `conflicts`, so where POST /requests would stop with the overlap error the preview keeps going and may name a later rule in `rejection` while the overlap sits in `conflicts`. When a rule fails, the response is still 200 with `rejection` set instead of a 400, and `can_create` is false. Match on `rejection.code`: START_AFTER_END, HALF_DAY_NOT_ALLOWED_FOR_FULL_DAY_LEAVE_TYPE, LEAVE_TYPE_DISABLED (disabled for this member), REASON_REQUIRED, REASON_TOO_LONG, OUTSIDE_FISCAL_YEAR_WINDOW, PAST_DATE_NOT_ALLOWED (manager or self-service retroactive limits), OUTSIDE_EMPLOYMENT_PERIOD, REPRESENTATIVE_CONFLICT (the member is someone else''s accepted representative in that period), MAX_ABSENT_REACHED (department limit), NO_APPROVER_SET (the leave type needs approval and the member has no approver), REPRESENTATIVES_INVALID, REQUIRED_REPRESENTATIVES_COUNT_NOT_MET. Permission and scoping failures stay real 403 / 404 responses.
+
+
+        **Verdict:** `can_create` is true only when `rejection` is null, `conflicts` is empty and the allowance covers the absence. It is the one field to gate a create call on.
+
+
+        **Side effects:** no request, approver, notification, webhook or calendar sync entry is created. Safe to repeat; each call evaluates the data as it is at that moment.'
+      tags:
+      - Requests
+      security:
+      - ApiKey: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                start:
+                  description: 'Start/end of the request in ISO 8601. For day-based leave types (`leave_unit: days`) send the date at midnight UTC (e.g. `2026-06-01T00:00:00Z`) and use `start_at` / `end_at` to set half-days. For hour-based leave types include the exact time of day (e.g. `2026-06-01T09:00:00Z`); `start_at` / `end_at` are then ignored.'
+                  type: string
+                end:
+                  description: 'Start/end of the request in ISO 8601. For day-based leave types (`leave_unit: days`) send the date at midnight UTC (e.g. `2026-06-01T00:00:00Z`) and use `start_at` / `end_at` to set half-days. For hour-based leave types include the exact time of day (e.g. `2026-06-01T09:00:00Z`); `start_at` / `end_at` are then ignored.'
+                  type: string
+                start_at:
+                  description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
+                  type: string
+                  enum:
+                  - morning
+                  - afternoon
+                end_at:
+                  description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
+                  type: string
+                  enum:
+                  - lunchtime
+                  - end_of_day
+                leave_type_id:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                reason:
+                  type: string
+                requester_member_id:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                representative_member_ids:
+                  description: Member IDs to assign as representatives. Required for leave types that mandate representatives; omitting them returns REQUIRED_REPRESENTATIVES_COUNT_NOT_MET (as a 400 on create, as `rejection.code` on preview).
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                    pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                ignoreRepresentativeRequirement:
+                  description: Skip the representative requirement. Only honored when the API key's member is an admin and the request is created for another member.
+                  type: boolean
+              required:
+              - start
+              - end
+              - leave_type_id
+              - requester_member_id
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  can_create:
+                    type: boolean
+                    description: 'The one-line verdict: true means POST with this payload passes every rule the create endpoint applies, as of the data at preview time; false means it fails. False whenever `rejection` is set, a blocking conflict is listed or `is_allowance_sufficient` is false. Two things the preview cannot see: requests created in between, and changes to the member''s approvers that the create call makes when approver sync from Microsoft 365 is on. A snapshot, not a reservation.'
+                  duration:
+                    anyOf:
+                    - type: object
+                      properties:
+                        workday_absence_duration:
+                          type: number
+                          description: 'Same field and unit rule as `workday_absence_duration` on GET /requests: days for day and half-day leave units, minutes for hour and minute units.'
+                        duration:
+                          type: number
+                          description: 'The span as it would be stored on the request: calendar days for day units, minutes for hour units. Use `workday_absence_duration` for what is deducted.'
+                        leave_unit:
+                          type: string
+                          enum:
+                          - days
+                          - half_days
+                          - hours
+                          - minutes_30
+                          - minutes_15
+                          - minutes_10
+                          - minutes_5
+                          - minutes_1
+                        outside_of_schedule:
+                          type: boolean
+                          description: True when the whole absence falls on non-working time of the member's schedule.
+                        per_year:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              fiscal_year:
+                                type: integer
+                                minimum: -9007199254740991
+                                maximum: 9007199254740991
+                              workday_duration_in_days:
+                                type: number
+                              workday_duration_in_minutes:
+                                type: number
+                              carry_over_days_used_in_period:
+                                type: number
+                              carry_over_minutes_used_in_period:
+                                type: number
+                            required:
+                            - fiscal_year
+                            - workday_duration_in_days
+                            - workday_duration_in_minutes
+                            - carry_over_days_used_in_period
+                            - carry_over_minutes_used_in_period
+                            additionalProperties: false
+                            description: Portion of the absence falling into this fiscal year. An absence crossing the fiscal year boundary costs different amounts in different years; the entries add up to the total.
+                      required:
+                      - workday_absence_duration
+                      - duration
+                      - leave_unit
+                      - outside_of_schedule
+                      - per_year
+                      additionalProperties: false
+                    - type: 'null'
+                  takes_from_allowance:
+                    type: boolean
+                  allowance_type:
+                    anyOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        allowance_unit:
+                          type: string
+                          enum:
+                          - days
+                          - hours
+                      required:
+                      - id
+                      - name
+                      - allowance_unit
+                      additionalProperties: false
+                    - type: 'null'
+                    description: The allowance the absence deducts from. Null when it deducts nothing.
+                  is_allowance_sufficient:
+                    anyOf:
+                    - type: boolean
+                    - type: 'null'
+                    description: 'True means the allowance covers this payload, false means creating it fails with the allowance error. Always true for leave types that do not deduct. Null when `rejection` is set: the allowance was not evaluated. `conflicts` is reported separately and does not affect this flag.'
+                  conflicts:
+                    anyOf:
+                    - type: array
+                      items:
+                        type: object
+                        properties:
+                          request_id:
+                            type: string
+                          start:
+                            type: string
+                          end:
+                            type: string
+                          start_at:
+                            type: string
+                            enum:
+                            - morning
+                            - afternoon
+                          end_at:
+                            type: string
+                            enum:
+                            - lunchtime
+                            - end_of_day
+                          status:
+                            type: string
+                          leave_type_name:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - request_id
+                        - start
+                        - end
+                        - start_at
+                        - end_at
+                        - status
+                        - leave_type_name
+                        additionalProperties: false
+                    - type: 'null'
+                    description: Existing non-declined, non-cancelled requests of the member that overlap the absence, regardless of their leave type. Any entry blocks creation. Null when the payload was rejected before the overlap check ran (START_AFTER_END through OUTSIDE_EMPLOYMENT_PERIOD); populated for every later rejection so both problems are visible at once.
+                  rejection:
+                    anyOf:
+                    - type: object
+                      properties:
+                        code:
+                          type: string
+                          enum:
+                          - START_AFTER_END
+                          - HALF_DAY_NOT_ALLOWED_FOR_FULL_DAY_LEAVE_TYPE
+                          - LEAVE_TYPE_DISABLED
+                          - REASON_REQUIRED
+                          - REASON_TOO_LONG
+                          - OUTSIDE_FISCAL_YEAR_WINDOW
+                          - PAST_DATE_NOT_ALLOWED
+                          - OUTSIDE_EMPLOYMENT_PERIOD
+                          - REPRESENTATIVE_CONFLICT
+                          - MAX_ABSENT_REACHED
+                          - NO_APPROVER_SET
+                          - REPRESENTATIVES_INVALID
+                          - REQUIRED_REPRESENTATIVES_COUNT_NOT_MET
+                          - INVALID_REQUEST
+                        message:
+                          type: string
+                      required:
+                      - code
+                      - message
+                      additionalProperties: false
+                    - type: 'null'
+                    description: 'Set when creating the same payload would be rejected with 400: the first failing rule, in the order the create endpoint applies them. Overlapping requests and the allowance are never a rejection; see `conflicts` and `is_allowance_sufficient`. `duration` and `is_allowance_sufficient` are null when this is set. Match on `code`, not on `message` (which is translated into the API key member''s language).'
+                required:
+                - can_create
+                - duration
+                - takes_from_allowance
+                - allowance_type
+                - is_allowance_sufficient
+                - conflicts
+                - rejection
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /requests/recurring/preview:
+    post:
+      operationId: request-previewRecurringRequests
+      summary: Preview recurring requests (dry run)
+      description: 'Answer what POST /requests/recurring would do with this payload without creating anything: the number of occurrences, the summed workday duration and its split by fiscal year, whether the member''s allowance covers the whole series, and the per-occurrence conflicts.
+
+
+        **Input:** identical to POST /requests/recurring. `files` is accepted and ignored. `reason`, `admin_approval_option`, `ignoreMaximumAbsence` and `representative_member_ids` are validated exactly as on create.
+
+
+        **Duration:** `duration.workday_absence_duration` follows the same days-vs-minutes rule as `workday_absence_duration` on GET /requests and is the sum over all occurrences; preview and created series always agree. `per_year` splits that sum by fiscal year.
+
+
+        **Allowance:** `is_allowance_sufficient` is one verdict for the whole series, matching the all-or-nothing behaviour of POST /requests/recurring: `false` means creating the series fails with the allowance error and leaves nothing behind. Leave types that do not deduct return `true`.
+
+
+        **Conflicts:** `conflicts` lists occurrences overlapping the member''s existing requests, `department_limit_conflicts` the occurrences on which a department''s maximum absent limit is already reached, `representative_overlaps` the occurrences on which the member is someone else''s representative (pending or accepted), and `representative_unavailable` the occurrences on which a passed representative is absent.
+
+
+        **Rejection:** when the payload would be rejected with 400 by POST /requests/recurring, the response is still 200 with `rejection` set and `can_create: false`. Match on `rejection.code`: neither `until` nor `count` given (RECURRENCE_END_REQUIRED), day/month/pos/weekDays not matching `repeat` (RECURRENCE_RULE_INVALID), a series reaching more than 365 days into the future (RECURRENCE_WINDOW_EXCEEDED), fewer than two occurrences (RECURRENCE_TOO_FEW_OCCURRENCES), an hour-based leave type without a valid start_time/end_time (HOUR_LEAVE_TYPE_REQUIRES_TIME_RANGE), a half_day on a full-day-only leave type (HALF_DAY_NOT_ALLOWED_FOR_FULL_DAY_LEAVE_TYPE), or an occurrence outside the member''s employment period (OUTSIDE_EMPLOYMENT_PERIOD). After that the rules the create endpoint applies to every occurrence follow, in its order: a leave type disabled for the member (LEAVE_TYPE_DISABLED), a missing or too long reason (REASON_REQUIRED, REASON_TOO_LONG), an occurrence outside the bookable fiscal-year window (OUTSIDE_FISCAL_YEAR_WINDOW) or too far in the past for the caller''s role (PAST_DATE_NOT_ALLOWED), an occurrence on which a non-admin is someone else''s accepted representative (REPRESENTATIVE_CONFLICT), a leave type needing approval while the member has no approver (NO_APPROVER_SET), and the representative requirement (REPRESENTATIVES_INVALID, REQUIRED_REPRESENTATIVES_COUNT_NOT_MET). A workspace without the Essentials plan, or a non-admin passing `admin_approval_option: approve_request_immediately`, gets the same 403 as the create endpoint.
+
+
+        **Verdict:** `can_create` is true only when `rejection` is null, `conflicts` is empty, `department_limit_conflicts` is empty (or the caller is an admin passing `ignoreMaximumAbsence`) and the allowance covers the series. `representative_unavailable` is informational.
+
+
+        **Side effects:** no request, approver, notification, webhook or calendar sync entry is created. Safe to repeat; each call evaluates the data as it is at that moment.'
+      tags:
+      - Requests
+      security:
+      - ApiKey: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                leave_type_id:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                requester_member_id:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                reason:
+                  type: string
+                repeat:
+                  type: string
+                  enum:
+                  - daily
+                  - weekly
+                  - monthly
+                interval:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                from:
+                  description: Date/time in ISO 8601 format, e.g. `2026-06-01` (interpreted as UTC midnight) or `2026-06-01T09:00:00Z`. Always include a time zone designator (`Z` for UTC) when sending a time of day. Localized formats such as `01.06.2026` or `06/01/2026` are misinterpreted and must not be used.
+                  type: string
+                until:
+                  anyOf:
+                  - description: Date/time in ISO 8601 format, e.g. `2026-06-01` (interpreted as UTC midnight) or `2026-06-01T09:00:00Z`. Always include a time zone designator (`Z` for UTC) when sending a time of day. Localized formats such as `01.06.2026` or `06/01/2026` are misinterpreted and must not be used.
+                    type: string
+                  - type: 'null'
+                count:
+                  anyOf:
+                  - type: integer
+                    minimum: 1
+                    maximum: 365
+                  - type: 'null'
+                start_time:
+                  type: object
+                  properties:
+                    hour:
+                      type: integer
+                      minimum: 0
+                      maximum: 23
+                    minute:
+                      type: integer
+                      minimum: 0
+                      maximum: 59
+                  required:
+                  - hour
+                  - minute
+                end_time:
+                  type: object
+                  properties:
+                    hour:
+                      type: integer
+                      minimum: 0
+                      maximum: 23
+                    minute:
+                      type: integer
+                      minimum: 0
+                      maximum: 59
+                  required:
+                  - hour
+                  - minute
+                half_day:
+                  type: string
+                  enum:
+                  - full_day
+                  - morning
+                  - afternoon
+                weekDays:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                day:
+                  anyOf:
+                  - anyOf:
+                    - type: integer
+                      minimum: 1
+                      maximum: 31
+                    - type: string
+                  - type: 'null'
+                month:
+                  anyOf:
+                  - type: integer
+                    minimum: 1
+                    maximum: 12
+                  - type: 'null'
+                pos:
+                  anyOf:
+                  - anyOf:
+                    - type: integer
+                      minimum: -1
+                      maximum: 5
+                    - type: string
+                  - type: 'null'
+                exDates:
+                  type: array
+                  items:
+                    description: Date/time in ISO 8601 format, e.g. `2026-06-01` (interpreted as UTC midnight) or `2026-06-01T09:00:00Z`. Always include a time zone designator (`Z` for UTC) when sending a time of day. Localized formats such as `01.06.2026` or `06/01/2026` are misinterpreted and must not be used.
+                    type: string
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                    pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                representative_member_ids:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                    pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                ignoreMaximumAbsence:
+                  type: boolean
+                admin_approval_option:
+                  type: string
+                  enum:
+                  - approve_request_immediately
+                  - go_through_the_normal_approval_process
+              required:
+              - leave_type_id
+              - requester_member_id
+              - repeat
+              - interval
+              - from
+              - until
+              - count
+              - weekDays
+              - day
+              - month
+              - pos
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  can_create:
+                    type: boolean
+                    description: 'The one-line verdict: true means POST with this payload passes every rule the create endpoint applies, as of the data at preview time; false means it fails. False whenever `rejection` is set, a blocking conflict is listed or `is_allowance_sufficient` is false. Two things the preview cannot see: requests created in between, and changes to the member''s approvers that the create call makes when approver sync from Microsoft 365 is on. A snapshot, not a reservation. `department_limit_conflicts` block unless the caller is an admin passing `ignoreMaximumAbsence`; `representative_unavailable` never blocks.'
+                  occurrence_count:
+                    type: integer
+                    minimum: -9007199254740991
+                    maximum: 9007199254740991
+                  duration:
+                    anyOf:
+                    - type: object
+                      properties:
+                        workday_absence_duration:
+                          type: number
+                          description: 'Same field and unit rule as `workday_absence_duration` on GET /requests: days for day and half-day leave units, minutes for hour and minute units. Summed over all occurrences.'
+                        leave_unit:
+                          type: string
+                          enum:
+                          - days
+                          - half_days
+                          - hours
+                          - minutes_30
+                          - minutes_15
+                          - minutes_10
+                          - minutes_5
+                          - minutes_1
+                        outside_of_schedule:
+                          type: boolean
+                          description: True when at least one occurrence falls entirely on non-working time of the member's schedule.
+                        per_year:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              fiscal_year:
+                                type: integer
+                                minimum: -9007199254740991
+                                maximum: 9007199254740991
+                              workday_duration_in_days:
+                                type: number
+                              workday_duration_in_minutes:
+                                type: number
+                              carry_over_days_used_in_period:
+                                type: number
+                              carry_over_minutes_used_in_period:
+                                type: number
+                            required:
+                            - fiscal_year
+                            - workday_duration_in_days
+                            - workday_duration_in_minutes
+                            - carry_over_days_used_in_period
+                            - carry_over_minutes_used_in_period
+                            additionalProperties: false
+                            description: Portion of the absence falling into this fiscal year. An absence crossing the fiscal year boundary costs different amounts in different years; the entries add up to the total.
+                      required:
+                      - workday_absence_duration
+                      - leave_unit
+                      - outside_of_schedule
+                      - per_year
+                      additionalProperties: false
+                    - type: 'null'
+                  takes_from_allowance:
+                    type: boolean
+                  allowance_type:
+                    anyOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        allowance_unit:
+                          type: string
+                          enum:
+                          - days
+                          - hours
+                      required:
+                      - id
+                      - name
+                      - allowance_unit
+                      additionalProperties: false
+                    - type: 'null'
+                    description: The allowance the absence deducts from. Null when it deducts nothing.
+                  is_allowance_sufficient:
+                    anyOf:
+                    - type: boolean
+                    - type: 'null'
+                    description: 'Verdict for the whole series: true means the allowance covers it, false means creating it fails with the allowance error and leaves nothing behind. Always true for leave types that do not deduct. Null when `rejection` is set: the allowance was not evaluated. The conflict arrays are reported separately and do not affect this flag.'
+                  conflicts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                        conflicts_with:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              request_id:
+                                type: string
+                              start:
+                                type: string
+                              end:
+                                type: string
+                              status:
+                                type: string
+                              leave_type_name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - request_id
+                            - start
+                            - end
+                            - status
+                            - leave_type_name
+                            additionalProperties: false
+                      required:
+                      - date
+                      - conflicts_with
+                      additionalProperties: false
+                    description: Occurrences that overlap an existing non-declined, non-cancelled request of the member.
+                  department_limit_conflicts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                        department_id:
+                          type: string
+                        department_name:
+                          type: string
+                        current_absent:
+                          type: integer
+                          minimum: -9007199254740991
+                          maximum: 9007199254740991
+                        max_allowed:
+                          type: integer
+                          minimum: -9007199254740991
+                          maximum: 9007199254740991
+                      required:
+                      - date
+                      - department_id
+                      - department_name
+                      - current_absent
+                      - max_allowed
+                      additionalProperties: false
+                  representative_unavailable:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                        representatives:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              member_id:
+                                type: string
+                              member_name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                              reason:
+                                type: string
+                            required:
+                            - member_id
+                            - member_name
+                            - reason
+                            additionalProperties: false
+                      required:
+                      - date
+                      - representatives
+                      additionalProperties: false
+                    description: 'Only populated when representative_member_ids are passed: occurrences on which a chosen representative is absent.'
+                  representative_overlaps:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                        representing_for:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              member_id:
+                                type: string
+                              member_name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                              request_id:
+                                type: string
+                              status:
+                                type: string
+                              start:
+                                type: string
+                              end:
+                                type: string
+                            required:
+                            - member_id
+                            - member_name
+                            - request_id
+                            - status
+                            - start
+                            - end
+                            additionalProperties: false
+                      required:
+                      - date
+                      - representing_for
+                      additionalProperties: false
+                    description: Occurrences on which the member is someone else's representative, pending or accepted. Only accepted ones reject the series for non-admins (REPRESENTATIVE_CONFLICT).
+                  rejection:
+                    anyOf:
+                    - type: object
+                      properties:
+                        code:
+                          type: string
+                          enum:
+                          - RECURRENCE_WINDOW_EXCEEDED
+                          - RECURRENCE_END_REQUIRED
+                          - RECURRENCE_RULE_INVALID
+                          - RECURRENCE_TOO_FEW_OCCURRENCES
+                          - HOUR_LEAVE_TYPE_REQUIRES_TIME_RANGE
+                          - HALF_DAY_NOT_ALLOWED_FOR_FULL_DAY_LEAVE_TYPE
+                          - OUTSIDE_EMPLOYMENT_PERIOD
+                          - LEAVE_TYPE_DISABLED
+                          - REASON_REQUIRED
+                          - REASON_TOO_LONG
+                          - OUTSIDE_FISCAL_YEAR_WINDOW
+                          - PAST_DATE_NOT_ALLOWED
+                          - REPRESENTATIVE_CONFLICT
+                          - NO_APPROVER_SET
+                          - REPRESENTATIVES_INVALID
+                          - REQUIRED_REPRESENTATIVES_COUNT_NOT_MET
+                          - INVALID_REQUEST
+                        message:
+                          type: string
+                      required:
+                      - code
+                      - message
+                      additionalProperties: false
+                    - type: 'null'
+                    description: 'Set when creating the same series would be rejected with 400: the first failing rule, series rules first and then the per-occurrence rules, in the order the create endpoint applies them. Overlaps, the allowance and department limits are never a rejection; see the conflict arrays and `is_allowance_sufficient`. `duration` and `is_allowance_sufficient` are null when this is set. Match on `code`, not on `message` (which is translated into the API key member''s language).'
+                required:
+                - can_create
+                - occurrence_count
+                - duration
+                - takes_from_allowance
+                - allowance_type
+                - is_allowance_sufficient
+                - conflicts
+                - department_limit_conflicts
+                - representative_unavailable
+                - representative_overlaps
+                - rejection
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
   /requests/{id}/approve:
     post:
       operationId: request-approveRequest
-      summary: Absentify Approve a Request
-      description: Approve a pending request on behalf of the user who created the API token. The API automatically finds the next pending approval and approves it.
+      summary: Approve a request
+      description: 'Approve a pending request on behalf of the user who created the API token. The API automatically finds the next pending approval and approves it. This acts on the request approvers only and never on a change request: to decide a change of an approved request use `POST /requests/{id}/changes/{changeId}/approve`.'
       tags:
       - Requests
       security:
@@ -1415,8 +3049,20 @@ paths:
         schema:
           type: string
           format: uuid
-          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
         required: true
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                revision:
+                  description: Revision you last saw (from GET /requests/{id} or the webhook). If the request was changed since, the call fails with 409 and nothing happens.
+                  type: integer
+                  exclusiveMinimum: 0
+                  maximum: 9007199254740991
       responses:
         '200':
           description: Successful response
@@ -1457,14 +3103,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /requests/{id}/decline:
     post:
       operationId: request-declineRequest
-      summary: Absentify Decline a Request
-      description: Decline a pending request on behalf of the user who created the API token. The API automatically finds the next pending approval and declines it with the provided reason.
+      summary: Decline a request
+      description: 'Decline a pending request on behalf of the user who created the API token. The API automatically finds the next pending approval and declines it with the provided reason. This acts on the request approvers only and never on a change request: to decide a change of an approved request use `POST /requests/{id}/changes/{changeId}/decline`.'
       tags:
       - Requests
       security:
@@ -1475,7 +3118,7 @@ paths:
         schema:
           type: string
           format: uuid
-          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
         required: true
       requestBody:
         required: true
@@ -1487,6 +3130,11 @@ paths:
                 decline_reason:
                   type: string
                   minLength: 1
+                revision:
+                  description: Revision you last saw (from GET /requests/{id} or the webhook). If the request was changed since, the call fails with 409 and nothing happens.
+                  type: integer
+                  exclusiveMinimum: 0
+                  maximum: 9007199254740991
               required:
               - decline_reason
       responses:
@@ -1529,13 +3177,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /requests/{id}/approve_representative:
     post:
       operationId: request-approveRequestRepresentative
-      summary: Absentify Approve a Request as a Representative
+      summary: Approve a request as a representative
       description: Approve a request as a representative/substitute on behalf of the user who created the API token. The API automatically finds the pending representative approval.
       tags:
       - Requests
@@ -1547,8 +3192,20 @@ paths:
         schema:
           type: string
           format: uuid
-          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
         required: true
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                revision:
+                  description: Revision you last saw (from GET /requests/{id} or the webhook). If the request was changed since, the call fails with 409 and nothing happens.
+                  type: integer
+                  exclusiveMinimum: 0
+                  maximum: 9007199254740991
       responses:
         '200':
           description: Successful response
@@ -1589,13 +3246,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /requests/{id}/decline_representative:
     post:
       operationId: request-declineRequestRepresentative
-      summary: Absentify Decline a Request as a Representative
+      summary: Decline a request as a representative
       description: Decline a request as a representative/substitute on behalf of the user who created the API token. The API automatically finds the pending representative approval.
       tags:
       - Requests
@@ -1607,7 +3261,7 @@ paths:
         schema:
           type: string
           format: uuid
-          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
         required: true
       requestBody:
         required: true
@@ -1619,6 +3273,11 @@ paths:
                 reason:
                   type: string
                   minLength: 1
+                revision:
+                  description: Revision you last saw (from GET /requests/{id} or the webhook). If the request was changed since, the call fails with 409 and nothing happens.
+                  type: integer
+                  exclusiveMinimum: 0
+                  maximum: 9007199254740991
       responses:
         '200':
           description: Successful response
@@ -1659,13 +3318,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /requests/{id}/cancel:
     post:
       operationId: request-cancelRequest
-      summary: Absentify Cancel a Request
+      summary: Cancel a request
       description: Cancel a request on behalf of the user who created the API token. The user must be the requester, an admin, or a department manager with appropriate permissions.
       tags:
       - Requests
@@ -1677,7 +3333,7 @@ paths:
         schema:
           type: string
           format: uuid
-          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
         required: true
       requestBody:
         required: true
@@ -1689,6 +3345,11 @@ paths:
                 cancel_reason:
                   type: string
                   minLength: 1
+                revision:
+                  description: Revision you last saw (from GET /requests/{id} or the webhook). If the request was changed since, the call fails with 409 and nothing happens.
+                  type: integer
+                  exclusiveMinimum: 0
+                  maximum: 9007199254740991
               required:
               - cancel_reason
       responses:
@@ -1731,127 +3392,1388 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
+  /requests/{id}/changes:
+    post:
+      operationId: request-changeRequest
+      summary: Change a request
+      description: 'Change the reason, the period or the leave type of a request on behalf of the user who created the API token.
+
+
+        Pending requests are changed in place: a new period or leave type restarts the approval, a reason change never does. Approved requests keep their approved version until a change is decided:
+
+
+        - A new period inside the old one (shortening, same leave type) is applied at once and the days go back to the allowance, unless the leave type turns on `request_shortening_needs_approval`.
+
+        - A longer or moved period, or a new leave type, creates a change request with status `pending`. The approved request stays in force everywhere (calendar, allowance, syncs) until the approvers approve it. Declining leaves it untouched. One change can be open per request: a new period or leave type withdraws the open one.
+
+        - A reason change is applied at once and never needs approval.
+
+        - Leave types without approval, and changes by admins or managers (`admin_approval_option: approve_request_immediately`), apply at once. For a new leave type, the new one decides whether approval is needed.
+
+
+        The leave type must allow changes (`allow_request_changes`), and so must a new one; if one does not, the call is rejected with 403, like a request that has already started or that the caller may not change. A non-admin passing `admin_approval_option: approve_request_immediately` gets 403 too.
+
+
+        A new leave type must be day-based or hour-based like the request: days and half days can be swapped for each other, and so can hours and minute units. Switching between the two is rejected with 400; cancel the request and create a new one instead.
+
+
+        In a recurring series, the dates of a single approved occurrence can be changed, and only that occurrence changes. The dates of an occurrence that still waits for approval and the leave type of any occurrence can''t be changed (400).
+
+
+        Send `start` and `end` together to change the period, and `leave_type_id` to change the leave type. Send `reason` to change the reason, or `null` to clear it. The response is the recorded change: its `status` is `applied` when it is in force and `pending` when it waits for approval (also shown as `pending_change` on the request). Approvers decide it with the `/requests/{id}/changes/{changeId}/approve` and `/decline` endpoints; the requester can `/withdraw` it.'
+      tags:
+      - Requests
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                start:
+                  description: 'Start/end of the request in ISO 8601. For day-based leave types (`leave_unit: days`) send the date at midnight UTC (e.g. `2026-06-01T00:00:00Z`) and use `start_at` / `end_at` to set half-days. For hour-based leave types include the exact time of day (e.g. `2026-06-01T09:00:00Z`); `start_at` / `end_at` are then ignored.'
+                  type: string
+                end:
+                  description: 'Start/end of the request in ISO 8601. For day-based leave types (`leave_unit: days`) send the date at midnight UTC (e.g. `2026-06-01T00:00:00Z`) and use `start_at` / `end_at` to set half-days. For hour-based leave types include the exact time of day (e.g. `2026-06-01T09:00:00Z`); `start_at` / `end_at` are then ignored.'
+                  type: string
+                start_at:
+                  description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
+                  type: string
+                  enum:
+                  - morning
+                  - afternoon
+                end_at:
+                  description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
+                  type: string
+                  enum:
+                  - lunchtime
+                  - end_of_day
+                leave_type_id:
+                  description: The new leave type, which must allow changes and be day-based or hour-based like the request.
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                admin_approval_option:
+                  description: Whether the change is applied at once (admins only) or goes through the normal approval process.
+                  type: string
+                  enum:
+                  - approve_request_immediately
+                  - go_through_the_normal_approval_process
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    minimum: -9007199254740991
+                    maximum: 9007199254740991
+                  revision:
+                    anyOf:
+                    - type: integer
+                      minimum: -9007199254740991
+                      maximum: 9007199254740991
+                    - type: 'null'
+                    description: The revision the request gets when this change is applied. Null while the change is pending, declined or withdrawn.
+                  kind:
+                    type: string
+                    enum:
+                    - reason
+                    - shortened
+                    - extended
+                    - moved
+                    - leave_type
+                  status:
+                    type: string
+                    enum:
+                    - pending
+                    - approved
+                    - declined
+                    - withdrawn
+                    - applied
+                    description: '`pending` waits for approvers, `applied` is in force, `declined` and `withdrawn` never changed the request.'
+                  previous:
+                    type: object
+                    properties:
+                      start:
+                        type: string
+                      end:
+                        type: string
+                      start_at:
+                        type: string
+                        enum:
+                        - morning
+                        - afternoon
+                        description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
+                      end_at:
+                        type: string
+                        enum:
+                        - lunchtime
+                        - end_of_day
+                        description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
+                      leave_type:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - id
+                        - name
+                        additionalProperties: false
+                      duration:
+                        type: number
+                      workday_absence_duration:
+                        type: number
+                      reason:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                    required:
+                    - start
+                    - end
+                    - start_at
+                    - end_at
+                    - leave_type
+                    - duration
+                    - workday_absence_duration
+                    - reason
+                    additionalProperties: false
+                    description: The request as it was before this change.
+                  proposed:
+                    type: object
+                    properties:
+                      start:
+                        type: string
+                      end:
+                        type: string
+                      start_at:
+                        type: string
+                        enum:
+                        - morning
+                        - afternoon
+                        description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
+                      end_at:
+                        type: string
+                        enum:
+                        - lunchtime
+                        - end_of_day
+                        description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
+                      leave_type:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - id
+                        - name
+                        additionalProperties: false
+                      duration:
+                        type: number
+                      workday_absence_duration:
+                        type: number
+                      reason:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                    required:
+                    - start
+                    - end
+                    - start_at
+                    - end_at
+                    - leave_type
+                    - duration
+                    - workday_absence_duration
+                    - reason
+                    additionalProperties: false
+                    description: The request as this change wants it. Only for `applied` changes is this what is in force.
+                  changed_by:
+                    anyOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                      required:
+                      - id
+                      - name
+                      additionalProperties: false
+                    - type: 'null'
+                  decided_by:
+                    anyOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                      required:
+                      - id
+                      - name
+                      additionalProperties: false
+                    - type: 'null'
+                  created_at:
+                    type: string
+                  decided_at:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                  decision_reason:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                required:
+                - id
+                - revision
+                - kind
+                - status
+                - previous
+                - proposed
+                - changed_by
+                - decided_by
+                - created_at
+                - decided_at
+                - decision_reason
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+    get:
+      operationId: request-getRequestChanges
+      summary: List the changes of a request
+      description: Every change of the request, oldest first, with the values before and after and who decided it. Includes pending changes and declined or withdrawn ones; only `applied` changes are in force.
+      tags:
+      - Requests
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      minimum: -9007199254740991
+                      maximum: 9007199254740991
+                    revision:
+                      anyOf:
+                      - type: integer
+                        minimum: -9007199254740991
+                        maximum: 9007199254740991
+                      - type: 'null'
+                      description: The revision the request gets when this change is applied. Null while the change is pending, declined or withdrawn.
+                    kind:
+                      type: string
+                      enum:
+                      - reason
+                      - shortened
+                      - extended
+                      - moved
+                      - leave_type
+                    status:
+                      type: string
+                      enum:
+                      - pending
+                      - approved
+                      - declined
+                      - withdrawn
+                      - applied
+                      description: '`pending` waits for approvers, `applied` is in force, `declined` and `withdrawn` never changed the request.'
+                    previous:
+                      type: object
+                      properties:
+                        start:
+                          type: string
+                        end:
+                          type: string
+                        start_at:
+                          type: string
+                          enum:
+                          - morning
+                          - afternoon
+                          description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
+                        end_at:
+                          type: string
+                          enum:
+                          - lunchtime
+                          - end_of_day
+                          description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
+                        leave_type:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                          required:
+                          - id
+                          - name
+                          additionalProperties: false
+                        duration:
+                          type: number
+                        workday_absence_duration:
+                          type: number
+                        reason:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                      required:
+                      - start
+                      - end
+                      - start_at
+                      - end_at
+                      - leave_type
+                      - duration
+                      - workday_absence_duration
+                      - reason
+                      additionalProperties: false
+                      description: The request as it was before this change.
+                    proposed:
+                      type: object
+                      properties:
+                        start:
+                          type: string
+                        end:
+                          type: string
+                        start_at:
+                          type: string
+                          enum:
+                          - morning
+                          - afternoon
+                          description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
+                        end_at:
+                          type: string
+                          enum:
+                          - lunchtime
+                          - end_of_day
+                          description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
+                        leave_type:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                          required:
+                          - id
+                          - name
+                          additionalProperties: false
+                        duration:
+                          type: number
+                        workday_absence_duration:
+                          type: number
+                        reason:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                      required:
+                      - start
+                      - end
+                      - start_at
+                      - end_at
+                      - leave_type
+                      - duration
+                      - workday_absence_duration
+                      - reason
+                      additionalProperties: false
+                      description: The request as this change wants it. Only for `applied` changes is this what is in force.
+                    changed_by:
+                      anyOf:
+                      - type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - id
+                        - name
+                        additionalProperties: false
+                      - type: 'null'
+                    decided_by:
+                      anyOf:
+                      - type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - id
+                        - name
+                        additionalProperties: false
+                      - type: 'null'
+                    created_at:
+                      type: string
+                    decided_at:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    decision_reason:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                  required:
+                  - id
+                  - revision
+                  - kind
+                  - status
+                  - previous
+                  - proposed
+                  - changed_by
+                  - decided_by
+                  - created_at
+                  - decided_at
+                  - decision_reason
+                  additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /requests/{id}/changes/{changeId}/approve:
+    post:
+      operationId: request-approveRequestChange
+      summary: Approve a change of a request
+      description: Approve the pending change of an approved request on behalf of the user who created the API token. Only the approvers of the change (or an admin) can do this. When the last needed approval is in, the change is applied, the request gets the next revision and `change.status` becomes `applied`; otherwise it stays `pending`. Fails with 409 when the change is no longer pending or when `revision` does not match the request, and with 400 when the allowance no longer covers the change.
+      tags:
+      - Requests
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      - in: path
+        name: changeId
+        schema:
+          type: integer
+          exclusiveMinimum: 0
+          maximum: 9007199254740991
+        required: true
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                revision:
+                  description: Revision you last saw (from GET /requests/{id} or the webhook). If the request was changed since, the call fails with 409 and nothing happens.
+                  type: integer
+                  exclusiveMinimum: 0
+                  maximum: 9007199254740991
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  change:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        minimum: -9007199254740991
+                        maximum: 9007199254740991
+                      revision:
+                        anyOf:
+                        - type: integer
+                          minimum: -9007199254740991
+                          maximum: 9007199254740991
+                        - type: 'null'
+                        description: The revision the request gets when this change is applied. Null while the change is pending, declined or withdrawn.
+                      kind:
+                        type: string
+                        enum:
+                        - reason
+                        - shortened
+                        - extended
+                        - moved
+                        - leave_type
+                      status:
+                        type: string
+                        enum:
+                        - pending
+                        - approved
+                        - declined
+                        - withdrawn
+                        - applied
+                        description: '`pending` waits for approvers, `applied` is in force, `declined` and `withdrawn` never changed the request.'
+                      previous:
+                        type: object
+                        properties:
+                          start:
+                            type: string
+                          end:
+                            type: string
+                          start_at:
+                            type: string
+                            enum:
+                            - morning
+                            - afternoon
+                            description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
+                          end_at:
+                            type: string
+                            enum:
+                            - lunchtime
+                            - end_of_day
+                            description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
+                          leave_type:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - id
+                            - name
+                            additionalProperties: false
+                          duration:
+                            type: number
+                          workday_absence_duration:
+                            type: number
+                          reason:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - start
+                        - end
+                        - start_at
+                        - end_at
+                        - leave_type
+                        - duration
+                        - workday_absence_duration
+                        - reason
+                        additionalProperties: false
+                        description: The request as it was before this change.
+                      proposed:
+                        type: object
+                        properties:
+                          start:
+                            type: string
+                          end:
+                            type: string
+                          start_at:
+                            type: string
+                            enum:
+                            - morning
+                            - afternoon
+                            description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
+                          end_at:
+                            type: string
+                            enum:
+                            - lunchtime
+                            - end_of_day
+                            description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
+                          leave_type:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - id
+                            - name
+                            additionalProperties: false
+                          duration:
+                            type: number
+                          workday_absence_duration:
+                            type: number
+                          reason:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - start
+                        - end
+                        - start_at
+                        - end_at
+                        - leave_type
+                        - duration
+                        - workday_absence_duration
+                        - reason
+                        additionalProperties: false
+                        description: The request as this change wants it. Only for `applied` changes is this what is in force.
+                      changed_by:
+                        anyOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                          required:
+                          - id
+                          - name
+                          additionalProperties: false
+                        - type: 'null'
+                      decided_by:
+                        anyOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                          required:
+                          - id
+                          - name
+                          additionalProperties: false
+                        - type: 'null'
+                      created_at:
+                        type: string
+                      decided_at:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      decision_reason:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                    required:
+                    - id
+                    - revision
+                    - kind
+                    - status
+                    - previous
+                    - proposed
+                    - changed_by
+                    - decided_by
+                    - created_at
+                    - decided_at
+                    - decision_reason
+                    additionalProperties: false
+                required:
+                - success
+                - message
+                - change
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /requests/{id}/changes/{changeId}/decline:
+    post:
+      operationId: request-declineRequestChange
+      summary: Decline a change of a request
+      description: Decline the pending change of an approved request on behalf of the user who created the API token. Only the approvers of the change (or an admin) can do this. The request stays as it was and the requester gets the reason. Fails with 409 when the change is no longer pending or when `revision` does not match the request.
+      tags:
+      - Requests
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      - in: path
+        name: changeId
+        schema:
+          type: integer
+          exclusiveMinimum: 0
+          maximum: 9007199254740991
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                decline_reason:
+                  type: string
+                  minLength: 1
+                  description: The reason for declining the change. The request itself stays as it is.
+                revision:
+                  description: Revision you last saw (from GET /requests/{id} or the webhook). If the request was changed since, the call fails with 409 and nothing happens.
+                  type: integer
+                  exclusiveMinimum: 0
+                  maximum: 9007199254740991
+              required:
+              - decline_reason
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  change:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        minimum: -9007199254740991
+                        maximum: 9007199254740991
+                      revision:
+                        anyOf:
+                        - type: integer
+                          minimum: -9007199254740991
+                          maximum: 9007199254740991
+                        - type: 'null'
+                        description: The revision the request gets when this change is applied. Null while the change is pending, declined or withdrawn.
+                      kind:
+                        type: string
+                        enum:
+                        - reason
+                        - shortened
+                        - extended
+                        - moved
+                        - leave_type
+                      status:
+                        type: string
+                        enum:
+                        - pending
+                        - approved
+                        - declined
+                        - withdrawn
+                        - applied
+                        description: '`pending` waits for approvers, `applied` is in force, `declined` and `withdrawn` never changed the request.'
+                      previous:
+                        type: object
+                        properties:
+                          start:
+                            type: string
+                          end:
+                            type: string
+                          start_at:
+                            type: string
+                            enum:
+                            - morning
+                            - afternoon
+                            description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
+                          end_at:
+                            type: string
+                            enum:
+                            - lunchtime
+                            - end_of_day
+                            description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
+                          leave_type:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - id
+                            - name
+                            additionalProperties: false
+                          duration:
+                            type: number
+                          workday_absence_duration:
+                            type: number
+                          reason:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - start
+                        - end
+                        - start_at
+                        - end_at
+                        - leave_type
+                        - duration
+                        - workday_absence_duration
+                        - reason
+                        additionalProperties: false
+                        description: The request as it was before this change.
+                      proposed:
+                        type: object
+                        properties:
+                          start:
+                            type: string
+                          end:
+                            type: string
+                          start_at:
+                            type: string
+                            enum:
+                            - morning
+                            - afternoon
+                            description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
+                          end_at:
+                            type: string
+                            enum:
+                            - lunchtime
+                            - end_of_day
+                            description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
+                          leave_type:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - id
+                            - name
+                            additionalProperties: false
+                          duration:
+                            type: number
+                          workday_absence_duration:
+                            type: number
+                          reason:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - start
+                        - end
+                        - start_at
+                        - end_at
+                        - leave_type
+                        - duration
+                        - workday_absence_duration
+                        - reason
+                        additionalProperties: false
+                        description: The request as this change wants it. Only for `applied` changes is this what is in force.
+                      changed_by:
+                        anyOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                          required:
+                          - id
+                          - name
+                          additionalProperties: false
+                        - type: 'null'
+                      decided_by:
+                        anyOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                          required:
+                          - id
+                          - name
+                          additionalProperties: false
+                        - type: 'null'
+                      created_at:
+                        type: string
+                      decided_at:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      decision_reason:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                    required:
+                    - id
+                    - revision
+                    - kind
+                    - status
+                    - previous
+                    - proposed
+                    - changed_by
+                    - decided_by
+                    - created_at
+                    - decided_at
+                    - decision_reason
+                    additionalProperties: false
+                required:
+                - success
+                - message
+                - change
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /requests/{id}/changes/{changeId}/withdraw:
+    post:
+      operationId: request-withdrawRequestChange
+      summary: Withdraw a change of a request
+      description: Withdraw the pending change of an approved request on behalf of the user who created the API token. The requester, a manager of the requester or an admin can do this. The request stays as it was. Fails with 409 when the change is no longer pending or when `revision` does not match the request.
+      tags:
+      - Requests
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      - in: path
+        name: changeId
+        schema:
+          type: integer
+          exclusiveMinimum: 0
+          maximum: 9007199254740991
+        required: true
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  description: The reason for withdrawing the change.
+                  anyOf:
+                  - type: string
+                    maxLength: 2500
+                  - type: 'null'
+                revision:
+                  description: Revision you last saw (from GET /requests/{id} or the webhook). If the request was changed since, the call fails with 409 and nothing happens.
+                  type: integer
+                  exclusiveMinimum: 0
+                  maximum: 9007199254740991
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  change:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        minimum: -9007199254740991
+                        maximum: 9007199254740991
+                      revision:
+                        anyOf:
+                        - type: integer
+                          minimum: -9007199254740991
+                          maximum: 9007199254740991
+                        - type: 'null'
+                        description: The revision the request gets when this change is applied. Null while the change is pending, declined or withdrawn.
+                      kind:
+                        type: string
+                        enum:
+                        - reason
+                        - shortened
+                        - extended
+                        - moved
+                        - leave_type
+                      status:
+                        type: string
+                        enum:
+                        - pending
+                        - approved
+                        - declined
+                        - withdrawn
+                        - applied
+                        description: '`pending` waits for approvers, `applied` is in force, `declined` and `withdrawn` never changed the request.'
+                      previous:
+                        type: object
+                        properties:
+                          start:
+                            type: string
+                          end:
+                            type: string
+                          start_at:
+                            type: string
+                            enum:
+                            - morning
+                            - afternoon
+                            description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
+                          end_at:
+                            type: string
+                            enum:
+                            - lunchtime
+                            - end_of_day
+                            description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
+                          leave_type:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - id
+                            - name
+                            additionalProperties: false
+                          duration:
+                            type: number
+                          workday_absence_duration:
+                            type: number
+                          reason:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - start
+                        - end
+                        - start_at
+                        - end_at
+                        - leave_type
+                        - duration
+                        - workday_absence_duration
+                        - reason
+                        additionalProperties: false
+                        description: The request as it was before this change.
+                      proposed:
+                        type: object
+                        properties:
+                          start:
+                            type: string
+                          end:
+                            type: string
+                          start_at:
+                            type: string
+                            enum:
+                            - morning
+                            - afternoon
+                            description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
+                          end_at:
+                            type: string
+                            enum:
+                            - lunchtime
+                            - end_of_day
+                            description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
+                          leave_type:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - id
+                            - name
+                            additionalProperties: false
+                          duration:
+                            type: number
+                          workday_absence_duration:
+                            type: number
+                          reason:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - start
+                        - end
+                        - start_at
+                        - end_at
+                        - leave_type
+                        - duration
+                        - workday_absence_duration
+                        - reason
+                        additionalProperties: false
+                        description: The request as this change wants it. Only for `applied` changes is this what is in force.
+                      changed_by:
+                        anyOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                          required:
+                          - id
+                          - name
+                          additionalProperties: false
+                        - type: 'null'
+                      decided_by:
+                        anyOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                          required:
+                          - id
+                          - name
+                          additionalProperties: false
+                        - type: 'null'
+                      created_at:
+                        type: string
+                      decided_at:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      decision_reason:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                    required:
+                    - id
+                    - revision
+                    - kind
+                    - status
+                    - previous
+                    - proposed
+                    - changed_by
+                    - decided_by
+                    - created_at
+                    - decided_at
+                    - decision_reason
+                    additionalProperties: false
+                required:
+                - success
+                - message
+                - change
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
 components:
   schemas:
-    error.UNAUTHORIZED:
-      title: Authorization not provided error (401)
-      description: The error information
-      example:
-        code: UNAUTHORIZED
-        message: Authorization not provided
-        issues: []
-      type: object
-      properties:
-        message:
-          description: The error message
-          example: Authorization not provided
-          type: string
-        code:
-          description: The error code
-          example: UNAUTHORIZED
-          type: string
-        issues:
-          description: An array of issues that were responsible for the error
-          example: []
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-            additionalProperties: false
-      required:
-      - message
-      - code
-      additionalProperties: false
-    error.INTERNAL_SERVER_ERROR:
-      title: Internal server error error (500)
-      description: The error information
-      example:
-        code: INTERNAL_SERVER_ERROR
-        message: Internal server error
-        issues: []
-      type: object
-      properties:
-        message:
-          description: The error message
-          example: Internal server error
-          type: string
-        code:
-          description: The error code
-          example: INTERNAL_SERVER_ERROR
-          type: string
-        issues:
-          description: An array of issues that were responsible for the error
-          example: []
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-            additionalProperties: false
-      required:
-      - message
-      - code
-      additionalProperties: false
-    error.NOT_FOUND:
-      title: Not found error (404)
-      description: The error information
-      example:
-        code: NOT_FOUND
-        message: Not found
-        issues: []
-      type: object
-      properties:
-        message:
-          description: The error message
-          example: Not found
-          type: string
-        code:
-          description: The error code
-          example: NOT_FOUND
-          type: string
-        issues:
-          description: An array of issues that were responsible for the error
-          example: []
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-            additionalProperties: false
-      required:
-      - message
-      - code
-      additionalProperties: false
     error.BAD_REQUEST:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Invalid input data
+        code:
+          type: string
+          description: The error code
+          example: BAD_REQUEST
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
       title: Invalid input data error (400)
       description: The error information
       example:
         code: BAD_REQUEST
         message: Invalid input data
         issues: []
+    error.UNAUTHORIZED:
       type: object
       properties:
         message:
+          type: string
           description: The error message
-          example: Invalid input data
-          type: string
+          example: Authorization not provided
         code:
-          description: The error code
-          example: BAD_REQUEST
           type: string
+          description: The error code
+          example: UNAUTHORIZED
         issues:
           description: An array of issues that were responsible for the error
           example: []
@@ -1868,23 +4790,89 @@ components:
       - message
       - code
       additionalProperties: false
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
     error.FORBIDDEN:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Insufficient access
+        code:
+          type: string
+          description: The error code
+          example: FORBIDDEN
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
       title: Insufficient access error (403)
       description: The error information
       example:
         code: FORBIDDEN
         message: Insufficient access
         issues: []
+    error.NOT_FOUND:
       type: object
       properties:
         message:
+          type: string
           description: The error message
-          example: Insufficient access
-          type: string
+          example: Not found
         code:
-          description: The error code
-          example: FORBIDDEN
           type: string
+          description: The error code
+          example: NOT_FOUND
         issues:
           description: An array of issues that were responsible for the error
           example: []
@@ -1901,15 +4889,20 @@ components:
       - message
       - code
       additionalProperties: false
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
   securitySchemes:
     ApiKey:
       type: apiKey
       name: X-API-KEY
       in: header
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: x-api-key
-      description: API key from your absentify account settings. Requires Plus plan.
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'The API key as `Authorization: Bearer <key>`.'
 externalDocs:
   url: https://absentify.com/docs/en/api-reference

@@ -1,0 +1,3760 @@
+openapi: 3.2.0
+info:
+  title: absentify CRUD Allowance Management API
+  description: OpenAPI compliant REST API
+  version: 1.0.0
+servers:
+- url: https://api.absentify.com/api/v1
+tags:
+- name: Allowance Management
+paths:
+  /allowance-types/{allowance_type_id}/rules:
+    get:
+      operationId: allowanceRule-listRules
+      summary: List all rules for an allowance type
+      description: Returns all allowance rules defined for the given allowance type, including the count of members currently assigned to each rule.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: allowance_type_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    accrual_month:
+                      type: number
+                    rule_amount:
+                      type: number
+                    accrual_cycle:
+                      type: string
+                      enum:
+                      - month
+                      - year
+                      - biweek
+                    accrual_anchor_date:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    cycle_on_employment_start:
+                      type: boolean
+                    rule_duration:
+                      anyOf:
+                      - type: number
+                      - type: 'null'
+                    upfront_allocation:
+                      type: boolean
+                    proration_basis:
+                      type: string
+                      enum:
+                      - month
+                      - day
+                      - full_month
+                      - none
+                    part_time_basis:
+                      type: string
+                      enum:
+                      - none
+                      - workdays
+                      - hours
+                      description: Scales every grant of this rule to the member's own working week. none = off; workdays = by the days worked per week; hours = by the hours worked per week. A member with no schedule of their own counts as full time.
+                    part_time_reference:
+                      anyOf:
+                      - type: number
+                      - type: 'null'
+                      description: Days (workdays) or hours (hours) per week that count as full time. Required and greater than 0 when part_time_basis is not none; stored as null when it is none.
+                    part_time_from:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                      description: First day (inclusive) the scaling applies to. A grant for a year, month or two weeks that started earlier is not scaled. Null when part_time_basis is none.
+                    allowance_type_id:
+                      type: string
+                    max_carry_forward:
+                      anyOf:
+                      - type: number
+                      - type: 'null'
+                    carry_forward_expiry_months:
+                      anyOf:
+                      - type: number
+                      - type: 'null'
+                    carry_forward_kept_after_expiry:
+                      anyOf:
+                      - type: number
+                      - type: 'null'
+                    createdAt:
+                      type: string
+                    updatedAt:
+                      type: string
+                    _count:
+                      type: object
+                      properties:
+                        member_allowance_rule_assignments:
+                          type: number
+                      required:
+                      - member_allowance_rule_assignments
+                      additionalProperties: false
+                  required:
+                  - id
+                  - name
+                  - accrual_month
+                  - rule_amount
+                  - accrual_cycle
+                  - accrual_anchor_date
+                  - cycle_on_employment_start
+                  - rule_duration
+                  - upfront_allocation
+                  - proration_basis
+                  - part_time_basis
+                  - part_time_reference
+                  - part_time_from
+                  - allowance_type_id
+                  - max_carry_forward
+                  - carry_forward_expiry_months
+                  - carry_forward_kept_after_expiry
+                  - createdAt
+                  - updatedAt
+                  - _count
+                  additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+    post:
+      operationId: allowanceRule-createRule
+      summary: Create a new allowance rule
+      description: Creates a new allowance rule for the given allowance type. Rules define how much allowance members receive and how it accrues (monthly or yearly).
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: allowance_type_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                accrual_month:
+                  type: integer
+                  minimum: 0
+                  maximum: 11
+                  description: 0 = January, 11 = December
+                rule_amount:
+                  type: number
+                  exclusiveMinimum: 0
+                  maximum: 100000
+                  description: Allowance amount per accrual cycle, must be greater than 0. For day-based allowance types the value is in days; for hour-based allowance types the value is in MINUTES (e.g. 480 = 8 hours). A 0-amount (manual) rule is created by assigning a member to manage manually, not through this endpoint.
+                accrual_cycle:
+                  type: string
+                  enum:
+                  - month
+                  - year
+                  - biweek
+                accrual_anchor_date:
+                  description: Bi-weekly cycle anchor (YYYY-MM-DD); null = count from each member's start date
+                  anyOf:
+                  - type: string
+                    pattern: ^\d{4}-\d{2}-\d{2}$
+                  - type: 'null'
+                cycle_on_employment_start:
+                  default: false
+                  description: 'Starts each allowance year on the member''s employment start date instead of accrual_month. Yearly rules only: a monthly or bi-weekly rule with true is rejected, so a PATCH that moves a rule with true away from accrual_cycle year must also send false.'
+                  type: boolean
+                rule_duration:
+                  default: null
+                  description: 'Per-accrual rolling expiry: each accrual is valid for this many months from its accrual date, then expires automatically (like time off in lieu). Min 1; null = off. Cannot be combined with any carry-forward setting, and is not allowed on a 0-amount (manual) rule.'
+                  anyOf:
+                  - type: integer
+                    minimum: 1
+                    maximum: 1200
+                  - type: 'null'
+                upfront_allocation:
+                  default: true
+                  description: If true, full allowance is granted at start of cycle
+                  type: boolean
+                proration_basis:
+                  default: month
+                  description: How partial yearly rules are prorated. month = whole months count fully, the partial start or end month is prorated by day; day = calendar-day exact; full_month = only whole months count 1/12 each, a started month counts nothing; none = a rule year in which employment starts or ends grants the full yearly amount; every other partial year, such as a switch to another rule or an assignment that starts or ends during the year while employed, counts its months. Ignored for monthly and biweekly cycles. Defaults to month.
+                  type: string
+                  enum:
+                  - month
+                  - day
+                  - full_month
+                  - none
+                max_carry_forward:
+                  default: null
+                  description: Hard cap on the amount carried into the next fiscal year, applied at the year boundary. null = unlimited (everything carries), 0 = nothing carries. For hour-based allowance types the value is in MINUTES.
+                  anyOf:
+                  - type: number
+                    minimum: 0
+                    maximum: 100000
+                  - type: 'null'
+                carry_forward_expiry_months:
+                  default: null
+                  description: How long carried-forward allowance stays usable in the new fiscal year. null = it never expires; N (>= 1) = usable until the last day of the Nth month after the fiscal year end, then forfeited (except carry_forward_kept_after_expiry).
+                  anyOf:
+                  - type: integer
+                    minimum: 1
+                    maximum: 1200
+                  - type: 'null'
+                carry_forward_kept_after_expiry:
+                  default: null
+                  description: Amount of the carried-forward allowance that survives permanently after the expiry deadline. Only allowed when carry_forward_expiry_months is set; must be lower than max_carry_forward when both are set. null/0 = nothing survives. For hour-based allowance types the value is in MINUTES.
+                  anyOf:
+                  - type: number
+                    minimum: 0
+                    maximum: 100000
+                  - type: 'null'
+                part_time_basis:
+                  default: none
+                  description: Scales every grant of this rule to the member's own working week. none = off; workdays = by the days worked per week; hours = by the hours worked per week. A member with no schedule of their own counts as full time.
+                  type: string
+                  enum:
+                  - none
+                  - workdays
+                  - hours
+                part_time_reference:
+                  default: null
+                  description: Days (workdays) or hours (hours) per week that count as full time. Required and greater than 0 when part_time_basis is not none; stored as null when it is none.
+                  anyOf:
+                  - type: number
+                    exclusiveMinimum: 0
+                    maximum: 168
+                  - type: 'null'
+                part_time_from:
+                  description: First day (inclusive, YYYY-MM-DD) the scaling applies to. A grant for a year, month or two weeks that started earlier is not scaled. A new date must not be before the first day of the current fiscal year. Without a date (null included), a new or newly scaling rule starts on that day and a rule that already scales keeps its stored date. Stored as null when part_time_basis is none.
+                  anyOf:
+                  - type: string
+                    pattern: ^\d{4}-\d{2}-\d{2}$
+                  - type: 'null'
+              required:
+              - name
+              - accrual_month
+              - rule_amount
+              - accrual_cycle
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                required:
+                - id
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /rules/{id}:
+    patch:
+      operationId: allowanceRule-updateRule
+      summary: Update an allowance rule
+      description: Updates an existing allowance rule. Only provide the fields you want to change. Changes are applied to all members subscribed to this rule.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                accrual_month:
+                  type: integer
+                  minimum: 0
+                  maximum: 11
+                rule_amount:
+                  description: Allowance amount per accrual cycle, must be greater than 0. For hour-based allowance types the value is in MINUTES (e.g. 480 = 8 hours). Omit to leave a stored 0-amount (manual) rule unchanged.
+                  type: number
+                  exclusiveMinimum: 0
+                  maximum: 100000
+                accrual_cycle:
+                  type: string
+                  enum:
+                  - month
+                  - year
+                  - biweek
+                accrual_anchor_date:
+                  anyOf:
+                  - type: string
+                    pattern: ^\d{4}-\d{2}-\d{2}$
+                  - type: 'null'
+                cycle_on_employment_start:
+                  description: 'Starts each allowance year on the member''s employment start date instead of accrual_month. Yearly rules only: a monthly or bi-weekly rule with true is rejected, so a PATCH that moves a rule with true away from accrual_cycle year must also send false.'
+                  type: boolean
+                rule_duration:
+                  description: Per-accrual rolling expiry in months (each accrual valid this many months from its accrual date). Min 1; null = off. Cannot be combined with any carry-forward setting, and is not allowed on a 0-amount (manual) rule.
+                  anyOf:
+                  - type: integer
+                    minimum: 1
+                    maximum: 1200
+                  - type: 'null'
+                upfront_allocation:
+                  type: boolean
+                proration_basis:
+                  description: How partial yearly rules are prorated. month = whole months count fully, the partial start or end month is prorated by day; day = calendar-day exact; full_month = only whole months count 1/12 each, a started month counts nothing; none = a rule year in which employment starts or ends grants the full yearly amount; every other partial year, such as a switch to another rule or an assignment that starts or ends during the year while employed, counts its months. Ignored for monthly and biweekly cycles.
+                  type: string
+                  enum:
+                  - month
+                  - day
+                  - full_month
+                  - none
+                max_carry_forward:
+                  description: Hard cap on the amount carried into the next fiscal year, applied at the year boundary. null = unlimited (everything carries), 0 = nothing carries. For hour-based allowance types the value is in MINUTES.
+                  anyOf:
+                  - type: number
+                    minimum: 0
+                    maximum: 100000
+                  - type: 'null'
+                carry_forward_expiry_months:
+                  description: How long carried-forward allowance stays usable in the new fiscal year. null = it never expires; N (>= 1) = months after fiscal year end.
+                  anyOf:
+                  - type: integer
+                    minimum: 1
+                    maximum: 1200
+                  - type: 'null'
+                carry_forward_kept_after_expiry:
+                  description: Amount surviving permanently after the expiry deadline. Requires carry_forward_expiry_months; must be lower than max_carry_forward when both are set.
+                  anyOf:
+                  - type: number
+                    minimum: 0
+                    maximum: 100000
+                  - type: 'null'
+                part_time_basis:
+                  description: Scales every grant of this rule to the member's own working week. none = off; workdays = by the days worked per week; hours = by the hours worked per week. A member with no schedule of their own counts as full time.
+                  type: string
+                  enum:
+                  - none
+                  - workdays
+                  - hours
+                part_time_reference:
+                  description: Days (workdays) or hours (hours) per week that count as full time. Required and greater than 0 when part_time_basis is not none; stored as null when it is none.
+                  anyOf:
+                  - type: number
+                    exclusiveMinimum: 0
+                    maximum: 168
+                  - type: 'null'
+                part_time_from:
+                  description: First day (inclusive, YYYY-MM-DD) the scaling applies to. A grant for a year, month or two weeks that started earlier is not scaled. A new date must not be before the first day of the current fiscal year. Without a date (null included), a new or newly scaling rule starts on that day and a rule that already scales keeps its stored date. Stored as null when part_time_basis is none.
+                  anyOf:
+                  - type: string
+                    pattern: ^\d{4}-\d{2}-\d{2}$
+                  - type: 'null'
+                reason:
+                  description: Why this rule is being changed — stored in the rule audit log.
+                  type: string
+                  minLength: 3
+                  maxLength: 500
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: number
+                required:
+                - count
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+    delete:
+      operationId: allowanceRule-deleteRule
+      summary: Delete an allowance rule
+      description: Deletes an allowance rule. If members are assigned, you must provide reassign_to with the ID of another rule to move them to. Members move at the first fiscal-year start on or after today, never mid year.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      - in: query
+        name: reassign_to
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+      - in: query
+        name: reason
+        schema:
+          type: string
+          minLength: 3
+          maxLength: 500
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                required:
+                - success
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /members/{member_id}/rule-assignments:
+    get:
+      operationId: allowanceRule-listAssignments
+      summary: List rule assignments for a member
+      description: Returns all rule assignments for a member. Optionally filter by allowance type.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: member_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      - in: query
+        name: allowance_type_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    rule_start_date:
+                      description: 'First day the assignment itself applies (inclusive). This is the assignment''s own validity, which is independent of the member: it does not account for a member who joined after it began. Matches what POST and PATCH accept, so values can be round-tripped — use coverage_start_date to see when the member actually starts accruing.'
+                      type: string
+                    coverage_start_date:
+                      description: 'First day this MEMBER actually accrues under the assignment (inclusive): rule_start_date, moved forward to the member''s employment_start_date when they joined after the assignment began and before it ended. For an assignment that ended on or before the member''s employment start, the member never accrued under it at all and this field simply equals rule_start_date (that state is detectable as rule_end_date <= employment_start_date). Read-only and derived — POST and PATCH do not accept it, and writing it back into rule_start_date would freeze a hire date that is still editable.'
+                      type: string
+                    rule_end_date:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                      description: Last day the rule applies (inclusive), or null for open-ended. Matches what POST and PATCH accept, so values can be round-tripped.
+                    allowance_type_id:
+                      type: string
+                    rule_id:
+                      type: string
+                    rule:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        rule_amount:
+                          type: number
+                        accrual_cycle:
+                          type: string
+                          enum:
+                          - month
+                          - year
+                          - biweek
+                        accrual_month:
+                          type: number
+                        max_carry_forward:
+                          anyOf:
+                          - type: number
+                          - type: 'null'
+                      required:
+                      - id
+                      - name
+                      - rule_amount
+                      - accrual_cycle
+                      - accrual_month
+                      - max_carry_forward
+                      additionalProperties: false
+                  required:
+                  - id
+                  - rule_start_date
+                  - coverage_start_date
+                  - rule_end_date
+                  - allowance_type_id
+                  - rule_id
+                  - rule
+                  additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+    post:
+      operationId: allowanceRule-createAssignment
+      summary: Assign a member to an allowance rule
+      description: Creates a new rule assignment for a member. Assignments for one allowance type form a chain, so an end date is only accepted on the day before the next assignment starts or on the member's last employment day; leave `rule_end_date` null when nothing follows. Gaps or overlaps that already existed are tolerated, but a write may not widen them. Allowance values are automatically recalculated.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: member_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rule_id:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                allowance_type_id:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                rule_start_date:
+                  description: First day the rule applies (inclusive), in YYYY-MM-DD format.
+                  type: string
+                  pattern: ^\d{4}-\d{2}-\d{2}$
+                rule_end_date:
+                  description: Last day the rule applies (inclusive), in YYYY-MM-DD format, or null for open-ended. To cover a member through 2026-08-31, send 2026-08-31.
+                  anyOf:
+                  - type: string
+                    pattern: ^\d{4}-\d{2}-\d{2}$
+                  - type: 'null'
+                reason:
+                  type: string
+                  minLength: 3
+                  maxLength: 500
+                  description: Why this assignment is being created — stored in the rule audit log.
+              required:
+              - rule_id
+              - allowance_type_id
+              - rule_start_date
+              - reason
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                required:
+                - id
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /rule-assignments/{id}:
+    patch:
+      operationId: allowanceRule-updateAssignment
+      summary: Update a rule assignment
+      description: Updates an existing rule assignment. You can change the date range or reassign to a different rule. An end date is only accepted on the day before the next assignment starts or on the member's last employment day; otherwise leave the end open by sending null. Gaps or overlaps inherited from before this rule are tolerated, but an edit may not widen them.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          minimum: -9007199254740991
+          maximum: 9007199254740991
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rule_start_date:
+                  description: First day the rule applies (inclusive).
+                  type: string
+                  pattern: ^\d{4}-\d{2}-\d{2}$
+                rule_end_date:
+                  description: Last day the rule applies (inclusive), or null for open-ended. Omit the field to leave the current end date unchanged.
+                  anyOf:
+                  - type: string
+                    pattern: ^\d{4}-\d{2}-\d{2}$
+                  - type: 'null'
+                rule_id:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                reason:
+                  type: string
+                  minLength: 3
+                  maxLength: 500
+                  description: Why this assignment is being changed — stored in the rule audit log.
+              required:
+              - reason
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                required:
+                - success
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+    delete:
+      operationId: allowanceRule-deleteAssignment
+      summary: Remove a member from an allowance rule
+      description: 'Deletes a rule assignment. The neighbouring assignment absorbs the removed period: the preceding one extends forward, or, when there is none, the following one reaches back, so the chain is left without a new gap. The member''s allowance will be recalculated without this rule.'
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          minimum: -9007199254740991
+          maximum: 9007199254740991
+        required: true
+      - in: query
+        name: reason
+        schema:
+          type: string
+          minLength: 3
+          maxLength: 500
+          description: Why this assignment is being deleted — stored in the rule audit log.
+        required: true
+        description: Why this assignment is being deleted — stored in the rule audit log.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                required:
+                - success
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /members/{member_id}/adjustments:
+    post:
+      operationId: allowanceRule-createAdjustment
+      summary: Create an allowance adjustment
+      description: Creates a manual adjustment (positive or negative) for a member's allowance. Use this for one-off corrections, bonuses, or deductions. The adjustment is applied to the fiscal year containing the given date.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: member_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                allowance_type_id:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                amount:
+                  type: number
+                  minimum: -100000
+                  maximum: 100000
+                  description: Adjustment amount (positive to add, negative to subtract). For day-based allowance types the value is in days; for hour-based allowance types the value is in MINUTES (e.g. 480 = 8 hours).
+                date:
+                  description: Effective date of the adjustment in YYYY-MM-DD format
+                  type: string
+                  pattern: ^\d{4}-\d{2}-\d{2}$
+                expiry_date:
+                  description: Optional. The LAST day (inclusive, YYYY-MM-DD) these days can still be used; from the day after, whatever is left of them is forfeited. To let them be used through 2026-08-31, send 2026-08-31. May equal `date` (granted and gone the same day). Only allowed for positive adjustments.
+                  anyOf:
+                  - type: string
+                    pattern: ^\d{4}-\d{2}-\d{2}$
+                  - type: 'null'
+                comment:
+                  default: ''
+                  description: Optional comment for audit trail (max 500 characters)
+                  type: string
+                  maxLength: 500
+              required:
+              - allowance_type_id
+              - amount
+              - date
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                required:
+                - id
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+    get:
+      operationId: allowanceRule-listAdjustments
+      summary: List a member's allowance adjustments
+      description: Returns the manual adjustments of one member and allowance type, oldest first. These are the ids DELETE /adjustments/{id} expects.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: member_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      - in: query
+        name: allowance_type_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    amount:
+                      anyOf:
+                      - type: number
+                      - type: 'null'
+                      description: Days for a day-based allowance type, MINUTES for an hour-based one. Negative values subtract.
+                    date:
+                      description: The day the adjustment takes effect; it decides its year.
+                      type: string
+                    comment:
+                      type: string
+                    compensatory_time_off:
+                      type: number
+                      description: Non-zero when the adjustment came from overtime compensation.
+                    expiry_date:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                      description: The LAST day (inclusive) the granted days can still be used, or null when they do not expire. The same convention POST /members/{member_id}/adjustments accepts, so a value read here can be sent straight back.
+                  required:
+                  - id
+                  - amount
+                  - date
+                  - comment
+                  - compensatory_time_off
+                  - expiry_date
+                  additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /adjustments/{id}:
+    delete:
+      operationId: allowanceRule-deleteAdjustment
+      summary: Delete an allowance adjustment
+      description: Deletes a manual adjustment. The member's allowance will be recalculated without this adjustment.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          minimum: -9007199254740991
+          maximum: 9007199254740991
+        required: true
+      - in: query
+        name: reason
+        schema:
+          type: string
+          minLength: 3
+          maxLength: 500
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                required:
+                - success
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /allowance-types/{allowance_type_id}/default-rule:
+    put:
+      operationId: allowanceRule-setDefaultRule
+      summary: Set the organisation default rule
+      description: Points the allowance type's organisation default at another rule. New members of the workspace are put on it, unless their department has a default rule of its own. Existing members are not moved.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: allowance_type_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rule_id:
+                  anyOf:
+                  - type: string
+                    format: uuid
+                    pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                  - type: 'null'
+                  description: The new default. Use null for manual management; otherwise this must be an active, shared rule of this allowance type.
+              required:
+              - rule_id
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                required:
+                - success
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /members/{member_id}/rule-change:
+    post:
+      operationId: allowanceRule-changeMemberRule
+      summary: Move a member to another rule
+      description: 'Ends the member''s current assignment on `valid_from` and starts the new rule on the same day, in one transaction. Prefer this over deleting and recreating assignments: it leaves neither a gap nor an overlap, and records the move as a single audit entry. A `valid_until` is only accepted on the day before the next assignment starts or on the member''s last employment day, so send null when nothing follows. Gaps or overlaps that predate this rule are tolerated, but the move may not widen them.'
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: member_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                current_assignment_id:
+                  type: integer
+                  minimum: -9007199254740991
+                  maximum: 9007199254740991
+                  description: The assignment being replaced, from GET /members/{member_id}/rule-assignments.
+                rule_id:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                  description: The rule to move the member to.
+                allowance_type_id:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                valid_from:
+                  description: First day the new rule applies (inclusive), in YYYY-MM-DD format. Must be after the current assignment's start date.
+                  type: string
+                  pattern: ^\d{4}-\d{2}-\d{2}$
+                valid_until:
+                  description: Last day the new rule applies (inclusive), in YYYY-MM-DD format, or null for open-ended. To cover the member through 2026-08-31, send 2026-08-31.
+                  anyOf:
+                  - type: string
+                    pattern: ^\d{4}-\d{2}-\d{2}$
+                  - type: 'null'
+                reason:
+                  type: string
+                  minLength: 3
+                  maxLength: 500
+                  description: Why the member is being moved — stored in the rule audit log.
+              required:
+              - current_assignment_id
+              - rule_id
+              - allowance_type_id
+              - valid_from
+              - reason
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                required:
+                - success
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /members/{member_id}/manual-rule:
+    post:
+      operationId: allowanceRule-assignManualRule
+      summary: Switch a member to manual allowance management
+      description: Takes the member off automatic accrual for this allowance type from `valid_from` on. Nothing accrues afterwards, and the balance is whatever you set through adjustments. Pass the member's active assignment as `current_assignment_id` and it is ended on `valid_from` in the same transaction; without it, an assignment overlapping `valid_from` makes the call fail. A `valid_until` is only accepted on the day before the next assignment starts or on the member's last employment day, so leave it null to stay open ended. Gaps or overlaps that predate this rule are tolerated, but the switch may not widen them.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: member_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                allowance_type_id:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                valid_from:
+                  description: First day the member is managed manually (inclusive), in YYYY-MM-DD format.
+                  type: string
+                  pattern: ^\d{4}-\d{2}-\d{2}$
+                valid_until:
+                  description: Last day of manual management (inclusive), in YYYY-MM-DD format, or null for open-ended.
+                  anyOf:
+                  - type: string
+                    pattern: ^\d{4}-\d{2}-\d{2}$
+                  - type: 'null'
+                current_assignment_id:
+                  default: null
+                  description: The assignment that is active today, from GET /members/{member_id}/rule-assignments. Send null when the member has none.
+                  anyOf:
+                  - type: integer
+                    minimum: -9007199254740991
+                    maximum: 9007199254740991
+                  - type: 'null'
+                reason:
+                  type: string
+                  minLength: 3
+                  maxLength: 500
+                  description: Why the member is managed manually — stored in the rule audit log.
+              required:
+              - allowance_type_id
+              - valid_from
+              - reason
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                required:
+                - success
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /rules/{rule_id}/members:
+    get:
+      operationId: allowanceRule-listRuleMembers
+      summary: List the members currently on a rule
+      description: Returns the members whose assignment to this rule has not ended yet, plus the total number of them. Use `limit` to page through the first entries; `total` always counts all of them.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: rule_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      - in: query
+        name: limit
+        schema:
+          default: 10
+          type: integer
+          minimum: 1
+          maximum: 50
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                    description: How many members are on the rule, ignoring `limit`.
+                  members:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                          description: The member's name, or their email if they have none.
+                      required:
+                      - id
+                      - name
+                      additionalProperties: false
+                required:
+                - total
+                - members
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /rules/{rule_id}/audit-log:
+    get:
+      operationId: allowanceRule-getRuleAuditLog
+      summary: Read the audit log of a rule
+      description: Every recorded change to this rule and to its assignments, newest first. A member moving to another rule is filed under the rule they moved TO, with the previous rule in `changes.from_rule_id`.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: rule_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      - in: query
+        name: take
+        schema:
+          default: 100
+          type: integer
+          minimum: 1
+          maximum: 200
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  entries:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        createdAt:
+                          type: string
+                        rule_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        allowance_type_id:
+                          type: string
+                        event_type:
+                          type: string
+                          enum:
+                          - RULE_CREATED
+                          - RULE_UPDATED
+                          - RULE_DELETED
+                          - ASSIGNMENT_CREATED
+                          - ASSIGNMENT_UPDATED
+                          - ASSIGNMENT_DELETED
+                          - MEMBER_RULE_CHANGED
+                          - DEFAULT_RULE_CHANGED
+                        actor_member_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                          description: Null once the member who made the change has been deleted.
+                        member_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                          description: 'Set on assignment-level events: the member they affected.'
+                        comment:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                          description: The reason given for the change.
+                        changes:
+                          description: 'What changed, as a JSON object. Rule edits carry `{ field: { from, to } }` pairs; a rule change carries `from_rule_id` / `to_rule_id`. The exact keys depend on `event_type`.'
+                        affected_member_count:
+                          type: number
+                          description: How many members were on the rule when the change was made.
+                        workspace_id:
+                          type: string
+                        actor:
+                          anyOf:
+                          - type: object
+                            properties:
+                              name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                              email:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - name
+                            - email
+                            additionalProperties: false
+                          - type: 'null'
+                        member:
+                          anyOf:
+                          - type: object
+                            properties:
+                              name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                              email:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - name
+                            - email
+                            additionalProperties: false
+                          - type: 'null'
+                      required:
+                      - id
+                      - createdAt
+                      - rule_id
+                      - allowance_type_id
+                      - event_type
+                      - actor_member_id
+                      - member_id
+                      - comment
+                      - changes
+                      - affected_member_count
+                      - workspace_id
+                      - actor
+                      - member
+                      additionalProperties: false
+                  ruleNames:
+                    type: object
+                    propertyNames:
+                      type: string
+                    additionalProperties:
+                      type: string
+                    description: Names of every rule the entries reference, keyed by rule id — including rules referenced inside `changes` and rules that have since been deleted.
+                required:
+                - entries
+                - ruleNames
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /allowance-types/{allowance_type_id}/audit-log:
+    get:
+      operationId: allowanceRule-getAllowanceTypeAuditLog
+      summary: Read the audit log of an allowance type
+      description: Every recorded change to any rule of this allowance type, newest first. This is the only way to reach entries of rules that have since been deleted, because those leave the rule list but keep their history.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: allowance_type_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      - in: query
+        name: take
+        schema:
+          default: 100
+          type: integer
+          minimum: 1
+          maximum: 200
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  entries:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        createdAt:
+                          type: string
+                        rule_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        allowance_type_id:
+                          type: string
+                        event_type:
+                          type: string
+                          enum:
+                          - RULE_CREATED
+                          - RULE_UPDATED
+                          - RULE_DELETED
+                          - ASSIGNMENT_CREATED
+                          - ASSIGNMENT_UPDATED
+                          - ASSIGNMENT_DELETED
+                          - MEMBER_RULE_CHANGED
+                          - DEFAULT_RULE_CHANGED
+                        actor_member_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                          description: Null once the member who made the change has been deleted.
+                        member_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                          description: 'Set on assignment-level events: the member they affected.'
+                        comment:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                          description: The reason given for the change.
+                        changes:
+                          description: 'What changed, as a JSON object. Rule edits carry `{ field: { from, to } }` pairs; a rule change carries `from_rule_id` / `to_rule_id`. The exact keys depend on `event_type`.'
+                        affected_member_count:
+                          type: number
+                          description: How many members were on the rule when the change was made.
+                        workspace_id:
+                          type: string
+                        actor:
+                          anyOf:
+                          - type: object
+                            properties:
+                              name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                              email:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - name
+                            - email
+                            additionalProperties: false
+                          - type: 'null'
+                        member:
+                          anyOf:
+                          - type: object
+                            properties:
+                              name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                              email:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - name
+                            - email
+                            additionalProperties: false
+                          - type: 'null'
+                      required:
+                      - id
+                      - createdAt
+                      - rule_id
+                      - allowance_type_id
+                      - event_type
+                      - actor_member_id
+                      - member_id
+                      - comment
+                      - changes
+                      - affected_member_count
+                      - workspace_id
+                      - actor
+                      - member
+                      additionalProperties: false
+                  ruleNames:
+                    type: object
+                    propertyNames:
+                      type: string
+                    additionalProperties:
+                      type: string
+                    description: Names of every rule the entries reference, keyed by rule id — including rules referenced inside `changes` and rules that have since been deleted.
+                required:
+                - entries
+                - ruleNames
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /members/{member_id}/rule-audit-log:
+    get:
+      operationId: allowanceRule-getMemberRuleAuditLog
+      summary: Read a member's rule history
+      description: 'Every assignment-level entry referencing this member, newest first: which rule they were put on, moved to, or removed from, by whom and why.'
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: member_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      - in: query
+        name: allowance_type_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+      - in: query
+        name: take
+        schema:
+          default: 100
+          type: integer
+          minimum: 1
+          maximum: 200
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    createdAt:
+                      type: string
+                    rule_id:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    allowance_type_id:
+                      type: string
+                    event_type:
+                      type: string
+                      enum:
+                      - RULE_CREATED
+                      - RULE_UPDATED
+                      - RULE_DELETED
+                      - ASSIGNMENT_CREATED
+                      - ASSIGNMENT_UPDATED
+                      - ASSIGNMENT_DELETED
+                      - MEMBER_RULE_CHANGED
+                      - DEFAULT_RULE_CHANGED
+                    actor_member_id:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                      description: Null once the member who made the change has been deleted.
+                    member_id:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                      description: 'Set on assignment-level events: the member they affected.'
+                    comment:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                      description: The reason given for the change.
+                    changes:
+                      description: 'What changed, as a JSON object. Rule edits carry `{ field: { from, to } }` pairs; a rule change carries `from_rule_id` / `to_rule_id`. The exact keys depend on `event_type`.'
+                    affected_member_count:
+                      type: number
+                      description: How many members were on the rule when the change was made.
+                    actor:
+                      anyOf:
+                      - type: object
+                        properties:
+                          name:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          email:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - name
+                        - email
+                        additionalProperties: false
+                      - type: 'null'
+                    rule_name:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    from_rule_id:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                      description: The rule the member was on before this entry.
+                    to_rule_id:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                      description: The rule the member was on after it.
+                    from_rule_name:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    to_rule_name:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                  required:
+                  - id
+                  - createdAt
+                  - rule_id
+                  - allowance_type_id
+                  - event_type
+                  - actor_member_id
+                  - member_id
+                  - comment
+                  - changes
+                  - affected_member_count
+                  - actor
+                  - rule_name
+                  - from_rule_id
+                  - to_rule_id
+                  - from_rule_name
+                  - to_rule_name
+                  additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /allowance-types:
+    get:
+      operationId: allowanceType-listAllowanceTypes
+      summary: List all allowance types
+      description: Returns every allowance type of the workspace, in the order they are shown in the app. The ids returned here are the `allowance_type_id` every rule, rule assignment and adjustment endpoint expects.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: query
+        name: locale
+        schema:
+          type: string
+          enum:
+          - en
+          - de
+          - fr
+          - hu
+          - it
+          - pl
+          - pt
+          - ru
+          - es
+          - tr
+          - uk
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                      description: Translated into `locale` when one is given, otherwise into the API key owner's language, falling back to the stored name where no translation exists.
+                    default_name:
+                      type: string
+                      description: The stored name, without any translation applied.
+                    allowance_unit:
+                      type: string
+                      enum:
+                      - days
+                      - hours
+                      description: Whether this type is counted in days or in minutes.
+                    ignore_allowance_limit:
+                      type: boolean
+                      description: When true, members may book more than their balance and go negative.
+                    default_rule_id:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                      description: The rule a new member of this workspace is put on. A department default rule takes precedence over it.
+                    default_rule_manually_managed:
+                      type: boolean
+                      description: When true, new members are managed manually unless their department selects a rule.
+                    workspace_id:
+                      type: string
+                    createdAt:
+                      type: string
+                    updatedAt:
+                      type: string
+                    translations:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          language:
+                            type: string
+                            description: Language code the name below is written in, e.g. `de`.
+                          name:
+                            type: string
+                        required:
+                        - language
+                        - name
+                        additionalProperties: false
+                    leave_types:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          color:
+                            type: string
+                          icon:
+                            type: string
+                          deleted:
+                            type: boolean
+                        required:
+                        - id
+                        - name
+                        - color
+                        - icon
+                        - deleted
+                        additionalProperties: false
+                      description: The leave types that draw from this allowance type.
+                  required:
+                  - id
+                  - name
+                  - default_name
+                  - allowance_unit
+                  - ignore_allowance_limit
+                  - default_rule_id
+                  - default_rule_manually_managed
+                  - workspace_id
+                  - createdAt
+                  - updatedAt
+                  - translations
+                  - leave_types
+                  additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+    post:
+      operationId: allowanceType-createAllowanceType
+      summary: Create an allowance type
+      description: Creates an allowance type. It starts without a rule, so nothing accrues on it until you create one via POST /allowance-types/{allowance_type_id}/rules. How many types a workspace may have depends on its plan.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                allowance_unit:
+                  type: string
+                  enum:
+                  - days
+                  - hours
+                  description: Whether this type is counted in days or in minutes. Cannot be changed afterwards.
+                ignore_allowance_limit:
+                  default: false
+                  description: When true, members may book more than their balance and go negative.
+                  type: boolean
+                translations:
+                  description: Optional per-language names, shown to members using that language.
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      language:
+                        type: string
+                        description: Language code the name below is written in, e.g. `de`.
+                      name:
+                        type: string
+                    required:
+                    - language
+                    - name
+                locale:
+                  description: Returns translatable names in this language, falling back to the stored name where no translation exists. Omit it to keep the response unchanged.
+                  type: string
+                  enum:
+                  - en
+                  - de
+                  - fr
+                  - hu
+                  - it
+                  - pl
+                  - pt
+                  - ru
+                  - es
+                  - tr
+                  - uk
+              required:
+              - name
+              - allowance_unit
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                    description: Translated into `locale` when one is given, otherwise into the API key owner's language, falling back to the stored name where no translation exists.
+                  default_name:
+                    type: string
+                    description: The stored name, without any translation applied.
+                  allowance_unit:
+                    type: string
+                    enum:
+                    - days
+                    - hours
+                    description: Whether this type is counted in days or in minutes.
+                  ignore_allowance_limit:
+                    type: boolean
+                    description: When true, members may book more than their balance and go negative.
+                  default_rule_id:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                    description: The rule a new member of this workspace is put on. A department default rule takes precedence over it.
+                  default_rule_manually_managed:
+                    type: boolean
+                    description: When true, new members are managed manually unless their department selects a rule.
+                  workspace_id:
+                    type: string
+                  createdAt:
+                    type: string
+                  updatedAt:
+                    type: string
+                  translations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        language:
+                          type: string
+                          description: Language code the name below is written in, e.g. `de`.
+                        name:
+                          type: string
+                      required:
+                      - language
+                      - name
+                      additionalProperties: false
+                  leave_types:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        color:
+                          type: string
+                        icon:
+                          type: string
+                        deleted:
+                          type: boolean
+                      required:
+                      - id
+                      - name
+                      - color
+                      - icon
+                      - deleted
+                      additionalProperties: false
+                    description: The leave types that draw from this allowance type.
+                required:
+                - id
+                - name
+                - default_name
+                - allowance_unit
+                - ignore_allowance_limit
+                - default_rule_id
+                - default_rule_manually_managed
+                - workspace_id
+                - createdAt
+                - updatedAt
+                - translations
+                - leave_types
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /allowance-types/{id}:
+    get:
+      operationId: allowanceType-getAllowanceType
+      summary: Read an allowance type
+      description: Returns a single allowance type of the workspace.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      - in: query
+        name: locale
+        schema:
+          type: string
+          enum:
+          - en
+          - de
+          - fr
+          - hu
+          - it
+          - pl
+          - pt
+          - ru
+          - es
+          - tr
+          - uk
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                    description: Translated into `locale` when one is given, otherwise into the API key owner's language, falling back to the stored name where no translation exists.
+                  default_name:
+                    type: string
+                    description: The stored name, without any translation applied.
+                  allowance_unit:
+                    type: string
+                    enum:
+                    - days
+                    - hours
+                    description: Whether this type is counted in days or in minutes.
+                  ignore_allowance_limit:
+                    type: boolean
+                    description: When true, members may book more than their balance and go negative.
+                  default_rule_id:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                    description: The rule a new member of this workspace is put on. A department default rule takes precedence over it.
+                  default_rule_manually_managed:
+                    type: boolean
+                    description: When true, new members are managed manually unless their department selects a rule.
+                  workspace_id:
+                    type: string
+                  createdAt:
+                    type: string
+                  updatedAt:
+                    type: string
+                  translations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        language:
+                          type: string
+                          description: Language code the name below is written in, e.g. `de`.
+                        name:
+                          type: string
+                      required:
+                      - language
+                      - name
+                      additionalProperties: false
+                  leave_types:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        color:
+                          type: string
+                        icon:
+                          type: string
+                        deleted:
+                          type: boolean
+                      required:
+                      - id
+                      - name
+                      - color
+                      - icon
+                      - deleted
+                      additionalProperties: false
+                    description: The leave types that draw from this allowance type.
+                required:
+                - id
+                - name
+                - default_name
+                - allowance_unit
+                - ignore_allowance_limit
+                - default_rule_id
+                - default_rule_manually_managed
+                - workspace_id
+                - createdAt
+                - updatedAt
+                - translations
+                - leave_types
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+    patch:
+      operationId: allowanceType-updateAllowanceType
+      summary: Update an allowance type
+      description: Updates the name and the booking limit of an allowance type. Omitted fields keep their current value. The unit (days or minutes) cannot be changed once the type exists.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                ignore_allowance_limit:
+                  type: boolean
+                translations:
+                  description: Replaces the stored translations. Omit the field to leave them untouched.
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      language:
+                        type: string
+                        description: Language code the name below is written in, e.g. `de`.
+                      name:
+                        type: string
+                    required:
+                    - language
+                    - name
+                locale:
+                  description: Returns translatable names in this language, falling back to the stored name where no translation exists. Omit it to keep the response unchanged.
+                  type: string
+                  enum:
+                  - en
+                  - de
+                  - fr
+                  - hu
+                  - it
+                  - pl
+                  - pt
+                  - ru
+                  - es
+                  - tr
+                  - uk
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                    description: Translated into `locale` when one is given, otherwise into the API key owner's language, falling back to the stored name where no translation exists.
+                  default_name:
+                    type: string
+                    description: The stored name, without any translation applied.
+                  allowance_unit:
+                    type: string
+                    enum:
+                    - days
+                    - hours
+                    description: Whether this type is counted in days or in minutes.
+                  ignore_allowance_limit:
+                    type: boolean
+                    description: When true, members may book more than their balance and go negative.
+                  default_rule_id:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                    description: The rule a new member of this workspace is put on. A department default rule takes precedence over it.
+                  default_rule_manually_managed:
+                    type: boolean
+                    description: When true, new members are managed manually unless their department selects a rule.
+                  workspace_id:
+                    type: string
+                  createdAt:
+                    type: string
+                  updatedAt:
+                    type: string
+                  translations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        language:
+                          type: string
+                          description: Language code the name below is written in, e.g. `de`.
+                        name:
+                          type: string
+                      required:
+                      - language
+                      - name
+                      additionalProperties: false
+                  leave_types:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        color:
+                          type: string
+                        icon:
+                          type: string
+                        deleted:
+                          type: boolean
+                      required:
+                      - id
+                      - name
+                      - color
+                      - icon
+                      - deleted
+                      additionalProperties: false
+                    description: The leave types that draw from this allowance type.
+                required:
+                - id
+                - name
+                - default_name
+                - allowance_unit
+                - ignore_allowance_limit
+                - default_rule_id
+                - default_rule_manually_managed
+                - workspace_id
+                - createdAt
+                - updatedAt
+                - translations
+                - leave_types
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+    delete:
+      operationId: allowanceType-deleteAllowanceType
+      summary: Delete an allowance type
+      description: Deletes an allowance type. Rejected while leave types still draw from it, while it is any member's default type, while it still has rules, and for the last remaining type of the workspace.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                required:
+                - success
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /allowance-types/reorder:
+    post:
+      operationId: allowanceType-reorderAllowanceTypes
+      summary: Reorder the allowance types
+      description: 'Sets the order the allowance types are listed in, throughout the app and in GET /allowance-types. Send every id of the workspace: an id that is left out keeps its old position and the resulting order is ambiguous.'
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  minItems: 1
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                    pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                  description: The allowance type ids, in the order you want them in.
+              required:
+              - ids
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                required:
+                - success
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /members/{member_id}/allowances:
+    get:
+      operationId: memberAllowance-listMemberAllowances
+      summary: List a member's allowances
+      description: Every fiscal year of every allowance type the member can use, oldest first. Allowance types that are switched off for this member are left out. This is the read side of the deprecated PUT /members/{id}/allowance/{allowance_type_id}/{year}.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: member_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      - in: query
+        name: year
+        schema:
+          type: integer
+          minimum: -9007199254740991
+          maximum: 9007199254740991
+      - in: query
+        name: locale
+        schema:
+          type: string
+          enum:
+          - en
+          - de
+          - fr
+          - hu
+          - it
+          - pl
+          - pt
+          - ru
+          - es
+          - tr
+          - uk
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    member_id:
+                      type: string
+                    allowance_type_id:
+                      type: string
+                    year:
+                      type: integer
+                      minimum: -9007199254740991
+                      maximum: 9007199254740991
+                    start:
+                      description: First day of the fiscal year (inclusive).
+                      type: string
+                    end:
+                      description: Last day of the fiscal year (inclusive).
+                      type: string
+                    allowance:
+                      type: number
+                      description: 'The entitlement of this year: `rule_allowance` plus `adjustments`. Same meaning as the `allowance` field on GET /members/{id}.'
+                    rule_allowance:
+                      type: number
+                      description: The part of the entitlement the allowance rule granted. For a year still on the pre-rules data it holds the stored entitlement, and `adjustments` is 0.
+                    adjustments:
+                      type: number
+                      description: The part that came from manual adjustments, overtime compensation excluded.
+                    brought_forward:
+                      type: number
+                      description: Carried over from the previous year into this one.
+                    overwrite_brought_forward:
+                      type: boolean
+                      description: True when an admin set the carry-over by hand instead of letting it be computed.
+                    compensatory_time_off:
+                      type: number
+                      description: 'Compensatory time off of this year, including approved overtime credits. Days for day-based allowance types, MINUTES for hour-based ones. On an allowance type with overtime logging, or with credited overtime in that year, it cannot be changed through PUT /members/{id}/allowance/{allowance_type_id}/{year}: log overtime with POST /overtime-entries instead.'
+                    taken:
+                      type: number
+                      description: Booked and approved out of this year.
+                    remaining:
+                      type: number
+                      description: What is left to book.
+                    carry_over:
+                      type: number
+                      description: Compatibility alias for allowance carried over from the previous year into this one.
+                    will_expire:
+                      type: number
+                      description: Of `remaining`, how much expires later this year.
+                    expired:
+                      type: number
+                      description: How much has already expired this year.
+                    carry_forward_deadline:
+                      description: The day carried-over balance expires.
+                      type: string
+                    expiring_adjustments:
+                      anyOf:
+                      - type: object
+                        properties:
+                          amount:
+                            type: number
+                          earliest_expiry:
+                            description: The LAST day (inclusive) the soonest-expiring of them can still be used, the same value POST /members/{member_id}/adjustments takes.
+                            type: string
+                        required:
+                        - amount
+                        - earliest_expiry
+                        additionalProperties: false
+                      - type: 'null'
+                      description: Positive adjustments of this year that expire in the future, if any. Always null when the `year` filter is used.
+                    allowance_type:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                          description: Translated into `locale` when one is given, otherwise into the API key owner's language, falling back to the stored name.
+                        default_name:
+                          type: string
+                        allowance_unit:
+                          type: string
+                          enum:
+                          - days
+                          - hours
+                      required:
+                      - id
+                      - name
+                      - default_name
+                      - allowance_unit
+                      additionalProperties: false
+                    createdAt:
+                      type: string
+                    updatedAt:
+                      type: string
+                  required:
+                  - id
+                  - member_id
+                  - allowance_type_id
+                  - year
+                  - start
+                  - end
+                  - allowance
+                  - rule_allowance
+                  - adjustments
+                  - brought_forward
+                  - overwrite_brought_forward
+                  - compensatory_time_off
+                  - taken
+                  - remaining
+                  - carry_over
+                  - will_expire
+                  - expired
+                  - carry_forward_deadline
+                  - expiring_adjustments
+                  - allowance_type
+                  - createdAt
+                  - updatedAt
+                  additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /members/{member_id}/allowance-audit-log:
+    get:
+      operationId: memberAllowance-getAuditLog
+      summary: Read a member's allowance history
+      description: 'Every manual change to this member''s allowance for one allowance type, newest first: hand-set balances, carry-over overrides and deleted adjustments. Rule changes are not in here, they are in GET /members/{member_id}/rule-audit-log.'
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: member_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      - in: query
+        name: allowance_type_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      - in: query
+        name: year
+        schema:
+          type: integer
+          minimum: -9007199254740991
+          maximum: 9007199254740991
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    createdAt:
+                      type: string
+                    year:
+                      type: integer
+                      minimum: -9007199254740991
+                      maximum: 9007199254740991
+                    event_type:
+                      type: string
+                      enum:
+                      - BROUGHT_FORWARD_OVERRIDE_SET
+                      - BROUGHT_FORWARD_OVERRIDE_REVERTED
+                      - ALLOWANCE_MANUALLY_EDITED
+                      - ALLOWANCE_LEGACY_EDITED
+                      - ADJUSTMENT_DELETED
+                    old_allowance:
+                      anyOf:
+                      - type: number
+                      - type: 'null'
+                    new_allowance:
+                      anyOf:
+                      - type: number
+                      - type: 'null'
+                    old_brought_forward:
+                      anyOf:
+                      - type: number
+                      - type: 'null'
+                    new_brought_forward:
+                      anyOf:
+                      - type: number
+                      - type: 'null'
+                    old_compensatory_time_off:
+                      anyOf:
+                      - type: number
+                      - type: 'null'
+                    new_compensatory_time_off:
+                      anyOf:
+                      - type: number
+                      - type: 'null'
+                    old_overwrite_brought_forward:
+                      anyOf:
+                      - type: boolean
+                      - type: 'null'
+                    new_overwrite_brought_forward:
+                      anyOf:
+                      - type: boolean
+                      - type: 'null'
+                    delta_allowance:
+                      anyOf:
+                      - type: number
+                      - type: 'null'
+                      description: Set instead of the old/new pair on entries migrated from the pre-rules history, which only recorded a difference.
+                    delta_brought_forward:
+                      anyOf:
+                      - type: number
+                      - type: 'null'
+                    delta_compensatory_time_off:
+                      anyOf:
+                      - type: number
+                      - type: 'null'
+                    comment:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    actor:
+                      anyOf:
+                      - type: object
+                        properties:
+                          name:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          email:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - name
+                        - email
+                        additionalProperties: false
+                      - type: 'null'
+                      description: Who made the change; null once that member has been deleted.
+                  required:
+                  - id
+                  - createdAt
+                  - year
+                  - event_type
+                  - old_allowance
+                  - new_allowance
+                  - old_brought_forward
+                  - new_brought_forward
+                  - old_compensatory_time_off
+                  - new_compensatory_time_off
+                  - old_overwrite_brought_forward
+                  - new_overwrite_brought_forward
+                  - delta_allowance
+                  - delta_brought_forward
+                  - delta_compensatory_time_off
+                  - comment
+                  - actor
+                  additionalProperties: false
+                description: Capped at the 200 newest entries.
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /members/{member_id}/allowance-breakdown:
+    get:
+      operationId: memberAllowance-getBreakdown
+      summary: Explain one year of a member's allowance
+      description: 'How the figures of one fiscal year came about: which rule was active, what accrued month by month, what was carried over, what expired and what was booked. This is the calculation the app shows in the ledger.'
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: member_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      - in: query
+        name: allowance_type_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      - in: query
+        name: year
+        schema:
+          type: integer
+          minimum: -9007199254740991
+          maximum: 9007199254740991
+          description: The fiscal year to explain.
+        required: true
+        description: The fiscal year to explain.
+      - in: query
+        name: locale
+        schema:
+          type: string
+          enum:
+          - en
+          - de
+          - fr
+          - hu
+          - it
+          - pl
+          - pt
+          - ru
+          - es
+          - tr
+          - uk
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  legacy_unmigrated:
+                    type: boolean
+                    description: 'True when this member has not been moved to the rules engine yet. Every other field is then null or empty: there is no rule-based breakdown to report.'
+                  no_allowance_for_year:
+                    type: boolean
+                    description: True when the member has no allowance of this type in this year at all, for instance because no rule ever covered it. Every other field is then null or empty.
+                  member_allowance_id:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                    description: The id to pass to POST /allowances/{id}/revert-carryover-override.
+                  fiscal_year_start_month:
+                    type: integer
+                    minimum: -9007199254740991
+                    maximum: 9007199254740991
+                    description: 0 = January, matching the workspace setting.
+                  active_rule:
+                    anyOf:
+                    - type: object
+                      properties:
+                        name:
+                          type: string
+                        amount:
+                          type: number
+                          description: The rule's own amount per cycle, before any part-time adjustment. What this member was granted is in `allowance`.
+                        cycle:
+                          type: string
+                          description: How often the rule grants, e.g. `monthly`.
+                      required:
+                      - name
+                      - amount
+                      - cycle
+                      additionalProperties: false
+                    - type: 'null'
+                    description: The rule that governed this year, if any.
+                  allowance:
+                    type: number
+                    description: The rule-granted entitlement after rounding.
+                  raw_allowance:
+                    type: number
+                    description: The same figure before rounding.
+                  rounding_increment:
+                    anyOf:
+                    - type: number
+                    - type: 'null'
+                    description: What the entitlement was rounded up to, e.g. 0.5 days.
+                  rounding_mode:
+                    anyOf:
+                    - type: string
+                      enum:
+                      - increment
+                      - half_day_threshold
+                    - type: 'null'
+                    description: 'How the entitlement is rounded: up to `rounding_increment`, or a fraction of half a day or more up to a full day.'
+                  rounding_delta:
+                    type: number
+                    description: 'How much the rounding added: `allowance` minus `raw_allowance`.'
+                  adjustments:
+                    type: number
+                    description: The manual adjustments of this year.
+                  brought_forward:
+                    type: number
+                  overwrite_brought_forward:
+                    type: boolean
+                  taken:
+                    type: number
+                  remaining:
+                    type: number
+                  will_expire:
+                    type: number
+                  expired:
+                    type: number
+                  expiration:
+                    type: number
+                  carry_forward_deadline:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                  next_credit_expiry:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                    description: The next day on which part of the balance expires.
+                  credit_expiration_past:
+                    type: number
+                    description: Already expired out of the dated credits.
+                  credit_expiration_future:
+                    type: number
+                    description: Still to expire out of them, later this year.
+                  monthly_accruals:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        month:
+                          type: integer
+                          minimum: -9007199254740991
+                          maximum: 9007199254740991
+                          description: 0-based index within the fiscal year, not the calendar.
+                        amount:
+                          type: number
+                        earned:
+                          type: boolean
+                          description: False for a month that has not accrued yet.
+                        ruleName:
+                          type: string
+                      required:
+                      - month
+                      - amount
+                      - earned
+                      additionalProperties: false
+                    description: Empty when the year accrued in one go rather than per month.
+                  carry_forward_detail:
+                    anyOf:
+                    - type: object
+                      properties:
+                        previous_remaining:
+                          type: number
+                          description: What was left at the end of the previous year.
+                        carried:
+                          type: number
+                          description: How much of it was carried over.
+                        expired:
+                          type: number
+                        deadline:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        expiry_months:
+                          anyOf:
+                          - type: number
+                          - type: 'null'
+                          description: How long carry-over survives; null means it never expires.
+                        max_carry_forward:
+                          anyOf:
+                          - type: number
+                          - type: 'null'
+                        kept_after_expiry:
+                          anyOf:
+                          - type: number
+                          - type: 'null'
+                        computed_carried:
+                          anyOf:
+                          - type: number
+                          - type: 'null'
+                          description: What the engine would have carried over. Only set when an admin overrode the carry-over, so the two can be compared.
+                      required:
+                      - previous_remaining
+                      - carried
+                      - expired
+                      - deadline
+                      - expiry_months
+                      - max_carry_forward
+                      - kept_after_expiry
+                      - computed_carried
+                      additionalProperties: false
+                    - type: 'null'
+                    description: Null for the member's first year, which carries nothing over.
+                  deductions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                        amount:
+                          type: number
+                        request_id:
+                          type: string
+                        leave_type_id:
+                          type: string
+                        leave_type_name:
+                          type: string
+                          description: Translated into `locale` when one is given, otherwise the stored name.
+                        request_start:
+                          type: string
+                        request_end:
+                          type: string
+                      required:
+                      - date
+                      - amount
+                      - request_id
+                      - leave_type_id
+                      - leave_type_name
+                      - request_start
+                      - request_end
+                      additionalProperties: false
+                    description: What was booked out of this year, oldest first.
+                  adjustment_details:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        amount:
+                          type: number
+                        date:
+                          type: string
+                        expiry_date:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                          description: The LAST day (inclusive) these days can still be used, the same value POST /members/{member_id}/adjustments takes. Null when they never expire.
+                        comment:
+                          type: string
+                        is_expired:
+                          type: boolean
+                        is_overtime:
+                          type: boolean
+                          description: True when the adjustment is overtime compensation.
+                        created_by:
+                          anyOf:
+                          - type: object
+                            properties:
+                              name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                              email:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - name
+                            - email
+                            additionalProperties: false
+                          - type: 'null'
+                      required:
+                      - id
+                      - amount
+                      - date
+                      - expiry_date
+                      - comment
+                      - is_expired
+                      - is_overtime
+                      - created_by
+                      additionalProperties: false
+                    description: The individual adjustments that make up `adjustments`.
+                required:
+                - legacy_unmigrated
+                - no_allowance_for_year
+                - member_allowance_id
+                - fiscal_year_start_month
+                - active_rule
+                - allowance
+                - raw_allowance
+                - rounding_increment
+                - rounding_mode
+                - rounding_delta
+                - adjustments
+                - brought_forward
+                - overwrite_brought_forward
+                - taken
+                - remaining
+                - will_expire
+                - expired
+                - expiration
+                - carry_forward_deadline
+                - next_credit_expiry
+                - credit_expiration_past
+                - credit_expiration_future
+                - monthly_accruals
+                - carry_forward_detail
+                - deductions
+                - adjustment_details
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /allowances/{id}/revert-carryover-override:
+    post:
+      operationId: memberAllowance-revertCarryoverOverride
+      summary: Let the carry-over be computed again
+      description: Drops a hand-set carry-over for one year and recomputes the member's allowances from the previous year again, before the call returns. Does nothing when the carry-over was never overridden. The id is the `member_allowance_id` from GET /members/{member_id}/allowance-breakdown.
+      tags:
+      - Allowance Management
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  year:
+                    type: integer
+                    minimum: -9007199254740991
+                    maximum: 9007199254740991
+                  brought_forward:
+                    type: number
+                    description: The value from BEFORE the revert, as confirmation of what was dropped. Re-read GET /members/{member_id}/allowances for the recomputed figure.
+                  overwrite_brought_forward:
+                    type: boolean
+                required:
+                - id
+                - year
+                - brought_forward
+                - overwrite_brought_forward
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+components:
+  schemas:
+    error.BAD_REQUEST:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Invalid input data
+        code:
+          type: string
+          description: The error code
+          example: BAD_REQUEST
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
+        issues: []
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+    error.FORBIDDEN:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Insufficient access
+        code:
+          type: string
+          description: The error code
+          example: FORBIDDEN
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+    error.NOT_FOUND:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Not found
+        code:
+          type: string
+          description: The error code
+          example: NOT_FOUND
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'The API key as `Authorization: Bearer <key>`.'
+externalDocs:
+  url: https://absentify.com/docs/en/api-reference

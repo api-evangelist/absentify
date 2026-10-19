@@ -1,0 +1,471 @@
+openapi: 3.2.0
+info:
+  title: absentify CRUD Out of office API
+  description: OpenAPI compliant REST API
+  version: 1.0.0
+servers:
+- url: https://api.absentify.com/api/v1
+tags:
+- name: Out of office
+paths:
+  /members/{member_id}/out-of-office-settings:
+    get:
+      operationId: memberMailboxSettings-getMemberOutOfOfficeSettings
+      summary: Get a member's out of office settings
+      description: Returns one entry per leave type for which an out of office message is configured for this member. An empty array means the member has no configured message. `sync_enabled` tells you whether absentify writes the message to the member's mailbox, and `allow_member_edit_out_of_office_message` whether the member may change the text themselves.
+      tags:
+      - Out of office
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: member_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    member_id:
+                      type: string
+                    leave_type_id:
+                      type: string
+                    internalReplyMessage:
+                      type: string
+                    externalReplyMessage:
+                      type: string
+                    externalAudience:
+                      type: string
+                      enum:
+                      - none
+                      - contactsOnly
+                      - all
+                    allow_member_edit_out_of_office_message:
+                      type: boolean
+                    sync_enabled:
+                      type: boolean
+                    createdAt:
+                      type: string
+                    updatedAt:
+                      type: string
+                  required:
+                  - id
+                  - member_id
+                  - leave_type_id
+                  - internalReplyMessage
+                  - externalReplyMessage
+                  - externalAudience
+                  - allow_member_edit_out_of_office_message
+                  - sync_enabled
+                  - createdAt
+                  - updatedAt
+                  additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /members/{member_id}/out-of-office-settings/{leave_type_id}:
+    put:
+      operationId: memberMailboxSettings-setMemberOutOfOfficeSetting
+      summary: Create or update a member's out of office message
+      description: 'Sets the out of office message absentify puts into the member''s mailbox while they are absent with this leave type. The call creates the setting if none exists yet and otherwise updates it, so an integration can send the same request repeatedly. The message is an initial value: the member can still edit it in absentify unless you send `allow_member_edit_out_of_office_message: false`. Omitted optional fields keep their current value on an existing setting, and default to `true` on a newly created one. Both messages accept the same placeholders as the absentify user interface and are limited to 6000 characters each. Requires the mailbox permission to be granted for the workspace, and the member to have a linked Microsoft account.'
+      tags:
+      - Out of office
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: member_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      - in: path
+        name: leave_type_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                internalReplyMessage:
+                  type: string
+                  maxLength: 6000
+                  description: Message sent to senders inside the organisation. Must contain text.
+                externalReplyMessage:
+                  type: string
+                  maxLength: 6000
+                  description: Message sent to senders outside the organisation. Must contain text unless externalAudience is none.
+                externalAudience:
+                  type: string
+                  enum:
+                  - none
+                  - contactsOnly
+                  - all
+                  description: Who outside the organisation receives the external message.
+                sync_enabled:
+                  description: Whether absentify writes the message to the member's mailbox. Defaults to true for a new setting.
+                  type: boolean
+                allow_member_edit_out_of_office_message:
+                  description: Whether the member may change the message in absentify. Defaults to true for a new setting.
+                  type: boolean
+              required:
+              - internalReplyMessage
+              - externalReplyMessage
+              - externalAudience
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  member_id:
+                    type: string
+                  leave_type_id:
+                    type: string
+                  internalReplyMessage:
+                    type: string
+                  externalReplyMessage:
+                    type: string
+                  externalAudience:
+                    type: string
+                    enum:
+                    - none
+                    - contactsOnly
+                    - all
+                  allow_member_edit_out_of_office_message:
+                    type: boolean
+                  sync_enabled:
+                    type: boolean
+                  createdAt:
+                    type: string
+                  updatedAt:
+                    type: string
+                required:
+                - id
+                - member_id
+                - leave_type_id
+                - internalReplyMessage
+                - externalReplyMessage
+                - externalAudience
+                - allow_member_edit_out_of_office_message
+                - sync_enabled
+                - createdAt
+                - updatedAt
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+    delete:
+      operationId: memberMailboxSettings-deleteMemberOutOfOfficeSetting
+      summary: Delete a member's out of office message
+      description: 'Removes the out of office message configured for this member and leave type. Absences of this leave type no longer set an automatic reply in the member''s mailbox. Use PUT with `sync_enabled: false` instead if you want to keep the text and only stop the synchronisation.'
+      tags:
+      - Out of office
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: member_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      - in: path
+        name: leave_type_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: 'null'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+components:
+  schemas:
+    error.BAD_REQUEST:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Invalid input data
+        code:
+          type: string
+          description: The error code
+          example: BAD_REQUEST
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
+        issues: []
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+    error.FORBIDDEN:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Insufficient access
+        code:
+          type: string
+          description: The error code
+          example: FORBIDDEN
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+    error.NOT_FOUND:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Not found
+        code:
+          type: string
+          description: The error code
+          example: NOT_FOUND
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'The API key as `Authorization: Bearer <key>`.'
+externalDocs:
+  url: https://absentify.com/docs/en/api-reference

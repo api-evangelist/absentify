@@ -1,15 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Absentify Departments API
-  description: 'The Absentify REST API provides comprehensive absence management capabilities for Microsoft 365-integrated organizations. Manage members, departments, leave types, requests, allowances, public holidays, and workspace settings. The API requires the Plus plan and uses API key authentication. Rate limit: 150 requests per second per IP.'
+  title: absentify CRUD Departments API
+  description: OpenAPI compliant REST API
   version: 1.0.0
-  contact:
-    url: https://absentify.com/docs
-    email: support@absentify.com
-  license:
-    name: Proprietary
-    url: https://absentify.com/terms-and-conditions
-  x-generated-from: official-openapi-spec
 servers:
 - url: https://api.absentify.com/api/v1
 tags:
@@ -18,8 +11,7 @@ paths:
   /departments:
     get:
       operationId: department-getDepartments
-      summary: Absentify Get All Departments
-      description: Get all departments
+      summary: Get all departments
       tags:
       - Departments
       security:
@@ -54,6 +46,7 @@ paths:
                       - Linear_one_has_to_agree
                       - Parallel_all_have_to_agree
                       - Parallel_one_has_to_agree
+                      - Parallel_first_response_decides
                     maximum_absent:
                       anyOf:
                       - type: integer
@@ -84,12 +77,15 @@ paths:
                             enum:
                             - Member
                             - Manager
+                          is_hidden:
+                            type: boolean
                         required:
                         - id
                         - name
                         - email
                         - custom_id
                         - manager_type
+                        - is_hidden
                         additionalProperties: false
                   required:
                   - id
@@ -131,13 +127,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
     post:
       operationId: department-createDepartment
-      summary: Absentify Create a Department
-      description: Create a department
+      summary: Create a department
       tags:
       - Departments
       security:
@@ -167,6 +159,7 @@ paths:
                   - Linear_one_has_to_agree
                   - Parallel_all_have_to_agree
                   - Parallel_one_has_to_agree
+                  - Parallel_first_response_decides
                 manager_member:
                   type: array
                   items:
@@ -178,6 +171,8 @@ paths:
                         anyOf:
                         - type: string
                         - type: 'null'
+                      is_hidden:
+                        type: boolean
                     required:
                     - member_id
                     - predecessor_manager_id
@@ -209,7 +204,7 @@ paths:
               schema:
                 type: string
                 format: uuid
-                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
         '400':
           description: Invalid input data
           content:
@@ -234,14 +229,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /departments/{id}:
     get:
       operationId: department-getDepartmentByid
-      summary: Absentify Read a Department by Id
-      description: Read a department by id
+      summary: Read a department by id
       tags:
       - Departments
       security:
@@ -252,7 +243,7 @@ paths:
         schema:
           type: string
           format: uuid
-          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
         required: true
       responses:
         '200':
@@ -282,6 +273,7 @@ paths:
                       - Linear_one_has_to_agree
                       - Parallel_all_have_to_agree
                       - Parallel_one_has_to_agree
+                      - Parallel_first_response_decides
                     maximum_absent:
                       anyOf:
                       - type: integer
@@ -312,12 +304,15 @@ paths:
                             enum:
                             - Member
                             - Manager
+                          is_hidden:
+                            type: boolean
                         required:
                         - id
                         - name
                         - email
                         - custom_id
                         - manager_type
+                        - is_hidden
                         additionalProperties: false
                   required:
                   - id
@@ -360,13 +355,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
     put:
       operationId: department-updateDepartment
-      summary: Absentify Update a Department
-      description: Update a department
+      summary: Update a department
       tags:
       - Departments
       security:
@@ -377,7 +368,7 @@ paths:
         schema:
           type: string
           format: uuid
-          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
         required: true
       requestBody:
         required: true
@@ -403,6 +394,7 @@ paths:
                   - Linear_one_has_to_agree
                   - Parallel_all_have_to_agree
                   - Parallel_one_has_to_agree
+                  - Parallel_first_response_decides
                 manager_member:
                   type: array
                   items:
@@ -414,10 +406,13 @@ paths:
                         anyOf:
                         - type: string
                         - type: 'null'
+                      is_hidden:
+                        type: boolean
                     required:
                     - member_id
                     - predecessor_manager_id
                 default_department_allowances:
+                  description: A non-empty array replaces the department's default allowances. Omit the field to leave them untouched; an empty array is ignored, not a reset.
                   type: array
                   items:
                     type: object
@@ -429,8 +424,6 @@ paths:
                     required:
                     - id
                     - value
-              required:
-              - default_department_allowances
       responses:
         '200':
           description: Successful response
@@ -439,7 +432,7 @@ paths:
               schema:
                 type: string
                 format: uuid
-                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
         '400':
           description: Invalid input data
           content:
@@ -470,13 +463,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
     delete:
       operationId: department-DeleteDepartmentById
-      summary: Absentify Delete a Department
-      description: Delete a department
+      summary: Delete a department
       tags:
       - Departments
       security:
@@ -487,7 +476,7 @@ paths:
         schema:
           type: string
           format: uuid
-          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
         required: true
       responses:
         '200':
@@ -526,127 +515,52 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
 components:
   schemas:
-    error.UNAUTHORIZED:
-      title: Authorization not provided error (401)
-      description: The error information
-      example:
-        code: UNAUTHORIZED
-        message: Authorization not provided
-        issues: []
-      type: object
-      properties:
-        message:
-          description: The error message
-          example: Authorization not provided
-          type: string
-        code:
-          description: The error code
-          example: UNAUTHORIZED
-          type: string
-        issues:
-          description: An array of issues that were responsible for the error
-          example: []
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-            additionalProperties: false
-      required:
-      - message
-      - code
-      additionalProperties: false
-    error.INTERNAL_SERVER_ERROR:
-      title: Internal server error error (500)
-      description: The error information
-      example:
-        code: INTERNAL_SERVER_ERROR
-        message: Internal server error
-        issues: []
-      type: object
-      properties:
-        message:
-          description: The error message
-          example: Internal server error
-          type: string
-        code:
-          description: The error code
-          example: INTERNAL_SERVER_ERROR
-          type: string
-        issues:
-          description: An array of issues that were responsible for the error
-          example: []
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-            additionalProperties: false
-      required:
-      - message
-      - code
-      additionalProperties: false
-    error.NOT_FOUND:
-      title: Not found error (404)
-      description: The error information
-      example:
-        code: NOT_FOUND
-        message: Not found
-        issues: []
-      type: object
-      properties:
-        message:
-          description: The error message
-          example: Not found
-          type: string
-        code:
-          description: The error code
-          example: NOT_FOUND
-          type: string
-        issues:
-          description: An array of issues that were responsible for the error
-          example: []
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-            additionalProperties: false
-      required:
-      - message
-      - code
-      additionalProperties: false
     error.BAD_REQUEST:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Invalid input data
+        code:
+          type: string
+          description: The error code
+          example: BAD_REQUEST
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
       title: Invalid input data error (400)
       description: The error information
       example:
         code: BAD_REQUEST
         message: Invalid input data
         issues: []
+    error.UNAUTHORIZED:
       type: object
       properties:
         message:
+          type: string
           description: The error message
-          example: Invalid input data
-          type: string
+          example: Authorization not provided
         code:
-          description: The error code
-          example: BAD_REQUEST
           type: string
+          description: The error code
+          example: UNAUTHORIZED
         issues:
           description: An array of issues that were responsible for the error
           example: []
@@ -663,23 +577,89 @@ components:
       - message
       - code
       additionalProperties: false
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
     error.FORBIDDEN:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Insufficient access
+        code:
+          type: string
+          description: The error code
+          example: FORBIDDEN
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
       title: Insufficient access error (403)
       description: The error information
       example:
         code: FORBIDDEN
         message: Insufficient access
         issues: []
+    error.NOT_FOUND:
       type: object
       properties:
         message:
+          type: string
           description: The error message
-          example: Insufficient access
-          type: string
+          example: Not found
         code:
-          description: The error code
-          example: FORBIDDEN
           type: string
+          description: The error code
+          example: NOT_FOUND
         issues:
           description: An array of issues that were responsible for the error
           example: []
@@ -696,15 +676,20 @@ components:
       - message
       - code
       additionalProperties: false
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
   securitySchemes:
     ApiKey:
       type: apiKey
       name: X-API-KEY
       in: header
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: x-api-key
-      description: API key from your absentify account settings. Requires Plus plan.
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'The API key as `Authorization: Bearer <key>`.'
 externalDocs:
   url: https://absentify.com/docs/en/api-reference

@@ -1,15 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Absentify Leave types API
-  description: 'The Absentify REST API provides comprehensive absence management capabilities for Microsoft 365-integrated organizations. Manage members, departments, leave types, requests, allowances, public holidays, and workspace settings. The API requires the Plus plan and uses API key authentication. Rate limit: 150 requests per second per IP.'
+  title: absentify CRUD Leave types API
+  description: OpenAPI compliant REST API
   version: 1.0.0
-  contact:
-    url: https://absentify.com/docs
-    email: support@absentify.com
-  license:
-    name: Proprietary
-    url: https://absentify.com/terms-and-conditions
-  x-generated-from: official-openapi-spec
 servers:
 - url: https://api.absentify.com/api/v1
 tags:
@@ -18,13 +11,28 @@ paths:
   /leave_types:
     get:
       operationId: leaveTypes-getLeaveTypes
-      summary: Absentify Get All Leave Types
-      description: Get all leave types
+      summary: Get all leave types
       tags:
       - Leave types
       security:
       - ApiKey: []
-      parameters: []
+      parameters:
+      - in: query
+        name: locale
+        schema:
+          type: string
+          enum:
+          - en
+          - de
+          - fr
+          - hu
+          - it
+          - pl
+          - pt
+          - ru
+          - es
+          - tr
+          - uk
       responses:
         '200':
           description: Successful response
@@ -39,6 +47,10 @@ paths:
                       type: string
                     name:
                       type: string
+                      description: Translated into `locale` when one is given and a translation exists, otherwise the stored name.
+                    default_name:
+                      type: string
+                      description: The stored name, without any translation applied.
                     createdAt:
                       type: string
                     updatedAt:
@@ -115,6 +127,10 @@ paths:
                             type: string
                           name:
                             type: string
+                            description: Translated into `locale` when one is given and a translation exists, otherwise the stored name.
+                          default_name:
+                            type: string
+                            description: The stored name, without any translation applied.
                           ignore_allowance_limit:
                             type: boolean
                           allowance_unit:
@@ -125,15 +141,25 @@ paths:
                         required:
                         - id
                         - name
+                        - default_name
                         - ignore_allowance_limit
                         - allowance_unit
                         additionalProperties: false
                       - type: 'null'
                     counts_as_leave:
                       type: boolean
+                    allow_representative_overlap:
+                      type: boolean
+                    allow_request_changes:
+                      type: boolean
+                      description: Whether pending and approved requests of this leave type can be changed.
+                    request_shortening_needs_approval:
+                      type: boolean
+                      description: 'Shortening an approved request needs approval from its approvers when this is on. Off by default: a shortened request applies at once and the days go back to the allowance. Extending or moving always needs approval.'
                   required:
                   - id
                   - name
+                  - default_name
                   - createdAt
                   - updatedAt
                   - color
@@ -151,6 +177,9 @@ paths:
                   - outlook_synchronization_subject
                   - allowance_type
                   - counts_as_leave
+                  - allow_representative_overlap
+                  - allow_request_changes
+                  - request_shortening_needs_approval
                   additionalProperties: false
         '400':
           description: Invalid input data
@@ -182,13 +211,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
     post:
       operationId: leaveTypes-createLeaveType
-      summary: Absentify Create a Leave Type
-      description: Create a leave type
+      summary: Create a leave type
       tags:
       - Leave types
       security:
@@ -221,6 +246,7 @@ paths:
                   - minutes_10
                   - minutes_5
                   - minutes_1
+                  description: 'When `take_from_allowance` is true, the unit follows the allowance: an hour or minute unit is saved as `days` for a days-based allowance, and `days` or `half_days` is saved as `hours` for an hours-based allowance.'
                 position:
                   type: number
                 take_from_allowance:
@@ -260,9 +286,87 @@ paths:
                   - Frown
                   - Image
                   - Sun
-                  - Zap
                   - Home
+                  - Zap
                   - Users
+                  - TreePalm
+                  - Plane
+                  - Luggage
+                  - Tent
+                  - Mountain
+                  - Bike
+                  - Waves
+                  - Snowflake
+                  - Ship
+                  - Map
+                  - Camera
+                  - Sunset
+                  - Thermometer
+                  - Pill
+                  - Stethoscope
+                  - HeartPulse
+                  - Hospital
+                  - Bandage
+                  - Brain
+                  - Syringe
+                  - Bed
+                  - Ambulance
+                  - Eye
+                  - Accessibility
+                  - Activity
+                  - Baby
+                  - Heart
+                  - HeartHandshake
+                  - Dog
+                  - Truck
+                  - Milk
+                  - HandHeart
+                  - ToyBrick
+                  - Cake
+                  - Laptop
+                  - Building2
+                  - Presentation
+                  - Car
+                  - TrainFront
+                  - RotateCcw
+                  - Headset
+                  - Phone
+                  - HardHat
+                  - Wrench
+                  - Globe
+                  - MapPin
+                  - GraduationCap
+                  - BookOpen
+                  - School
+                  - Languages
+                  - Lightbulb
+                  - PenLine
+                  - PartyPopper
+                  - Gem
+                  - Flower2
+                  - Landmark
+                  - Vote
+                  - Shield
+                  - Church
+                  - HandHelping
+                  - Scale
+                  - Siren
+                  - Trophy
+                  - Star
+                  - Timer
+                  - Hourglass
+                  - CalendarOff
+                  - Moon
+                  - AlarmClock
+                  - Sunrise
+                  - CalendarDays
+                  - CalendarHeart
+                  - Megaphone
+                  - CloudLightning
+                  - Leaf
+                  - Lock
+                  - Ban
+                  - CircleHelp
                 reason_mandatory:
                   type: boolean
                 reason_hint_text:
@@ -273,6 +377,7 @@ paths:
                   anyOf:
                   - type: string
                   - type: 'null'
+                  description: 'The allowance to deduct from when `take_from_allowance` is true. Always pass it: if it is null or unknown, another allowance of the workspace is used instead. Ignored when `take_from_allowance` is false.'
                 ignore_schedule:
                   type: boolean
                 sync_option:
@@ -288,6 +393,45 @@ paths:
                 counts_as_leave:
                   default: true
                   type: boolean
+                allow_representative_overlap:
+                  default: false
+                  type: boolean
+                allow_request_changes:
+                  default: true
+                  description: Whether pending and approved requests of this leave type can be changed.
+                  type: boolean
+                request_shortening_needs_approval:
+                  default: false
+                  description: 'Shortening an approved request needs approval from its approvers when this is on. Off by default: a shortened request applies at once and the days go back to the allowance. Extending or moving always needs approval.'
+                  type: boolean
+                translations:
+                  description: Optional per-language names, shown to members using that language.
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      language:
+                        type: string
+                        enum:
+                        - en
+                        - de
+                        - fr
+                        - hu
+                        - it
+                        - pl
+                        - pt
+                        - ru
+                        - es
+                        - tr
+                        - uk
+                        description: Language code the name below is written in, e.g. `de`.
+                      name:
+                        type: string
+                        minLength: 1
+                        maxLength: 255
+                    required:
+                    - language
+                    - name
               required:
               - name
               - color
@@ -315,7 +459,7 @@ paths:
               schema:
                 type: string
                 format: uuid
-                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
         '400':
           description: Invalid input data
           content:
@@ -340,14 +484,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /leave_types/{id}:
     get:
       operationId: leaveTypes-getLeaveTypeById
-      summary: Absentify Read a Leave Type by Id
-      description: Read a leave type by id
+      summary: Read a leave type by id
       tags:
       - Leave types
       security:
@@ -358,8 +498,24 @@ paths:
         schema:
           type: string
           format: uuid
-          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
         required: true
+      - in: query
+        name: locale
+        schema:
+          type: string
+          enum:
+          - en
+          - de
+          - fr
+          - hu
+          - it
+          - pl
+          - pt
+          - ru
+          - es
+          - tr
+          - uk
       responses:
         '200':
           description: Successful response
@@ -373,6 +529,10 @@ paths:
                       type: string
                     name:
                       type: string
+                      description: Translated into `locale` when one is given and a translation exists, otherwise the stored name.
+                    default_name:
+                      type: string
+                      description: The stored name, without any translation applied.
                     createdAt:
                       type: string
                     updatedAt:
@@ -449,6 +609,10 @@ paths:
                             type: string
                           name:
                             type: string
+                            description: Translated into `locale` when one is given and a translation exists, otherwise the stored name.
+                          default_name:
+                            type: string
+                            description: The stored name, without any translation applied.
                           ignore_allowance_limit:
                             type: boolean
                           allowance_unit:
@@ -459,15 +623,25 @@ paths:
                         required:
                         - id
                         - name
+                        - default_name
                         - ignore_allowance_limit
                         - allowance_unit
                         additionalProperties: false
                       - type: 'null'
                     counts_as_leave:
                       type: boolean
+                    allow_representative_overlap:
+                      type: boolean
+                    allow_request_changes:
+                      type: boolean
+                      description: Whether pending and approved requests of this leave type can be changed.
+                    request_shortening_needs_approval:
+                      type: boolean
+                      description: 'Shortening an approved request needs approval from its approvers when this is on. Off by default: a shortened request applies at once and the days go back to the allowance. Extending or moving always needs approval.'
                   required:
                   - id
                   - name
+                  - default_name
                   - createdAt
                   - updatedAt
                   - color
@@ -485,6 +659,9 @@ paths:
                   - outlook_synchronization_subject
                   - allowance_type
                   - counts_as_leave
+                  - allow_representative_overlap
+                  - allow_request_changes
+                  - request_shortening_needs_approval
                   additionalProperties: false
                 - type: 'null'
         '400':
@@ -517,13 +694,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
     put:
       operationId: leaveTypes-updateLeaveType
-      summary: Absentify Update a Leave Type
-      description: Update a leave type
+      summary: Update a leave type
+      description: Update a leave type. Omitted fields keep their current value, so a request that only sends `name` renames the leave type and changes nothing else.
       tags:
       - Leave types
       security:
@@ -534,7 +708,7 @@ paths:
         schema:
           type: string
           format: uuid
-          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
         required: true
       requestBody:
         required: true
@@ -553,6 +727,7 @@ paths:
                 maximum_absent:
                   type: boolean
                 leave_unit:
+                  description: 'When `take_from_allowance` is true, the unit follows the allowance: an hour or minute unit is saved as `days` for a days-based allowance, and `days` or `half_days` is saved as `hours` for an hours-based allowance. Switching between day and hour units is rejected while the leave type has requests that are not canceled or declined.'
                   type: string
                   enum:
                   - days
@@ -604,9 +779,87 @@ paths:
                   - Frown
                   - Image
                   - Sun
-                  - Zap
                   - Home
+                  - Zap
                   - Users
+                  - TreePalm
+                  - Plane
+                  - Luggage
+                  - Tent
+                  - Mountain
+                  - Bike
+                  - Waves
+                  - Snowflake
+                  - Ship
+                  - Map
+                  - Camera
+                  - Sunset
+                  - Thermometer
+                  - Pill
+                  - Stethoscope
+                  - HeartPulse
+                  - Hospital
+                  - Bandage
+                  - Brain
+                  - Syringe
+                  - Bed
+                  - Ambulance
+                  - Eye
+                  - Accessibility
+                  - Activity
+                  - Baby
+                  - Heart
+                  - HeartHandshake
+                  - Dog
+                  - Truck
+                  - Milk
+                  - HandHeart
+                  - ToyBrick
+                  - Cake
+                  - Laptop
+                  - Building2
+                  - Presentation
+                  - Car
+                  - TrainFront
+                  - RotateCcw
+                  - Headset
+                  - Phone
+                  - HardHat
+                  - Wrench
+                  - Globe
+                  - MapPin
+                  - GraduationCap
+                  - BookOpen
+                  - School
+                  - Languages
+                  - Lightbulb
+                  - PenLine
+                  - PartyPopper
+                  - Gem
+                  - Flower2
+                  - Landmark
+                  - Vote
+                  - Shield
+                  - Church
+                  - HandHelping
+                  - Scale
+                  - Siren
+                  - Trophy
+                  - Star
+                  - Timer
+                  - Hourglass
+                  - CalendarOff
+                  - Moon
+                  - AlarmClock
+                  - Sunrise
+                  - CalendarDays
+                  - CalendarHeart
+                  - Megaphone
+                  - CloudLightning
+                  - Leaf
+                  - Lock
+                  - Ban
+                  - CircleHelp
                 reason_mandatory:
                   type: boolean
                 reason_hint_text:
@@ -625,6 +878,42 @@ paths:
                   - OnlyApproved
                 counts_as_leave:
                   type: boolean
+                allow_representative_overlap:
+                  type: boolean
+                allow_request_changes:
+                  description: Whether pending and approved requests of this leave type can be changed.
+                  type: boolean
+                request_shortening_needs_approval:
+                  description: 'Shortening an approved request needs approval from its approvers when this is on. Off by default: a shortened request applies at once and the days go back to the allowance. Extending or moving always needs approval.'
+                  type: boolean
+                translations:
+                  description: Replaces the stored translations. Omit the field to leave them untouched.
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      language:
+                        type: string
+                        enum:
+                        - en
+                        - de
+                        - fr
+                        - hu
+                        - it
+                        - pl
+                        - pt
+                        - ru
+                        - es
+                        - tr
+                        - uk
+                        description: Language code the name below is written in, e.g. `de`.
+                      name:
+                        type: string
+                        minLength: 1
+                        maxLength: 255
+                    required:
+                    - language
+                    - name
       responses:
         '200':
           description: Successful response
@@ -634,7 +923,7 @@ paths:
                 anyOf:
                 - type: string
                   format: uuid
-                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
                 - type: 'null'
         '400':
           description: Invalid input data
@@ -666,13 +955,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
     delete:
       operationId: leaveTypes-DeleteLeaveTypeById
-      summary: Absentify Delete a Leave Type
-      description: Delete a leave type
+      summary: Delete a leave type
+      description: 'Archive a leave type. Rejected with 403 when it is the workspace''s last active one, and with 400 when `deleted_by_member_id` is not a member of the calling workspace. Send `deleted: false` to make an archived type selectable again.'
       tags:
       - Leave types
       security:
@@ -683,7 +969,7 @@ paths:
         schema:
           type: string
           format: uuid
-          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
         required: true
       - in: query
         name: deleted
@@ -695,7 +981,7 @@ paths:
         schema:
           type: string
           format: uuid
-          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
         required: true
       responses:
         '200':
@@ -734,13 +1020,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /leave_types/{id}/restore:
     put:
       operationId: leaveTypes-restoreLeaveType
-      summary: Absentify Restore an Archived Leave Type
+      summary: Restore an archived leave type
       description: Restore an archived leave type to make it available for user selection in the UI again
       tags:
       - Leave types
@@ -752,7 +1035,7 @@ paths:
         schema:
           type: string
           format: uuid
-          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
         required: true
       responses:
         '200':
@@ -762,7 +1045,7 @@ paths:
               schema:
                 type: string
                 format: uuid
-                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
         '400':
           description: Invalid input data
           content:
@@ -793,127 +1076,52 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
 components:
   schemas:
-    error.UNAUTHORIZED:
-      title: Authorization not provided error (401)
-      description: The error information
-      example:
-        code: UNAUTHORIZED
-        message: Authorization not provided
-        issues: []
-      type: object
-      properties:
-        message:
-          description: The error message
-          example: Authorization not provided
-          type: string
-        code:
-          description: The error code
-          example: UNAUTHORIZED
-          type: string
-        issues:
-          description: An array of issues that were responsible for the error
-          example: []
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-            additionalProperties: false
-      required:
-      - message
-      - code
-      additionalProperties: false
-    error.INTERNAL_SERVER_ERROR:
-      title: Internal server error error (500)
-      description: The error information
-      example:
-        code: INTERNAL_SERVER_ERROR
-        message: Internal server error
-        issues: []
-      type: object
-      properties:
-        message:
-          description: The error message
-          example: Internal server error
-          type: string
-        code:
-          description: The error code
-          example: INTERNAL_SERVER_ERROR
-          type: string
-        issues:
-          description: An array of issues that were responsible for the error
-          example: []
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-            additionalProperties: false
-      required:
-      - message
-      - code
-      additionalProperties: false
-    error.NOT_FOUND:
-      title: Not found error (404)
-      description: The error information
-      example:
-        code: NOT_FOUND
-        message: Not found
-        issues: []
-      type: object
-      properties:
-        message:
-          description: The error message
-          example: Not found
-          type: string
-        code:
-          description: The error code
-          example: NOT_FOUND
-          type: string
-        issues:
-          description: An array of issues that were responsible for the error
-          example: []
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-            additionalProperties: false
-      required:
-      - message
-      - code
-      additionalProperties: false
     error.BAD_REQUEST:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Invalid input data
+        code:
+          type: string
+          description: The error code
+          example: BAD_REQUEST
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
       title: Invalid input data error (400)
       description: The error information
       example:
         code: BAD_REQUEST
         message: Invalid input data
         issues: []
+    error.UNAUTHORIZED:
       type: object
       properties:
         message:
+          type: string
           description: The error message
-          example: Invalid input data
-          type: string
+          example: Authorization not provided
         code:
-          description: The error code
-          example: BAD_REQUEST
           type: string
+          description: The error code
+          example: UNAUTHORIZED
         issues:
           description: An array of issues that were responsible for the error
           example: []
@@ -930,23 +1138,89 @@ components:
       - message
       - code
       additionalProperties: false
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
     error.FORBIDDEN:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Insufficient access
+        code:
+          type: string
+          description: The error code
+          example: FORBIDDEN
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
       title: Insufficient access error (403)
       description: The error information
       example:
         code: FORBIDDEN
         message: Insufficient access
         issues: []
+    error.NOT_FOUND:
       type: object
       properties:
         message:
+          type: string
           description: The error message
-          example: Insufficient access
-          type: string
+          example: Not found
         code:
-          description: The error code
-          example: FORBIDDEN
           type: string
+          description: The error code
+          example: NOT_FOUND
         issues:
           description: An array of issues that were responsible for the error
           example: []
@@ -963,15 +1237,20 @@ components:
       - message
       - code
       additionalProperties: false
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
   securitySchemes:
     ApiKey:
       type: apiKey
       name: X-API-KEY
       in: header
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: x-api-key
-      description: API key from your absentify account settings. Requires Plus plan.
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'The API key as `Authorization: Bearer <key>`.'
 externalDocs:
   url: https://absentify.com/docs/en/api-reference

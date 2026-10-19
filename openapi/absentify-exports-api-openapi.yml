@@ -1,0 +1,431 @@
+openapi: 3.2.0
+info:
+  title: absentify CRUD Exports API
+  description: OpenAPI compliant REST API
+  version: 1.0.0
+servers:
+- url: https://api.absentify.com/api/v1
+tags:
+- name: Exports
+paths:
+  /exports:
+    post:
+      operationId: exports-create
+      summary: Start an export
+      description: 'Starts the same export as a custom date range in Settings > Export and answers `202 Accepted`. A period without absences still produces a file. Request the URL in the `Location` header until it stops answering `202`; it then returns the file. Send the key as `X-API-KEY` or as `Authorization: Bearer `. In a Power Automate HTTP action set Authentication to Raw with `Bearer `, because it applies to the polling requests too. A key in the query string is not part of the `Location` URL. Requires an admin and an eligible plan. At most 5 API exports can run per workspace; more answer 429.'
+      tags:
+      - Exports
+      security:
+      - ApiKey: []
+      - BearerAuth: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                format:
+                  type: string
+                  enum:
+                  - EXCEL
+                  - PAYROLL_EXCEL
+                  - PAYROLL_CSV
+                  - LEAVE_BALANCE_EXCEL
+                  description: '`EXCEL` is the absence workbook. `PAYROLL_EXCEL` and `PAYROLL_CSV` are the payroll files. `LEAVE_BALANCE_EXCEL` is the leave balances workbook.'
+                start:
+                  description: Date/time in ISO 8601 format, e.g. `2026-06-01` (interpreted as UTC midnight) or `2026-06-01T09:00:00Z`. Always include a time zone designator (`Z` for UTC) when sending a time of day. Localized formats such as `01.06.2026` or `06/01/2026` are misinterpreted and must not be used. First day of the export. Only the UTC date is used. The range may span at most 1826 days (5 years).
+                  type: string
+                end:
+                  description: Date/time in ISO 8601 format, e.g. `2026-06-01` (interpreted as UTC midnight) or `2026-06-01T09:00:00Z`. Always include a time zone designator (`Z` for UTC) when sending a time of day. Localized formats such as `01.06.2026` or `06/01/2026` are misinterpreted and must not be used. Last day of the export, inclusive. Only the UTC date is used.
+                  type: string
+                department_id:
+                  description: Limit the export to one department. Omit for all departments.
+                  type: string
+                  minLength: 1
+                csv_separator:
+                  description: Only used by `PAYROLL_CSV`.
+                  type: string
+                  enum:
+                  - comma
+                  - semicolon
+              required:
+              - format
+              - start
+              - end
+      responses:
+        '202':
+          description: Export started. Poll the `Location` URL for the file.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  status:
+                    type: string
+                    const: processing
+                required:
+                - id
+                - status
+                additionalProperties: false
+          headers:
+            Location:
+              description: Absolute URL to poll for the file.
+              schema:
+                type: string
+            Retry-After:
+              description: Seconds to wait before polling again.
+              schema:
+                type: integer
+                example: 15
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '429':
+          description: Too many requests, or 5 API exports of the workspace are already running.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  code:
+                    type: string
+                required:
+                - message
+                - code
+          headers:
+            Retry-After:
+              description: Seconds to wait before starting another export.
+              schema:
+                type: integer
+                example: 60
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /exports/{id}/file:
+    get:
+      operationId: exports-getFile
+      summary: Get the file of an export
+      description: Request the `Location` URL returned by `POST /exports` with the same credentials. It answers `202` while the export runs and `200` with the file when it is done. `422` means the export failed (see `error`), `500` is an internal error, `410` means the file has expired and `404` that the export is unknown or older than 30 days. A period without absences still returns a file.
+      tags:
+      - Exports
+      security:
+      - ApiKey: []
+      - BearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The export id returned by `POST /exports`.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The export file.
+          content:
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+            text/csv; charset=utf-8:
+              schema:
+                type: string
+                format: binary
+        '202':
+          description: The export is still running.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  status:
+                    type: string
+                    const: processing
+                required:
+                - id
+                - status
+          headers:
+            Location:
+              description: Absolute URL to poll for the file.
+              schema:
+                type: string
+            Retry-After:
+              description: Seconds to wait before polling again.
+              schema:
+                type: integer
+                example: 15
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Export not found, not exportable through the API, or older than 30 days.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '410':
+          description: The file has expired.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  status:
+                    type: string
+                    const: expired
+                required:
+                - id
+                - status
+        '422':
+          description: The export failed. See `error` for the code.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  status:
+                    type: string
+                    const: failed
+                  error:
+                    type: string
+                    description: A failure code such as `stale_timeout` or `export_failed`.
+                required:
+                - id
+                - status
+                - error
+        '429':
+          description: Scheduled maintenance in progress
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  code:
+                    type: string
+                required:
+                - message
+                - code
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+components:
+  schemas:
+    error.BAD_REQUEST:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Invalid input data
+        code:
+          type: string
+          description: The error code
+          example: BAD_REQUEST
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
+        issues: []
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+    error.FORBIDDEN:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Insufficient access
+        code:
+          type: string
+          description: The error code
+          example: FORBIDDEN
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+    error.NOT_FOUND:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Not found
+        code:
+          type: string
+          description: The error code
+          example: NOT_FOUND
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'The API key as `Authorization: Bearer <key>`.'
+externalDocs:
+  url: https://absentify.com/docs/en/api-reference

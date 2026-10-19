@@ -1,0 +1,1783 @@
+openapi: 3.2.0
+info:
+  title: absentify CRUD Overtime API
+  description: OpenAPI compliant REST API
+  version: 1.0.0
+servers:
+- url: https://api.absentify.com/api/v1
+tags:
+- name: Overtime
+paths:
+  /overtime-entries:
+    get:
+      operationId: overtime-listOvertimeEntries
+      summary: List overtime entries
+      description: Overtime entries the API key's member may see, newest day first. Admins see every entry of the workspace; anyone else sees their own, the ones they approve or decided, the ones they logged for someone else, and those of the members they manage. Use `next_cursor` as `cursor` to read the next page. Workspaces without overtime logging answer with an error.
+      tags:
+      - Overtime
+      security:
+      - ApiKey: []
+      parameters:
+      - in: query
+        name: member_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - PENDING
+          - APPROVED
+          - DECLINED
+          - CANCELED
+      - in: query
+        name: allowance_type_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+      - in: query
+        name: date_from
+        schema:
+          type: string
+          pattern: ^\d{4}-\d{2}-\d{2}$
+      - in: query
+        name: date_to
+        schema:
+          type: string
+          pattern: ^\d{4}-\d{2}-\d{2}$
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 50
+      - in: query
+        name: cursor
+        schema:
+          type: integer
+          minimum: -9007199254740991
+          maximum: 9007199254740991
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          minimum: -9007199254740991
+                          maximum: 9007199254740991
+                        member:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            custom_id:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            name:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            email:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                          required:
+                          - id
+                          - custom_id
+                          - name
+                          - email
+                          additionalProperties: false
+                          description: The member the overtime was worked by.
+                        allowance_type_id:
+                          type: string
+                        allowance_unit:
+                          type: string
+                          enum:
+                          - days
+                          - hours
+                          description: The unit of the allowance type. Amounts are in days for `days` and in MINUTES for `hours`.
+                        date:
+                          type: string
+                          description: The day the overtime was worked, `YYYY-MM-DD`.
+                        amount:
+                          type: number
+                          description: The amount that was logged. Days (0.5 or 1) when `allowance_unit` is `days`, whole MINUTES when it is `hours` (for example 90 = 1 hour 30 minutes).
+                        recognized_amount:
+                          type: number
+                          description: The amount an approver recognized, never more than `amount`. Equal to `amount` until someone lowers it. Days (0.5 or 1) when `allowance_unit` is `days`, whole MINUTES when it is `hours` (for example 90 = 1 hour 30 minutes).
+                        day_kind:
+                          type: string
+                          enum:
+                          - WORKDAY
+                          - DAY_OFF
+                          - PUBLIC_HOLIDAY
+                          description: What kind of day it was when the entry was logged.
+                        factor:
+                          type: number
+                          description: The multiplier applied to the recognized amount, fixed when the entry was logged.
+                        credit_expiry_date:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                          description: The LAST day (inclusive, `YYYY-MM-DD`) the credit can still be used, or null when it does not expire.
+                        comment:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        status:
+                          type: string
+                          enum:
+                          - PENDING
+                          - APPROVED
+                          - DECLINED
+                          - CANCELED
+                        decided_by:
+                          anyOf:
+                          - type: object
+                            properties:
+                              id:
+                                type: string
+                              custom_id:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                              name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                              email:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - id
+                            - custom_id
+                            - name
+                            - email
+                            additionalProperties: false
+                          - type: 'null'
+                          description: Who made the final decision. Null while the entry is open.
+                        decided_at:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        created_by:
+                          anyOf:
+                          - type: object
+                            properties:
+                              id:
+                                type: string
+                              custom_id:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                              name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                              email:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - id
+                            - custom_id
+                            - name
+                            - email
+                            additionalProperties: false
+                          - type: 'null'
+                          description: Who logged the entry. It differs from `member` when an admin logged it for someone else. Null for entries from before this was recorded and once that member has been deleted.
+                        created_at:
+                          type: string
+                        canceled_at:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        canceled_by:
+                          anyOf:
+                          - type: object
+                            properties:
+                              id:
+                                type: string
+                              custom_id:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                              name:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                              email:
+                                anyOf:
+                                - type: string
+                                - type: 'null'
+                            required:
+                            - id
+                            - custom_id
+                            - name
+                            - email
+                            additionalProperties: false
+                          - type: 'null'
+                          description: Who withdrew the entry. It differs from `member` when the member who logged it for them withdrew it. Null unless the status is CANCELED.
+                        decline_reason:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                          description: The reason given when the entry was declined, also when an admin declined for the approver.
+                        credited_amount:
+                          anyOf:
+                          - type: number
+                          - type: 'null'
+                          description: 'What was credited to the allowance: the recognized amount times `factor`, as booked. Null while there is no credit. Days (rounded to two decimals, for example 0.75 or 1.5) when `allowance_unit` is `days`, whole MINUTES when it is `hours`.'
+                        credit_removed:
+                          type: boolean
+                          description: True when the entry is approved but its credit was deleted from the allowance afterwards.
+                      required:
+                      - id
+                      - member
+                      - allowance_type_id
+                      - allowance_unit
+                      - date
+                      - amount
+                      - recognized_amount
+                      - day_kind
+                      - factor
+                      - credit_expiry_date
+                      - comment
+                      - status
+                      - decided_by
+                      - decided_at
+                      - created_by
+                      - created_at
+                      - canceled_at
+                      - canceled_by
+                      - decline_reason
+                      - credited_amount
+                      - credit_removed
+                      additionalProperties: false
+                  next_cursor:
+                    anyOf:
+                    - type: integer
+                      minimum: -9007199254740991
+                      maximum: 9007199254740991
+                    - type: 'null'
+                    description: Null on the last page.
+                required:
+                - items
+                - next_cursor
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+    post:
+      operationId: overtime-createOvertimeEntry
+      summary: Log overtime
+      description: Logs overtime on an allowance type that has overtime logging switched on. The entry follows the member's normal approval chain and its approvers are notified; it is credited once approved. An admin can log for another active member of the workspace with `member_id`, otherwise it is logged for the API key's member. Send the same `submission_id` again to get the existing entry back instead of a second one. Fails with 409 when that `submission_id` was already used for the same member with a different allowance type, date or amount.
+      tags:
+      - Overtime
+      security:
+      - ApiKey: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                member_id:
+                  description: The member the overtime was worked by. Defaults to the API key's member. Only admins may name someone else.
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                allowance_type_id:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                  description: The allowance type the overtime is credited to. Overtime logging has to be switched on for it.
+                date:
+                  description: The day the overtime was worked, `YYYY-MM-DD`. Today or a day in the past.
+                  type: string
+                  pattern: ^\d{4}-\d{2}-\d{2}$
+                amount:
+                  type: number
+                  description: Days (0.5 or 1) when `allowance_unit` is `days`, whole MINUTES when it is `hours` (for example 90 = 1 hour 30 minutes).
+                comment:
+                  description: A note for the approvers, at most 2500 characters.
+                  anyOf:
+                  - type: string
+                    maxLength: 2500
+                  - type: 'null'
+                submission_id:
+                  description: 'Makes a retry safe: the same value for the same member with the same allowance type, date and amount returns the existing entry. With a different allowance type, date or amount it fails with 409. Generated when omitted, in which case a retry logs a second entry.'
+                  type: string
+                  minLength: 8
+                  maxLength: 64
+              required:
+              - allowance_type_id
+              - date
+              - amount
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    minimum: -9007199254740991
+                    maximum: 9007199254740991
+                  member:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      custom_id:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      name:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      email:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                    required:
+                    - id
+                    - custom_id
+                    - name
+                    - email
+                    additionalProperties: false
+                    description: The member the overtime was worked by.
+                  allowance_type_id:
+                    type: string
+                  allowance_unit:
+                    type: string
+                    enum:
+                    - days
+                    - hours
+                    description: The unit of the allowance type. Amounts are in days for `days` and in MINUTES for `hours`.
+                  date:
+                    type: string
+                    description: The day the overtime was worked, `YYYY-MM-DD`.
+                  amount:
+                    type: number
+                    description: The amount that was logged. Days (0.5 or 1) when `allowance_unit` is `days`, whole MINUTES when it is `hours` (for example 90 = 1 hour 30 minutes).
+                  recognized_amount:
+                    type: number
+                    description: The amount an approver recognized, never more than `amount`. Equal to `amount` until someone lowers it. Days (0.5 or 1) when `allowance_unit` is `days`, whole MINUTES when it is `hours` (for example 90 = 1 hour 30 minutes).
+                  day_kind:
+                    type: string
+                    enum:
+                    - WORKDAY
+                    - DAY_OFF
+                    - PUBLIC_HOLIDAY
+                    description: What kind of day it was when the entry was logged.
+                  factor:
+                    type: number
+                    description: The multiplier applied to the recognized amount, fixed when the entry was logged.
+                  credit_expiry_date:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                    description: The LAST day (inclusive, `YYYY-MM-DD`) the credit can still be used, or null when it does not expire.
+                  comment:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                  status:
+                    type: string
+                    enum:
+                    - PENDING
+                    - APPROVED
+                    - DECLINED
+                    - CANCELED
+                  decided_by:
+                    anyOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: string
+                        custom_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        name:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        email:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                      required:
+                      - id
+                      - custom_id
+                      - name
+                      - email
+                      additionalProperties: false
+                    - type: 'null'
+                    description: Who made the final decision. Null while the entry is open.
+                  decided_at:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                  created_by:
+                    anyOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: string
+                        custom_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        name:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        email:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                      required:
+                      - id
+                      - custom_id
+                      - name
+                      - email
+                      additionalProperties: false
+                    - type: 'null'
+                    description: Who logged the entry. It differs from `member` when an admin logged it for someone else. Null for entries from before this was recorded and once that member has been deleted.
+                  created_at:
+                    type: string
+                  canceled_at:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                  canceled_by:
+                    anyOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: string
+                        custom_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        name:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        email:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                      required:
+                      - id
+                      - custom_id
+                      - name
+                      - email
+                      additionalProperties: false
+                    - type: 'null'
+                    description: Who withdrew the entry. It differs from `member` when the member who logged it for them withdrew it. Null unless the status is CANCELED.
+                  decline_reason:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                    description: The reason given when the entry was declined, also when an admin declined for the approver.
+                  credited_amount:
+                    anyOf:
+                    - type: number
+                    - type: 'null'
+                    description: 'What was credited to the allowance: the recognized amount times `factor`, as booked. Null while there is no credit. Days (rounded to two decimals, for example 0.75 or 1.5) when `allowance_unit` is `days`, whole MINUTES when it is `hours`.'
+                  credit_removed:
+                    type: boolean
+                    description: True when the entry is approved but its credit was deleted from the allowance afterwards.
+                required:
+                - id
+                - member
+                - allowance_type_id
+                - allowance_unit
+                - date
+                - amount
+                - recognized_amount
+                - day_kind
+                - factor
+                - credit_expiry_date
+                - comment
+                - status
+                - decided_by
+                - decided_at
+                - created_by
+                - created_at
+                - canceled_at
+                - canceled_by
+                - decline_reason
+                - credited_amount
+                - credit_removed
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /overtime-entries/{id}:
+    get:
+      operationId: overtime-getOvertimeEntry
+      summary: Get an overtime entry
+      description: One overtime entry, if the API key's member may see it. The `overtime_created` and `overtime_status_changed` webhooks send this object as `body`.
+      tags:
+      - Overtime
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          minimum: -9007199254740991
+          maximum: 9007199254740991
+          description: The id of the overtime entry.
+        required: true
+        description: The id of the overtime entry.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    minimum: -9007199254740991
+                    maximum: 9007199254740991
+                  member:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      custom_id:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      name:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      email:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                    required:
+                    - id
+                    - custom_id
+                    - name
+                    - email
+                    additionalProperties: false
+                    description: The member the overtime was worked by.
+                  allowance_type_id:
+                    type: string
+                  allowance_unit:
+                    type: string
+                    enum:
+                    - days
+                    - hours
+                    description: The unit of the allowance type. Amounts are in days for `days` and in MINUTES for `hours`.
+                  date:
+                    type: string
+                    description: The day the overtime was worked, `YYYY-MM-DD`.
+                  amount:
+                    type: number
+                    description: The amount that was logged. Days (0.5 or 1) when `allowance_unit` is `days`, whole MINUTES when it is `hours` (for example 90 = 1 hour 30 minutes).
+                  recognized_amount:
+                    type: number
+                    description: The amount an approver recognized, never more than `amount`. Equal to `amount` until someone lowers it. Days (0.5 or 1) when `allowance_unit` is `days`, whole MINUTES when it is `hours` (for example 90 = 1 hour 30 minutes).
+                  day_kind:
+                    type: string
+                    enum:
+                    - WORKDAY
+                    - DAY_OFF
+                    - PUBLIC_HOLIDAY
+                    description: What kind of day it was when the entry was logged.
+                  factor:
+                    type: number
+                    description: The multiplier applied to the recognized amount, fixed when the entry was logged.
+                  credit_expiry_date:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                    description: The LAST day (inclusive, `YYYY-MM-DD`) the credit can still be used, or null when it does not expire.
+                  comment:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                  status:
+                    type: string
+                    enum:
+                    - PENDING
+                    - APPROVED
+                    - DECLINED
+                    - CANCELED
+                  decided_by:
+                    anyOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: string
+                        custom_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        name:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        email:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                      required:
+                      - id
+                      - custom_id
+                      - name
+                      - email
+                      additionalProperties: false
+                    - type: 'null'
+                    description: Who made the final decision. Null while the entry is open.
+                  decided_at:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                  created_by:
+                    anyOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: string
+                        custom_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        name:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        email:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                      required:
+                      - id
+                      - custom_id
+                      - name
+                      - email
+                      additionalProperties: false
+                    - type: 'null'
+                    description: Who logged the entry. It differs from `member` when an admin logged it for someone else. Null for entries from before this was recorded and once that member has been deleted.
+                  created_at:
+                    type: string
+                  canceled_at:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                  canceled_by:
+                    anyOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: string
+                        custom_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        name:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        email:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                      required:
+                      - id
+                      - custom_id
+                      - name
+                      - email
+                      additionalProperties: false
+                    - type: 'null'
+                    description: Who withdrew the entry. It differs from `member` when the member who logged it for them withdrew it. Null unless the status is CANCELED.
+                  decline_reason:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                    description: The reason given when the entry was declined, also when an admin declined for the approver.
+                  credited_amount:
+                    anyOf:
+                    - type: number
+                    - type: 'null'
+                    description: 'What was credited to the allowance: the recognized amount times `factor`, as booked. Null while there is no credit. Days (rounded to two decimals, for example 0.75 or 1.5) when `allowance_unit` is `days`, whole MINUTES when it is `hours`.'
+                  credit_removed:
+                    type: boolean
+                    description: True when the entry is approved but its credit was deleted from the allowance afterwards.
+                required:
+                - id
+                - member
+                - allowance_type_id
+                - allowance_unit
+                - date
+                - amount
+                - recognized_amount
+                - day_kind
+                - factor
+                - credit_expiry_date
+                - comment
+                - status
+                - decided_by
+                - decided_at
+                - created_by
+                - created_at
+                - canceled_at
+                - canceled_by
+                - decline_reason
+                - credited_amount
+                - credit_removed
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /overtime-entries/{id}/approve:
+    post:
+      operationId: overtime-approveOvertimeEntry
+      summary: Approve an overtime entry
+      description: 'Approves one approval step of a pending entry on behalf of the API key''s member: their own step first if they are an approver, otherwise the next pending one (an admin key can approve for any approver). In chains that need more than one approval the entry stays pending until the last step is approved and is credited then, so call it once per step and read the entry before retrying after a lost response. Send a lower `recognized_amount` to approve less than was logged; a `reason` is then required.'
+      tags:
+      - Overtime
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          minimum: -9007199254740991
+          maximum: 9007199254740991
+          description: The id of the overtime entry.
+        required: true
+        description: The id of the overtime entry.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                recognized_amount:
+                  description: Approve less than was logged. Never more than the current recognized amount. Days (0.5 or 1) when `allowance_unit` is `days`, whole MINUTES when it is `hours` (for example 90 = 1 hour 30 minutes).
+                  type: number
+                reason:
+                  description: Required when `recognized_amount` is lower.
+                  type: string
+                  maxLength: 2500
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    minimum: -9007199254740991
+                    maximum: 9007199254740991
+                  member:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      custom_id:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      name:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      email:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                    required:
+                    - id
+                    - custom_id
+                    - name
+                    - email
+                    additionalProperties: false
+                    description: The member the overtime was worked by.
+                  allowance_type_id:
+                    type: string
+                  allowance_unit:
+                    type: string
+                    enum:
+                    - days
+                    - hours
+                    description: The unit of the allowance type. Amounts are in days for `days` and in MINUTES for `hours`.
+                  date:
+                    type: string
+                    description: The day the overtime was worked, `YYYY-MM-DD`.
+                  amount:
+                    type: number
+                    description: The amount that was logged. Days (0.5 or 1) when `allowance_unit` is `days`, whole MINUTES when it is `hours` (for example 90 = 1 hour 30 minutes).
+                  recognized_amount:
+                    type: number
+                    description: The amount an approver recognized, never more than `amount`. Equal to `amount` until someone lowers it. Days (0.5 or 1) when `allowance_unit` is `days`, whole MINUTES when it is `hours` (for example 90 = 1 hour 30 minutes).
+                  day_kind:
+                    type: string
+                    enum:
+                    - WORKDAY
+                    - DAY_OFF
+                    - PUBLIC_HOLIDAY
+                    description: What kind of day it was when the entry was logged.
+                  factor:
+                    type: number
+                    description: The multiplier applied to the recognized amount, fixed when the entry was logged.
+                  credit_expiry_date:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                    description: The LAST day (inclusive, `YYYY-MM-DD`) the credit can still be used, or null when it does not expire.
+                  comment:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                  status:
+                    type: string
+                    enum:
+                    - PENDING
+                    - APPROVED
+                    - DECLINED
+                    - CANCELED
+                  decided_by:
+                    anyOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: string
+                        custom_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        name:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        email:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                      required:
+                      - id
+                      - custom_id
+                      - name
+                      - email
+                      additionalProperties: false
+                    - type: 'null'
+                    description: Who made the final decision. Null while the entry is open.
+                  decided_at:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                  created_by:
+                    anyOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: string
+                        custom_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        name:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        email:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                      required:
+                      - id
+                      - custom_id
+                      - name
+                      - email
+                      additionalProperties: false
+                    - type: 'null'
+                    description: Who logged the entry. It differs from `member` when an admin logged it for someone else. Null for entries from before this was recorded and once that member has been deleted.
+                  created_at:
+                    type: string
+                  canceled_at:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                  canceled_by:
+                    anyOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: string
+                        custom_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        name:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        email:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                      required:
+                      - id
+                      - custom_id
+                      - name
+                      - email
+                      additionalProperties: false
+                    - type: 'null'
+                    description: Who withdrew the entry. It differs from `member` when the member who logged it for them withdrew it. Null unless the status is CANCELED.
+                  decline_reason:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                    description: The reason given when the entry was declined, also when an admin declined for the approver.
+                  credited_amount:
+                    anyOf:
+                    - type: number
+                    - type: 'null'
+                    description: 'What was credited to the allowance: the recognized amount times `factor`, as booked. Null while there is no credit. Days (rounded to two decimals, for example 0.75 or 1.5) when `allowance_unit` is `days`, whole MINUTES when it is `hours`.'
+                  credit_removed:
+                    type: boolean
+                    description: True when the entry is approved but its credit was deleted from the allowance afterwards.
+                required:
+                - id
+                - member
+                - allowance_type_id
+                - allowance_unit
+                - date
+                - amount
+                - recognized_amount
+                - day_kind
+                - factor
+                - credit_expiry_date
+                - comment
+                - status
+                - decided_by
+                - decided_at
+                - created_by
+                - created_at
+                - canceled_at
+                - canceled_by
+                - decline_reason
+                - credited_amount
+                - credit_removed
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /overtime-entries/{id}/decline:
+    post:
+      operationId: overtime-declineOvertimeEntry
+      summary: Decline an overtime entry
+      description: 'Declines one approval step of a pending entry on behalf of the API key''s member: their own step first if they are an approver, otherwise the next pending one (an admin key can decline for any approver). Whether one decline closes the entry depends on the member''s approval process. Where it does not, the entry stays pending until the last step is decided, so read the entry before retrying after a lost response.'
+      tags:
+      - Overtime
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          minimum: -9007199254740991
+          maximum: 9007199254740991
+          description: The id of the overtime entry.
+        required: true
+        description: The id of the overtime entry.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  minLength: 1
+                  maxLength: 2500
+                  description: Why the entry is declined. The member sees it.
+              required:
+              - reason
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    minimum: -9007199254740991
+                    maximum: 9007199254740991
+                  member:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      custom_id:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      name:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      email:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                    required:
+                    - id
+                    - custom_id
+                    - name
+                    - email
+                    additionalProperties: false
+                    description: The member the overtime was worked by.
+                  allowance_type_id:
+                    type: string
+                  allowance_unit:
+                    type: string
+                    enum:
+                    - days
+                    - hours
+                    description: The unit of the allowance type. Amounts are in days for `days` and in MINUTES for `hours`.
+                  date:
+                    type: string
+                    description: The day the overtime was worked, `YYYY-MM-DD`.
+                  amount:
+                    type: number
+                    description: The amount that was logged. Days (0.5 or 1) when `allowance_unit` is `days`, whole MINUTES when it is `hours` (for example 90 = 1 hour 30 minutes).
+                  recognized_amount:
+                    type: number
+                    description: The amount an approver recognized, never more than `amount`. Equal to `amount` until someone lowers it. Days (0.5 or 1) when `allowance_unit` is `days`, whole MINUTES when it is `hours` (for example 90 = 1 hour 30 minutes).
+                  day_kind:
+                    type: string
+                    enum:
+                    - WORKDAY
+                    - DAY_OFF
+                    - PUBLIC_HOLIDAY
+                    description: What kind of day it was when the entry was logged.
+                  factor:
+                    type: number
+                    description: The multiplier applied to the recognized amount, fixed when the entry was logged.
+                  credit_expiry_date:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                    description: The LAST day (inclusive, `YYYY-MM-DD`) the credit can still be used, or null when it does not expire.
+                  comment:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                  status:
+                    type: string
+                    enum:
+                    - PENDING
+                    - APPROVED
+                    - DECLINED
+                    - CANCELED
+                  decided_by:
+                    anyOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: string
+                        custom_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        name:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        email:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                      required:
+                      - id
+                      - custom_id
+                      - name
+                      - email
+                      additionalProperties: false
+                    - type: 'null'
+                    description: Who made the final decision. Null while the entry is open.
+                  decided_at:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                  created_by:
+                    anyOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: string
+                        custom_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        name:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        email:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                      required:
+                      - id
+                      - custom_id
+                      - name
+                      - email
+                      additionalProperties: false
+                    - type: 'null'
+                    description: Who logged the entry. It differs from `member` when an admin logged it for someone else. Null for entries from before this was recorded and once that member has been deleted.
+                  created_at:
+                    type: string
+                  canceled_at:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                  canceled_by:
+                    anyOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: string
+                        custom_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        name:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        email:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                      required:
+                      - id
+                      - custom_id
+                      - name
+                      - email
+                      additionalProperties: false
+                    - type: 'null'
+                    description: Who withdrew the entry. It differs from `member` when the member who logged it for them withdrew it. Null unless the status is CANCELED.
+                  decline_reason:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                    description: The reason given when the entry was declined, also when an admin declined for the approver.
+                  credited_amount:
+                    anyOf:
+                    - type: number
+                    - type: 'null'
+                    description: 'What was credited to the allowance: the recognized amount times `factor`, as booked. Null while there is no credit. Days (rounded to two decimals, for example 0.75 or 1.5) when `allowance_unit` is `days`, whole MINUTES when it is `hours`.'
+                  credit_removed:
+                    type: boolean
+                    description: True when the entry is approved but its credit was deleted from the allowance afterwards.
+                required:
+                - id
+                - member
+                - allowance_type_id
+                - allowance_unit
+                - date
+                - amount
+                - recognized_amount
+                - day_kind
+                - factor
+                - credit_expiry_date
+                - comment
+                - status
+                - decided_by
+                - decided_at
+                - created_by
+                - created_at
+                - canceled_at
+                - canceled_by
+                - decline_reason
+                - credited_amount
+                - credit_removed
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /overtime-entries/{id}/cancel:
+    post:
+      operationId: overtime-cancelOvertimeEntry
+      summary: Cancel an overtime entry
+      description: Withdraws a pending entry. Only the member it is for, or the member who logged it, can do this. Entries that were decided already cannot be canceled.
+      tags:
+      - Overtime
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          minimum: -9007199254740991
+          maximum: 9007199254740991
+          description: The id of the overtime entry.
+        required: true
+        description: The id of the overtime entry.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    minimum: -9007199254740991
+                    maximum: 9007199254740991
+                  member:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      custom_id:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      name:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      email:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                    required:
+                    - id
+                    - custom_id
+                    - name
+                    - email
+                    additionalProperties: false
+                    description: The member the overtime was worked by.
+                  allowance_type_id:
+                    type: string
+                  allowance_unit:
+                    type: string
+                    enum:
+                    - days
+                    - hours
+                    description: The unit of the allowance type. Amounts are in days for `days` and in MINUTES for `hours`.
+                  date:
+                    type: string
+                    description: The day the overtime was worked, `YYYY-MM-DD`.
+                  amount:
+                    type: number
+                    description: The amount that was logged. Days (0.5 or 1) when `allowance_unit` is `days`, whole MINUTES when it is `hours` (for example 90 = 1 hour 30 minutes).
+                  recognized_amount:
+                    type: number
+                    description: The amount an approver recognized, never more than `amount`. Equal to `amount` until someone lowers it. Days (0.5 or 1) when `allowance_unit` is `days`, whole MINUTES when it is `hours` (for example 90 = 1 hour 30 minutes).
+                  day_kind:
+                    type: string
+                    enum:
+                    - WORKDAY
+                    - DAY_OFF
+                    - PUBLIC_HOLIDAY
+                    description: What kind of day it was when the entry was logged.
+                  factor:
+                    type: number
+                    description: The multiplier applied to the recognized amount, fixed when the entry was logged.
+                  credit_expiry_date:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                    description: The LAST day (inclusive, `YYYY-MM-DD`) the credit can still be used, or null when it does not expire.
+                  comment:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                  status:
+                    type: string
+                    enum:
+                    - PENDING
+                    - APPROVED
+                    - DECLINED
+                    - CANCELED
+                  decided_by:
+                    anyOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: string
+                        custom_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        name:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        email:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                      required:
+                      - id
+                      - custom_id
+                      - name
+                      - email
+                      additionalProperties: false
+                    - type: 'null'
+                    description: Who made the final decision. Null while the entry is open.
+                  decided_at:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                  created_by:
+                    anyOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: string
+                        custom_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        name:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        email:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                      required:
+                      - id
+                      - custom_id
+                      - name
+                      - email
+                      additionalProperties: false
+                    - type: 'null'
+                    description: Who logged the entry. It differs from `member` when an admin logged it for someone else. Null for entries from before this was recorded and once that member has been deleted.
+                  created_at:
+                    type: string
+                  canceled_at:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                  canceled_by:
+                    anyOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: string
+                        custom_id:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        name:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                        email:
+                          anyOf:
+                          - type: string
+                          - type: 'null'
+                      required:
+                      - id
+                      - custom_id
+                      - name
+                      - email
+                      additionalProperties: false
+                    - type: 'null'
+                    description: Who withdrew the entry. It differs from `member` when the member who logged it for them withdrew it. Null unless the status is CANCELED.
+                  decline_reason:
+                    anyOf:
+                    - type: string
+                    - type: 'null'
+                    description: The reason given when the entry was declined, also when an admin declined for the approver.
+                  credited_amount:
+                    anyOf:
+                    - type: number
+                    - type: 'null'
+                    description: 'What was credited to the allowance: the recognized amount times `factor`, as booked. Null while there is no credit. Days (rounded to two decimals, for example 0.75 or 1.5) when `allowance_unit` is `days`, whole MINUTES when it is `hours`.'
+                  credit_removed:
+                    type: boolean
+                    description: True when the entry is approved but its credit was deleted from the allowance afterwards.
+                required:
+                - id
+                - member
+                - allowance_type_id
+                - allowance_unit
+                - date
+                - amount
+                - recognized_amount
+                - day_kind
+                - factor
+                - credit_expiry_date
+                - comment
+                - status
+                - decided_by
+                - decided_at
+                - created_by
+                - created_at
+                - canceled_at
+                - canceled_by
+                - decline_reason
+                - credited_amount
+                - credit_removed
+                additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+components:
+  schemas:
+    error.BAD_REQUEST:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Invalid input data
+        code:
+          type: string
+          description: The error code
+          example: BAD_REQUEST
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
+        issues: []
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+    error.FORBIDDEN:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Insufficient access
+        code:
+          type: string
+          description: The error code
+          example: FORBIDDEN
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+    error.NOT_FOUND:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Not found
+        code:
+          type: string
+          description: The error code
+          example: NOT_FOUND
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'The API key as `Authorization: Bearer <key>`.'
+externalDocs:
+  url: https://absentify.com/docs/en/api-reference

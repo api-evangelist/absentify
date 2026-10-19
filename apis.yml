@@ -432,6 +432,46 @@ apis:
     url: examples/absentify-absence-example.json
   - type: Examples
     url: examples/absentify-workspace-example.json
+- aid: absentify:absentify-allowance-management-api
+  name: Absentify Allowance Management API
+  description: The Allowance Management API from Absentify — 20 operation(s) for allowance management.
+  humanURL: https://absentify.com/docs/en/api-reference/introduction
+  baseURL: https://api.absentify.com/api/v1
+  tags:
+  - Allowance Management
+  properties:
+  - type: OpenAPI
+    url: openapi/absentify-allowance-management-api-openapi.yml
+- aid: absentify:absentify-exports-api
+  name: Absentify Exports API
+  description: The Exports API from Absentify — 2 operation(s) for exports.
+  humanURL: https://absentify.com/docs/en/api-reference/introduction
+  baseURL: https://api.absentify.com/api/v1
+  tags:
+  - Exports
+  properties:
+  - type: OpenAPI
+    url: openapi/absentify-exports-api-openapi.yml
+- aid: absentify:absentify-out-of-office-api
+  name: Absentify Out of office API
+  description: The Out of office API from Absentify — 2 operation(s) for out of office.
+  humanURL: https://absentify.com/docs/en/api-reference/introduction
+  baseURL: https://api.absentify.com/api/v1
+  tags:
+  - Out of office
+  properties:
+  - type: OpenAPI
+    url: openapi/absentify-out-of-office-api-openapi.yml
+- aid: absentify:absentify-overtime-api
+  name: Absentify Overtime API
+  description: The Overtime API from Absentify — 5 operation(s) for overtime.
+  humanURL: https://absentify.com/docs/en/api-reference/introduction
+  baseURL: https://api.absentify.com/api/v1
+  tags:
+  - Overtime
+  properties:
+  - type: OpenAPI
+    url: openapi/absentify-overtime-api-openapi.yml
 common:
   - type: Plans
     url: plans/absentify-plans-pricing.yml
