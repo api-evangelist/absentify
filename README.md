@@ -1,4 +1,4 @@
-# Absentify (absentify)
+# Absentify
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,89 +66,196 @@
 
 Absentify is an absence management platform integrated with Microsoft 365 and Microsoft Teams that helps businesses track and manage employee absences, leave requests, approvals, and team schedules. Built by BrainCore Solutions GmbH, it provides a REST API for integrating absence management into custom workflows, HR systems, and business automation tools.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/absentify/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/absentify/refs/heads/main/apis.yml)
+**Areas:** Absence Management · Human Resources · Leave Management · Microsoft Teams
 
-## Scope
+## Absentify on APIs.io
 
-- **Access:** 3rd-Party
+Everything profiled for Absentify is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/absentify/](https://apis.io/providers/absentify/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (7)
 
-- Absence Management
-- HR
-- Leave Management
-- Microsoft Teams
-- Human Resources
+- [Absentify Absences API](https://apis.io/apis/absentify/absentify-absences-api/) — The Absences API from Absentify — 1 operation(s) for absences.
+- [Absentify Departments API](https://apis.io/apis/absentify/absentify-departments-api/) — The Departments API from Absentify — 2 operation(s) for departments.
+- [Absentify Leave types API](https://apis.io/apis/absentify/absentify-leave-types-api/) — The Leave types API from Absentify — 3 operation(s) for leave types.
+- [Absentify Members API](https://apis.io/apis/absentify/absentify-members-api/) — The Members API from Absentify — 10 operation(s) for members.
+- [Absentify Public holidays API](https://apis.io/apis/absentify/absentify-public-holidays-api/) — The Public holidays API from Absentify — 2 operation(s) for public holidays.
+- [Absentify Requests API](https://apis.io/apis/absentify/absentify-requests-api/) — The Requests API from Absentify — 9 operation(s) for requests.
+- [Absentify Workspace API](https://apis.io/apis/absentify/absentify-workspace-api/) — The Workspace API from Absentify — 1 operation(s) for workspace.
 
-## Timestamps
+### Published properties
 
-- **Created:** 2025-02-17
-- **Modified:** 2026-05-19
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### Agentic access (1)
 
-### Absentify API
+Which operations an agent can call, which act, and which need a human in the loop.
 
-REST API for managing employee absences, leave requests, members, departments, leave types, public holidays, and workspace settings. Requires an API key (x-api-key header) available on the Plus plan. Rate limit of 150 requests per second per IP address.
+- [Absentify Agentic Access](https://apis.io/agentic-access/absentify/absentify-agentic-access/)
 
-- **Human URL:** [https://absentify.com/docs/en/api-reference/introduction](https://absentify.com/docs/en/api-reference/introduction)
-- **Base URL:** `https://api.absentify.com/api/v1`
+#### JSON Schema (7)
 
-#### Tags
+The data models the API reads and writes.
 
-- Absence Management
-- Leave Requests
-- Members
-- Departments
-- Leave Types
+- [Absence](https://apis.io/schemas/absentify/absentify-absence/)
+- [Department](https://apis.io/schemas/absentify/absentify-department/)
+- [LeaveType](https://apis.io/schemas/absentify/absentify-leave-type/)
+- [Member](https://apis.io/schemas/absentify/absentify-member/)
+- [PublicHolidayCalendar](https://apis.io/schemas/absentify/absentify-public-holiday-calendar/)
+- [Request](https://apis.io/schemas/absentify/absentify-request/)
+- [Workspace](https://apis.io/schemas/absentify/absentify-workspace/)
 
-#### Properties
+#### JSON Structure (7)
 
-- [Documentation](https://absentify.com/docs/en/api-reference/introduction)
-- [OpenAPI](openapi/absentify-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/absentify.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/absentify.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-- [JSON Schema](json-schema/absentify-member-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/absentify-department-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/absentify-leave-type-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/absentify-request-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/absentify-absence-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/absentify-workspace-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/absentify-public-holiday-calendar-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Structure](json-structure/absentify-member-structure.json)
-- [JSON Structure](json-structure/absentify-department-structure.json)
-- [JSON Structure](json-structure/absentify-leave-type-structure.json)
-- [JSON Structure](json-structure/absentify-request-structure.json)
-- [JSON Structure](json-structure/absentify-absence-structure.json)
-- [JSON Structure](json-structure/absentify-workspace-structure.json)
-- [JSON Structure](json-structure/absentify-public-holiday-calendar-structure.json)
-- [JSON-LD](json-ld/absentify-context.jsonld) — [JSON-LD](https://www.w3.org/TR/json-ld11/)
-- [Example](examples/absentify-member-example.json)
-- [Example](examples/absentify-department-example.json)
-- [Example](examples/absentify-leave-type-example.json)
-- [Example](examples/absentify-request-example.json)
-- [Example](examples/absentify-absence-example.json)
-- [Example](examples/absentify-workspace-example.json)
+Data models expressed in JSON Structure.
 
-## Common Properties
+- [Absentify Absence Structure](https://apis.io/json-structure/absentify/absentify-absence-structure/)
+- [Absentify Department Structure](https://apis.io/json-structure/absentify/absentify-department-structure/)
+- [Absentify Leave Type Structure](https://apis.io/json-structure/absentify/absentify-leave-type-structure/)
+- [Absentify Member Structure](https://apis.io/json-structure/absentify/absentify-member-structure/)
+- [Absentify Public Holiday Calendar Structure](https://apis.io/json-structure/absentify/absentify-public-holiday-calendar-structure/)
+- [Absentify Request Structure](https://apis.io/json-structure/absentify/absentify-request-structure/)
+- [Absentify Workspace Structure](https://apis.io/json-structure/absentify/absentify-workspace-structure/)
 
-- [LinkedIn](https://www.linkedin.com/company/absentify)
-- [Portal](https://absentify.com/)
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Absentify Context](https://apis.io/jsonld/absentify/absentify-context/)
+
+#### Vocabulary (1)
+
+The provider's domain terms, defined.
+
+- [Absentify Vocabulary](https://apis.io/vocabularies/absentify/absentify-vocabulary/)
+
+#### Examples (7)
+
+Example requests and responses.
+
+- [Absentify Absence Example](https://apis.io/examples/absentify/absentify-absence-example/)
+- [Absentify Department Example](https://apis.io/examples/absentify/absentify-department-example/)
+- [Absentify Leave Type Example](https://apis.io/examples/absentify/absentify-leave-type-example/)
+- [Absentify Member Example](https://apis.io/examples/absentify/absentify-member-example/)
+- [Absentify Public Holiday Calendar Example](https://apis.io/examples/absentify/absentify-public-holiday-calendar-example/)
+- [Absentify Request Example](https://apis.io/examples/absentify/absentify-request-example/)
+- [Absentify Workspace Example](https://apis.io/examples/absentify/absentify-workspace-example/)
+
+#### Collections (15)
+
+Postman and Open Collection request collections.
+
+- [Absentify API](https://apis.io/collections/absentify/open-absentify/)
+- [Absentify Absences API](https://apis.io/collections/absentify/open-absentify-absences-api/)
+- [Absentify Absences Departments API](https://apis.io/collections/absentify/open-absentify-departments-api/)
+- [Absentify Absences Leave types API](https://apis.io/collections/absentify/open-absentify-leave-types-api/)
+- [Absentify Absences Members API](https://apis.io/collections/absentify/open-absentify-members-api/)
+- [Absentify Absences Public holidays API](https://apis.io/collections/absentify/open-absentify-public-holidays-api/)
+- [Absentify Absences Requests API](https://apis.io/collections/absentify/open-absentify-requests-api/)
+- [Absentify Absences Workspace API](https://apis.io/collections/absentify/open-absentify-workspace-api/)
+- [Absentify Absences API](https://apis.io/collections/absentify/postman-absentify-absences-api/)
+- [Absentify Absences Departments API](https://apis.io/collections/absentify/postman-absentify-departments-api/)
+- [Absentify Absences Leave types API](https://apis.io/collections/absentify/postman-absentify-leave-types-api/)
+- [Absentify Absences Members API](https://apis.io/collections/absentify/postman-absentify-members-api/)
+- [Absentify Absences Public holidays API](https://apis.io/collections/absentify/postman-absentify-public-holidays-api/)
+- [Absentify Absences Requests API](https://apis.io/collections/absentify/postman-absentify-requests-api/)
+- [Absentify Absences Workspace API](https://apis.io/collections/absentify/postman-absentify-workspace-api/)
+
+#### Governance rules (2)
+
+Spectral rulesets for the provider's contracts.
+
+- [Absentify — jsonschema rules](https://apis.io/rules/absentify/absentify-jsonschema-spectral-rules/)
+- [Absentify API Rules](https://apis.io/rules/absentify/absentify-spectral-rules/)
+
+#### Security (4)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Absentify Authentication](https://apis.io/security/absentify/absentify-authentication/)
+- [Absentify Domain Security](https://apis.io/security/absentify/absentify-domain-security/)
+- [Absentify Trust Center](https://apis.io/security/absentify/absentify-trust-center/)
+- [Absentify Vulnerability Disclosure](https://apis.io/security/absentify/absentify-vulnerability-disclosure/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Absentify Plans Pricing](https://apis.io/plans/absentify/absentify-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Absentify Rate Limits](https://apis.io/rate-limits/absentify/absentify-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Absentify Finops](https://apis.io/finops/absentify/absentify-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.absentify.com/)
 - [Documentation](https://absentify.com/docs/en/)
 - [Pricing](https://absentify.com/pricing)
-- [Privacy Policy](https://absentify.com/privacy-policy)
-- [Terms of Service](https://absentify.com/terms-and-conditions)
 - [Blog](https://absentify.com/blog)
-- [Status Page](https://status.absentify.com)
 - [Security](https://absentify.com/security)
-- [Tools](https://absentify.com/docs/en/mcp-server)
-- [Spectral Rules](rules/absentify-spectral-rules.yml)
-- [Vocabulary](vocabulary/absentify-vocabulary.yaml)
-- [Features](undefined)
-- [Use Cases](undefined)
-- [Integrations](undefined)
+- [Terms of service](https://absentify.com/terms-and-conditions)
+- [Privacy policy](https://absentify.com/privacy-policy)
+- [Status](https://status.absentify.com)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 49.0** — developing · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 57.1 |
+| Contract quality | 73.6 |
+| Contract governance | 27.3 |
+| Operational transparency | 26.3 |
+| Developer ergonomics | 34.5 |
+| Access clarity | 47.4 |
+
+**Agent readiness 26.6** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | documented (partial credit) |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 35.3** — Employment & Payroll
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/absentify/](https://apis.io/providers/absentify/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Absentify: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/absentify/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
