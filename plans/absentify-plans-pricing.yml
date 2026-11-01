@@ -1,0 +1,86 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-28'
+method: searched
+source: https://absentify.com/pricing
+sources:
+- https://absentify.com/pricing
+provenance:
+  tool: engine/economics/harvest_pricing.py
+  run: 20261028T161713
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: per-seat
+delivery:
+  delivery: managed+licensed
+  method: page
+  read: '2026-10-28'
+  evidence: Yes, for companies with specific needs such as dedicated support agreements, private hosting,
+    or onboarding assistance, we're here to help.
+  managed_tier: Mini
+published: false
+note: No numeric price is published on the pricing page; Pricing page lists four plans (Free, Mini, Essentials,
+  Plus) with monthly/yearly toggle and '-15%' annual discount, but the visible text contains no numeric
+  per-user amounts — only 'per user/month, plus VAT' labels and '100% Free' for the Free tier. API support
+  and MCP server are plan features of the Plus tier, not separately priced.
+plan_count: 4
+plans:
+- name: Free
+  price_text: 100% Free
+  period: month
+  unit: per user/month
+  included_quota: Unlimited users, 2 departments, 1 admin, Excel annual exports
+- name: Mini
+  price_text: per user/month, plus VAT
+  period: month
+  unit: per user/month
+  included_quota: 4 departments, unlimited admins, 1 calendar sync
+- name: Essentials
+  price_text: per user/month, plus VAT
+  period: month
+  unit: per user/month
+  included_quota: 8 departments, 3 Power Automate connectors, 3 webhooks, 5 calendar syncs, priority email
+    support
+- name: Plus
+  price_text: per user/month, plus VAT
+  period: month
+  unit: per user/month
+  included_quota: Unlimited departments, API support, unlimited webhooks, MCP server with 40+ tools, SCIM
+    provisioning, white label
+x-canonical:
+  generated: '2026-11-01'
+  vocabulary: engine/economics/plans-canonical.yml
+  models: []
+  units: []
+  plans:
+  - name: Free
+    access: other
+    model: unstated
+    model_how: derived
+    units:
+    - other
+    periods:
+    - month
+  - name: Mini
+    access: other
+    model: unstated
+    model_how: derived
+    units:
+    - other
+    periods:
+    - month
+  - name: Essentials
+    access: other
+    model: unstated
+    model_how: derived
+    units:
+    - other
+    periods:
+    - month
+  - name: Plus
+    access: other
+    model: unstated
+    model_how: derived
+    units:
+    - other
+    periods:
+    - month

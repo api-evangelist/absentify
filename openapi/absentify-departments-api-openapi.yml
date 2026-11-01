@@ -1,0 +1,695 @@
+openapi: 3.2.0
+info:
+  title: absentify CRUD Departments API
+  description: OpenAPI compliant REST API
+  version: 1.0.0
+servers:
+- url: https://api.absentify.com/api/v1
+tags:
+- name: Departments
+paths:
+  /departments:
+    get:
+      operationId: department-getDepartments
+      summary: Get all departments
+      tags:
+      - Departments
+      security:
+      - ApiKey: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    custom_id:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    name:
+                      type: string
+                    createdAt:
+                      type: string
+                    updatedAt:
+                      type: string
+                    approval_process:
+                      type: string
+                      enum:
+                      - Linear_all_have_to_agree
+                      - Linear_one_has_to_agree
+                      - Parallel_all_have_to_agree
+                      - Parallel_one_has_to_agree
+                      - Parallel_first_response_decides
+                    maximum_absent:
+                      anyOf:
+                      - type: integer
+                        minimum: -9007199254740991
+                        maximum: 9007199254740991
+                      - type: 'null'
+                    members:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          email:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          custom_id:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          manager_type:
+                            type: string
+                            enum:
+                            - Member
+                            - Manager
+                          is_hidden:
+                            type: boolean
+                        required:
+                        - id
+                        - name
+                        - email
+                        - custom_id
+                        - manager_type
+                        - is_hidden
+                        additionalProperties: false
+                  required:
+                  - id
+                  - custom_id
+                  - name
+                  - createdAt
+                  - updatedAt
+                  - approval_process
+                  - maximum_absent
+                  - members
+                  additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+    post:
+      operationId: department-createDepartment
+      summary: Create a department
+      tags:
+      - Departments
+      security:
+      - ApiKey: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                custom_id:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                default_allowance:
+                  type: number
+                maximum_absent:
+                  type: number
+                approval_process:
+                  type: string
+                  enum:
+                  - Linear_all_have_to_agree
+                  - Linear_one_has_to_agree
+                  - Parallel_all_have_to_agree
+                  - Parallel_one_has_to_agree
+                  - Parallel_first_response_decides
+                manager_member:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      member_id:
+                        type: string
+                      predecessor_manager_id:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      is_hidden:
+                        type: boolean
+                    required:
+                    - member_id
+                    - predecessor_manager_id
+                default_department_allowances:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      value:
+                        type: number
+                    required:
+                    - id
+                    - value
+              required:
+              - name
+              - custom_id
+              - default_allowance
+              - maximum_absent
+              - approval_process
+              - manager_member
+              - default_department_allowances
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /departments/{id}:
+    get:
+      operationId: department-getDepartmentByid
+      summary: Read a department by id
+      tags:
+      - Departments
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                    custom_id:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    name:
+                      type: string
+                    createdAt:
+                      type: string
+                    updatedAt:
+                      type: string
+                    approval_process:
+                      type: string
+                      enum:
+                      - Linear_all_have_to_agree
+                      - Linear_one_has_to_agree
+                      - Parallel_all_have_to_agree
+                      - Parallel_one_has_to_agree
+                      - Parallel_first_response_decides
+                    maximum_absent:
+                      anyOf:
+                      - type: integer
+                        minimum: -9007199254740991
+                        maximum: 9007199254740991
+                      - type: 'null'
+                    members:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          email:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          custom_id:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          manager_type:
+                            type: string
+                            enum:
+                            - Member
+                            - Manager
+                          is_hidden:
+                            type: boolean
+                        required:
+                        - id
+                        - name
+                        - email
+                        - custom_id
+                        - manager_type
+                        - is_hidden
+                        additionalProperties: false
+                  required:
+                  - id
+                  - custom_id
+                  - name
+                  - createdAt
+                  - updatedAt
+                  - approval_process
+                  - maximum_absent
+                  - members
+                  additionalProperties: false
+                - type: 'null'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+    put:
+      operationId: department-updateDepartment
+      summary: Update a department
+      tags:
+      - Departments
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                custom_id:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                name:
+                  type: string
+                maximum_absent:
+                  type: integer
+                  minimum: -9007199254740991
+                  maximum: 9007199254740991
+                approval_process:
+                  type: string
+                  enum:
+                  - Linear_all_have_to_agree
+                  - Linear_one_has_to_agree
+                  - Parallel_all_have_to_agree
+                  - Parallel_one_has_to_agree
+                  - Parallel_first_response_decides
+                manager_member:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      member_id:
+                        type: string
+                      predecessor_manager_id:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      is_hidden:
+                        type: boolean
+                    required:
+                    - member_id
+                    - predecessor_manager_id
+                default_department_allowances:
+                  description: A non-empty array replaces the department's default allowances. Omit the field to leave them untouched; an empty array is ignored, not a reset.
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      value:
+                        type: number
+                    required:
+                    - id
+                    - value
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+    delete:
+      operationId: department-DeleteDepartmentById
+      summary: Delete a department
+      tags:
+      - Departments
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: 'null'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+components:
+  schemas:
+    error.BAD_REQUEST:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Invalid input data
+        code:
+          type: string
+          description: The error code
+          example: BAD_REQUEST
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
+        issues: []
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+    error.FORBIDDEN:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Insufficient access
+        code:
+          type: string
+          description: The error code
+          example: FORBIDDEN
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+    error.NOT_FOUND:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Not found
+        code:
+          type: string
+          description: The error code
+          example: NOT_FOUND
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'The API key as `Authorization: Bearer <key>`.'
+externalDocs:
+  url: https://absentify.com/docs/en/api-reference

@@ -1,0 +1,444 @@
+openapi: 3.2.0
+info:
+  title: absentify CRUD Absences API
+  description: OpenAPI compliant REST API
+  version: 1.0.0
+servers:
+- url: https://api.absentify.com/api/v1
+tags:
+- name: Absences
+paths:
+  /absences_per_day:
+    get:
+      operationId: absences-getAbsencesPerDay
+      summary: Get all requests and public holiday per member per day
+      description: 'Get all requests and public holiday per member per day for the `start`…`end` window.
+
+
+        The window between `start` and `end` may span at most 1826 days (5 years). Wider ranges are rejected with a 400 response, so page through longer periods in smaller windows.'
+      tags:
+      - Absences
+      security:
+      - ApiKey: []
+      parameters:
+      - in: query
+        name: start
+        schema:
+          description: Date/time in ISO 8601 format, e.g. `2026-06-01` (interpreted as UTC midnight) or `2026-06-01T09:00:00Z`. Always include a time zone designator (`Z` for UTC) when sending a time of day. Localized formats such as `01.06.2026` or `06/01/2026` are misinterpreted and must not be used. The window between `start` and `end` may span at most 1826 days (5 years). Wider ranges are rejected with a 400 response, so page through longer periods in smaller windows.
+          type: string
+        required: true
+        description: Date/time in ISO 8601 format, e.g. `2026-06-01` (interpreted as UTC midnight) or `2026-06-01T09:00:00Z`. Always include a time zone designator (`Z` for UTC) when sending a time of day. Localized formats such as `01.06.2026` or `06/01/2026` are misinterpreted and must not be used. The window between `start` and `end` may span at most 1826 days (5 years). Wider ranges are rejected with a 400 response, so page through longer periods in smaller windows.
+      - in: query
+        name: end
+        schema:
+          description: Date/time in ISO 8601 format, e.g. `2026-06-01` (interpreted as UTC midnight) or `2026-06-01T09:00:00Z`. Always include a time zone designator (`Z` for UTC) when sending a time of day. Localized formats such as `01.06.2026` or `06/01/2026` are misinterpreted and must not be used. The window between `start` and `end` may span at most 1826 days (5 years). Wider ranges are rejected with a 400 response, so page through longer periods in smaller windows.
+          type: string
+        required: true
+        description: Date/time in ISO 8601 format, e.g. `2026-06-01` (interpreted as UTC midnight) or `2026-06-01T09:00:00Z`. Always include a time zone designator (`Z` for UTC) when sending a time of day. Localized formats such as `01.06.2026` or `06/01/2026` are misinterpreted and must not be used. The window between `start` and `end` may span at most 1826 days (5 years). Wider ranges are rejected with a 400 response, so page through longer periods in smaller windows.
+      - in: query
+        name: request_member_ids
+        schema:
+          type: string
+      - in: query
+        name: department_ids
+        schema:
+          type: string
+      - in: query
+        name: locale
+        schema:
+          type: string
+          enum:
+          - en
+          - de
+          - fr
+          - hu
+          - it
+          - pl
+          - pt
+          - ru
+          - es
+          - tr
+          - uk
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                  - type: object
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                        - request
+                        - public_holiday
+                      member:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          custom_id:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          name:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          email:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - id
+                        - custom_id
+                        - name
+                        - email
+                        additionalProperties: false
+                      date:
+                        type: string
+                      start_at:
+                        anyOf:
+                        - type: string
+                          enum:
+                          - morning
+                          - afternoon
+                        - type: 'null'
+                        description: 'For day-based leave types: whether the absence starts in the `morning` (the whole first day counts) or `afternoon` (only the second half of the first day). Ignored for hour-based leave types.'
+                      end_at:
+                        anyOf:
+                        - type: string
+                          enum:
+                          - lunchtime
+                          - end_of_day
+                        - type: 'null'
+                        description: 'For day-based leave types: whether the absence ends at `lunchtime` (only the first half of the last day) or `end_of_day` (the whole last day counts). Ignored for hour-based leave types.'
+                      request:
+                        anyOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                            duration:
+                              type: number
+                            workday_absence_duration:
+                              type: number
+                            status:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            take_from_allowance:
+                              type: boolean
+                            allowance_type:
+                              anyOf:
+                              - type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  name:
+                                    type: string
+                                  default_name:
+                                    type: string
+                                  ignore_allowance_limit:
+                                    type: boolean
+                                  allowance_unit:
+                                    type: string
+                                    enum:
+                                    - days
+                                    - hours
+                                required:
+                                - id
+                                - name
+                                - default_name
+                                - ignore_allowance_limit
+                                - allowance_unit
+                                additionalProperties: false
+                              - type: 'null'
+                            leave_type:
+                              anyOf:
+                              - type: object
+                                properties:
+                                  name:
+                                    type: string
+                                  default_name:
+                                    type: string
+                                  id:
+                                    anyOf:
+                                    - type: string
+                                    - type: 'null'
+                                  leave_unit:
+                                    type: string
+                                    enum:
+                                    - days
+                                    - half_days
+                                    - hours
+                                    - minutes_30
+                                    - minutes_15
+                                    - minutes_10
+                                    - minutes_5
+                                    - minutes_1
+                                required:
+                                - name
+                                - default_name
+                                - id
+                                - leave_unit
+                                additionalProperties: false
+                              - type: 'null'
+                          required:
+                          - id
+                          - duration
+                          - workday_absence_duration
+                          - status
+                          - take_from_allowance
+                          - allowance_type
+                          - leave_type
+                          additionalProperties: false
+                        - type: 'null'
+                      public_holiday_day:
+                        anyOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                            duration:
+                              type: string
+                            names:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  language:
+                                    type: string
+                                  name:
+                                    type: string
+                                required:
+                                - language
+                                - name
+                                additionalProperties: false
+                          required:
+                          - id
+                          - duration
+                          - names
+                          additionalProperties: false
+                        - type: 'null'
+                    required:
+                    - type
+                    - member
+                    - date
+                    - start_at
+                    - end_at
+                    - request
+                    - public_holiday_day
+                    additionalProperties: false
+                  - type: 'null'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+components:
+  schemas:
+    error.BAD_REQUEST:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Invalid input data
+        code:
+          type: string
+          description: The error code
+          example: BAD_REQUEST
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
+        issues: []
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+    error.FORBIDDEN:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Insufficient access
+        code:
+          type: string
+          description: The error code
+          example: FORBIDDEN
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+    error.NOT_FOUND:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Not found
+        code:
+          type: string
+          description: The error code
+          example: NOT_FOUND
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'The API key as `Authorization: Bearer <key>`.'
+externalDocs:
+  url: https://absentify.com/docs/en/api-reference

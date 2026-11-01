@@ -1,0 +1,1256 @@
+openapi: 3.2.0
+info:
+  title: absentify CRUD Leave types API
+  description: OpenAPI compliant REST API
+  version: 1.0.0
+servers:
+- url: https://api.absentify.com/api/v1
+tags:
+- name: Leave types
+paths:
+  /leave_types:
+    get:
+      operationId: leaveTypes-getLeaveTypes
+      summary: Get all leave types
+      tags:
+      - Leave types
+      security:
+      - ApiKey: []
+      parameters:
+      - in: query
+        name: locale
+        schema:
+          type: string
+          enum:
+          - en
+          - de
+          - fr
+          - hu
+          - it
+          - pl
+          - pt
+          - ru
+          - es
+          - tr
+          - uk
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                      description: Translated into `locale` when one is given and a translation exists, otherwise the stored name.
+                    default_name:
+                      type: string
+                      description: The stored name, without any translation applied.
+                    createdAt:
+                      type: string
+                    updatedAt:
+                      type: string
+                    color:
+                      type: string
+                    icon:
+                      type: string
+                    needs_approval:
+                      type: boolean
+                    deleted:
+                      type: boolean
+                    deleted_at:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    deleted_by:
+                      anyOf:
+                      - type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          email:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - id
+                        - name
+                        - email
+                        additionalProperties: false
+                      - type: 'null'
+                    maximum_absent:
+                      type: boolean
+                    leave_unit:
+                      type: string
+                      enum:
+                      - days
+                      - half_days
+                      - hours
+                      - minutes_30
+                      - minutes_15
+                      - minutes_10
+                      - minutes_5
+                      - minutes_1
+                    position:
+                      type: number
+                    take_from_allowance:
+                      type: boolean
+                    privacy_hide_leavetype:
+                      type: boolean
+                    outlook_synchronization_show_as:
+                      type: string
+                      enum:
+                      - free
+                      - tentative
+                      - busy
+                      - oof
+                      - workingElsewhere
+                      - unknown
+                    outlook_synchronization_subject:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    allowance_type:
+                      anyOf:
+                      - type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                            description: Translated into `locale` when one is given and a translation exists, otherwise the stored name.
+                          default_name:
+                            type: string
+                            description: The stored name, without any translation applied.
+                          ignore_allowance_limit:
+                            type: boolean
+                          allowance_unit:
+                            type: string
+                            enum:
+                            - days
+                            - hours
+                        required:
+                        - id
+                        - name
+                        - default_name
+                        - ignore_allowance_limit
+                        - allowance_unit
+                        additionalProperties: false
+                      - type: 'null'
+                    counts_as_leave:
+                      type: boolean
+                    allow_representative_overlap:
+                      type: boolean
+                    allow_request_changes:
+                      type: boolean
+                      description: Whether pending and approved requests of this leave type can be changed.
+                    request_shortening_needs_approval:
+                      type: boolean
+                      description: 'Shortening an approved request needs approval from its approvers when this is on. Off by default: a shortened request applies at once and the days go back to the allowance. Extending or moving always needs approval.'
+                  required:
+                  - id
+                  - name
+                  - default_name
+                  - createdAt
+                  - updatedAt
+                  - color
+                  - icon
+                  - needs_approval
+                  - deleted
+                  - deleted_at
+                  - deleted_by
+                  - maximum_absent
+                  - leave_unit
+                  - position
+                  - take_from_allowance
+                  - privacy_hide_leavetype
+                  - outlook_synchronization_show_as
+                  - outlook_synchronization_subject
+                  - allowance_type
+                  - counts_as_leave
+                  - allow_representative_overlap
+                  - allow_request_changes
+                  - request_shortening_needs_approval
+                  additionalProperties: false
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+    post:
+      operationId: leaveTypes-createLeaveType
+      summary: Create a leave type
+      tags:
+      - Leave types
+      security:
+      - ApiKey: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 255
+                color:
+                  type: string
+                needs_approval:
+                  type: boolean
+                maximum_absent:
+                  type: boolean
+                leave_unit:
+                  type: string
+                  enum:
+                  - days
+                  - half_days
+                  - hours
+                  - minutes_30
+                  - minutes_15
+                  - minutes_10
+                  - minutes_5
+                  - minutes_1
+                  description: 'When `take_from_allowance` is true, the unit follows the allowance: an hour or minute unit is saved as `days` for a days-based allowance, and `days` or `half_days` is saved as `hours` for an hours-based allowance.'
+                position:
+                  type: number
+                take_from_allowance:
+                  type: boolean
+                privacy_hide_leavetype:
+                  type: boolean
+                outlook_synchronization_show_as:
+                  type: string
+                  enum:
+                  - free
+                  - tentative
+                  - busy
+                  - oof
+                  - workingElsewhere
+                  - unknown
+                outlook_synchronization_subject:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                icon:
+                  type: string
+                  enum:
+                  - NoIcon
+                  - Umbrella
+                  - Anchor
+                  - Archive
+                  - Award
+                  - Briefcase
+                  - Calendar
+                  - Cast
+                  - Clock
+                  - Coffee
+                  - Compass
+                  - Battery
+                  - Emoji
+                  - Gift
+                  - Frown
+                  - Image
+                  - Sun
+                  - Home
+                  - Zap
+                  - Users
+                  - TreePalm
+                  - Plane
+                  - Luggage
+                  - Tent
+                  - Mountain
+                  - Bike
+                  - Waves
+                  - Snowflake
+                  - Ship
+                  - Map
+                  - Camera
+                  - Sunset
+                  - Thermometer
+                  - Pill
+                  - Stethoscope
+                  - HeartPulse
+                  - Hospital
+                  - Bandage
+                  - Brain
+                  - Syringe
+                  - Bed
+                  - Ambulance
+                  - Eye
+                  - Accessibility
+                  - Activity
+                  - Baby
+                  - Heart
+                  - HeartHandshake
+                  - Dog
+                  - Truck
+                  - Milk
+                  - HandHeart
+                  - ToyBrick
+                  - Cake
+                  - Laptop
+                  - Building2
+                  - Presentation
+                  - Car
+                  - TrainFront
+                  - RotateCcw
+                  - Headset
+                  - Phone
+                  - HardHat
+                  - Wrench
+                  - Globe
+                  - MapPin
+                  - GraduationCap
+                  - BookOpen
+                  - School
+                  - Languages
+                  - Lightbulb
+                  - PenLine
+                  - PartyPopper
+                  - Gem
+                  - Flower2
+                  - Landmark
+                  - Vote
+                  - Shield
+                  - Church
+                  - HandHelping
+                  - Scale
+                  - Siren
+                  - Trophy
+                  - Star
+                  - Timer
+                  - Hourglass
+                  - CalendarOff
+                  - Moon
+                  - AlarmClock
+                  - Sunrise
+                  - CalendarDays
+                  - CalendarHeart
+                  - Megaphone
+                  - CloudLightning
+                  - Leaf
+                  - Lock
+                  - Ban
+                  - CircleHelp
+                reason_mandatory:
+                  type: boolean
+                reason_hint_text:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                allowance_type_id:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  description: 'The allowance to deduct from when `take_from_allowance` is true. Always pass it: if it is null or unknown, another allowance of the workspace is used instead. Ignored when `take_from_allowance` is false.'
+                ignore_schedule:
+                  type: boolean
+                sync_option:
+                  type: string
+                  enum:
+                  - Disabled
+                  - All
+                  - OnlyApproved
+                ignore_public_holidays:
+                  type: boolean
+                reason_visibility_public:
+                  type: boolean
+                counts_as_leave:
+                  default: true
+                  type: boolean
+                allow_representative_overlap:
+                  default: false
+                  type: boolean
+                allow_request_changes:
+                  default: true
+                  description: Whether pending and approved requests of this leave type can be changed.
+                  type: boolean
+                request_shortening_needs_approval:
+                  default: false
+                  description: 'Shortening an approved request needs approval from its approvers when this is on. Off by default: a shortened request applies at once and the days go back to the allowance. Extending or moving always needs approval.'
+                  type: boolean
+                translations:
+                  description: Optional per-language names, shown to members using that language.
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      language:
+                        type: string
+                        enum:
+                        - en
+                        - de
+                        - fr
+                        - hu
+                        - it
+                        - pl
+                        - pt
+                        - ru
+                        - es
+                        - tr
+                        - uk
+                        description: Language code the name below is written in, e.g. `de`.
+                      name:
+                        type: string
+                        minLength: 1
+                        maxLength: 255
+                    required:
+                    - language
+                    - name
+              required:
+              - name
+              - color
+              - needs_approval
+              - maximum_absent
+              - leave_unit
+              - position
+              - take_from_allowance
+              - privacy_hide_leavetype
+              - outlook_synchronization_show_as
+              - outlook_synchronization_subject
+              - icon
+              - reason_mandatory
+              - reason_hint_text
+              - allowance_type_id
+              - ignore_schedule
+              - sync_option
+              - ignore_public_holidays
+              - reason_visibility_public
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /leave_types/{id}:
+    get:
+      operationId: leaveTypes-getLeaveTypeById
+      summary: Read a leave type by id
+      tags:
+      - Leave types
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      - in: query
+        name: locale
+        schema:
+          type: string
+          enum:
+          - en
+          - de
+          - fr
+          - hu
+          - it
+          - pl
+          - pt
+          - ru
+          - es
+          - tr
+          - uk
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                      description: Translated into `locale` when one is given and a translation exists, otherwise the stored name.
+                    default_name:
+                      type: string
+                      description: The stored name, without any translation applied.
+                    createdAt:
+                      type: string
+                    updatedAt:
+                      type: string
+                    color:
+                      type: string
+                    icon:
+                      type: string
+                    needs_approval:
+                      type: boolean
+                    deleted:
+                      type: boolean
+                    deleted_at:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    deleted_by:
+                      anyOf:
+                      - type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                          email:
+                            anyOf:
+                            - type: string
+                            - type: 'null'
+                        required:
+                        - id
+                        - name
+                        - email
+                        additionalProperties: false
+                      - type: 'null'
+                    maximum_absent:
+                      type: boolean
+                    leave_unit:
+                      type: string
+                      enum:
+                      - days
+                      - half_days
+                      - hours
+                      - minutes_30
+                      - minutes_15
+                      - minutes_10
+                      - minutes_5
+                      - minutes_1
+                    position:
+                      type: number
+                    take_from_allowance:
+                      type: boolean
+                    privacy_hide_leavetype:
+                      type: boolean
+                    outlook_synchronization_show_as:
+                      type: string
+                      enum:
+                      - free
+                      - tentative
+                      - busy
+                      - oof
+                      - workingElsewhere
+                      - unknown
+                    outlook_synchronization_subject:
+                      anyOf:
+                      - type: string
+                      - type: 'null'
+                    allowance_type:
+                      anyOf:
+                      - type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                            description: Translated into `locale` when one is given and a translation exists, otherwise the stored name.
+                          default_name:
+                            type: string
+                            description: The stored name, without any translation applied.
+                          ignore_allowance_limit:
+                            type: boolean
+                          allowance_unit:
+                            type: string
+                            enum:
+                            - days
+                            - hours
+                        required:
+                        - id
+                        - name
+                        - default_name
+                        - ignore_allowance_limit
+                        - allowance_unit
+                        additionalProperties: false
+                      - type: 'null'
+                    counts_as_leave:
+                      type: boolean
+                    allow_representative_overlap:
+                      type: boolean
+                    allow_request_changes:
+                      type: boolean
+                      description: Whether pending and approved requests of this leave type can be changed.
+                    request_shortening_needs_approval:
+                      type: boolean
+                      description: 'Shortening an approved request needs approval from its approvers when this is on. Off by default: a shortened request applies at once and the days go back to the allowance. Extending or moving always needs approval.'
+                  required:
+                  - id
+                  - name
+                  - default_name
+                  - createdAt
+                  - updatedAt
+                  - color
+                  - icon
+                  - needs_approval
+                  - deleted
+                  - deleted_at
+                  - deleted_by
+                  - maximum_absent
+                  - leave_unit
+                  - position
+                  - take_from_allowance
+                  - privacy_hide_leavetype
+                  - outlook_synchronization_show_as
+                  - outlook_synchronization_subject
+                  - allowance_type
+                  - counts_as_leave
+                  - allow_representative_overlap
+                  - allow_request_changes
+                  - request_shortening_needs_approval
+                  additionalProperties: false
+                - type: 'null'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+    put:
+      operationId: leaveTypes-updateLeaveType
+      summary: Update a leave type
+      description: Update a leave type. Omitted fields keep their current value, so a request that only sends `name` renames the leave type and changes nothing else.
+      tags:
+      - Leave types
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 255
+                color:
+                  type: string
+                needs_approval:
+                  type: boolean
+                maximum_absent:
+                  type: boolean
+                leave_unit:
+                  description: 'When `take_from_allowance` is true, the unit follows the allowance: an hour or minute unit is saved as `days` for a days-based allowance, and `days` or `half_days` is saved as `hours` for an hours-based allowance. Switching between day and hour units is rejected while the leave type has requests that are not canceled or declined.'
+                  type: string
+                  enum:
+                  - days
+                  - half_days
+                  - hours
+                  - minutes_30
+                  - minutes_15
+                  - minutes_10
+                  - minutes_5
+                  - minutes_1
+                position:
+                  type: integer
+                  minimum: -9007199254740991
+                  maximum: 9007199254740991
+                take_from_allowance:
+                  type: boolean
+                privacy_hide_leavetype:
+                  type: boolean
+                outlook_synchronization_show_as:
+                  type: string
+                  enum:
+                  - free
+                  - tentative
+                  - busy
+                  - oof
+                  - workingElsewhere
+                  - unknown
+                outlook_synchronization_subject:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                icon:
+                  type: string
+                  enum:
+                  - NoIcon
+                  - Umbrella
+                  - Anchor
+                  - Archive
+                  - Award
+                  - Briefcase
+                  - Calendar
+                  - Cast
+                  - Clock
+                  - Coffee
+                  - Compass
+                  - Battery
+                  - Emoji
+                  - Gift
+                  - Frown
+                  - Image
+                  - Sun
+                  - Home
+                  - Zap
+                  - Users
+                  - TreePalm
+                  - Plane
+                  - Luggage
+                  - Tent
+                  - Mountain
+                  - Bike
+                  - Waves
+                  - Snowflake
+                  - Ship
+                  - Map
+                  - Camera
+                  - Sunset
+                  - Thermometer
+                  - Pill
+                  - Stethoscope
+                  - HeartPulse
+                  - Hospital
+                  - Bandage
+                  - Brain
+                  - Syringe
+                  - Bed
+                  - Ambulance
+                  - Eye
+                  - Accessibility
+                  - Activity
+                  - Baby
+                  - Heart
+                  - HeartHandshake
+                  - Dog
+                  - Truck
+                  - Milk
+                  - HandHeart
+                  - ToyBrick
+                  - Cake
+                  - Laptop
+                  - Building2
+                  - Presentation
+                  - Car
+                  - TrainFront
+                  - RotateCcw
+                  - Headset
+                  - Phone
+                  - HardHat
+                  - Wrench
+                  - Globe
+                  - MapPin
+                  - GraduationCap
+                  - BookOpen
+                  - School
+                  - Languages
+                  - Lightbulb
+                  - PenLine
+                  - PartyPopper
+                  - Gem
+                  - Flower2
+                  - Landmark
+                  - Vote
+                  - Shield
+                  - Church
+                  - HandHelping
+                  - Scale
+                  - Siren
+                  - Trophy
+                  - Star
+                  - Timer
+                  - Hourglass
+                  - CalendarOff
+                  - Moon
+                  - AlarmClock
+                  - Sunrise
+                  - CalendarDays
+                  - CalendarHeart
+                  - Megaphone
+                  - CloudLightning
+                  - Leaf
+                  - Lock
+                  - Ban
+                  - CircleHelp
+                reason_mandatory:
+                  type: boolean
+                reason_hint_text:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                allowance_type_id:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                sync_option:
+                  type: string
+                  enum:
+                  - Disabled
+                  - All
+                  - OnlyApproved
+                counts_as_leave:
+                  type: boolean
+                allow_representative_overlap:
+                  type: boolean
+                allow_request_changes:
+                  description: Whether pending and approved requests of this leave type can be changed.
+                  type: boolean
+                request_shortening_needs_approval:
+                  description: 'Shortening an approved request needs approval from its approvers when this is on. Off by default: a shortened request applies at once and the days go back to the allowance. Extending or moving always needs approval.'
+                  type: boolean
+                translations:
+                  description: Replaces the stored translations. Omit the field to leave them untouched.
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      language:
+                        type: string
+                        enum:
+                        - en
+                        - de
+                        - fr
+                        - hu
+                        - it
+                        - pl
+                        - pt
+                        - ru
+                        - es
+                        - tr
+                        - uk
+                        description: Language code the name below is written in, e.g. `de`.
+                      name:
+                        type: string
+                        minLength: 1
+                        maxLength: 255
+                    required:
+                    - language
+                    - name
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+                - type: 'null'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+    delete:
+      operationId: leaveTypes-DeleteLeaveTypeById
+      summary: Delete a leave type
+      description: 'Archive a leave type. Rejected with 403 when it is the workspace''s last active one, and with 400 when `deleted_by_member_id` is not a member of the calling workspace. Send `deleted: false` to make an archived type selectable again.'
+      tags:
+      - Leave types
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      - in: query
+        name: deleted
+        schema:
+          type: boolean
+        required: true
+      - in: query
+        name: deleted_by_member_id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: 'null'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+  /leave_types/{id}/restore:
+    put:
+      operationId: leaveTypes-restoreLeaveType
+      summary: Restore an archived leave type
+      description: Restore an archived leave type to make it available for user selection in the UI again
+      tags:
+      - Leave types
+      security:
+      - ApiKey: []
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+components:
+  schemas:
+    error.BAD_REQUEST:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Invalid input data
+        code:
+          type: string
+          description: The error code
+          example: BAD_REQUEST
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
+        issues: []
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+    error.FORBIDDEN:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Insufficient access
+        code:
+          type: string
+          description: The error code
+          example: FORBIDDEN
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+    error.NOT_FOUND:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Not found
+        code:
+          type: string
+          description: The error code
+          example: NOT_FOUND
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          description: An array of issues that were responsible for the error
+          example: []
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+            additionalProperties: false
+      required:
+      - message
+      - code
+      additionalProperties: false
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'The API key as `Authorization: Bearer <key>`.'
+externalDocs:
+  url: https://absentify.com/docs/en/api-reference
