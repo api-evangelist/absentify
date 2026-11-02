@@ -47,7 +47,7 @@ plans:
   included_quota: Unlimited departments, API support, unlimited webhooks, MCP server with 40+ tools, SCIM
     provisioning, white label
 x-canonical:
-  generated: '2026-11-01'
+  generated: '2026-11-02'
   vocabulary: engine/economics/plans-canonical.yml
   models: []
   units: []
