@@ -47,17 +47,18 @@ plans:
   included_quota: Unlimited departments, API support, unlimited webhooks, MCP server with 40+ tools, SCIM
     provisioning, white label
 x-canonical:
-  generated: '2026-11-02'
+  generated: '2026-11-06'
   vocabulary: engine/economics/plans-canonical.yml
   models: []
-  units: []
+  units:
+  - seat
   plans:
   - name: Free
     access: other
     model: unstated
     model_how: derived
     units:
-    - other
+    - seat
     periods:
     - month
   - name: Mini
@@ -65,7 +66,7 @@ x-canonical:
     model: unstated
     model_how: derived
     units:
-    - other
+    - seat
     periods:
     - month
   - name: Essentials
@@ -73,7 +74,7 @@ x-canonical:
     model: unstated
     model_how: derived
     units:
-    - other
+    - seat
     periods:
     - month
   - name: Plus
@@ -81,6 +82,6 @@ x-canonical:
     model: unstated
     model_how: derived
     units:
-    - other
+    - seat
     periods:
     - month
