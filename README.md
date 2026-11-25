@@ -72,7 +72,7 @@ Absentify is an absence management platform integrated with Microsoft 365 and Mi
 
 Everything profiled for Absentify is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/absentify/](https://apis.io/providers/absentify/)** — or go straight to one of the APIs or properties below.
 
-### APIs (7)
+### APIs (11)
 
 - [Absentify Absences API](https://apis.io/apis/absentify/absentify-absences-api/) — The Absences API from Absentify — 1 operation(s) for absences.
 - [Absentify Departments API](https://apis.io/apis/absentify/absentify-departments-api/) — The Departments API from Absentify — 2 operation(s) for departments.
@@ -81,6 +81,10 @@ Everything profiled for Absentify is published on APIs.io rather than in this re
 - [Absentify Public holidays API](https://apis.io/apis/absentify/absentify-public-holidays-api/) — The Public holidays API from Absentify — 2 operation(s) for public holidays.
 - [Absentify Requests API](https://apis.io/apis/absentify/absentify-requests-api/) — The Requests API from Absentify — 9 operation(s) for requests.
 - [Absentify Workspace API](https://apis.io/apis/absentify/absentify-workspace-api/) — The Workspace API from Absentify — 1 operation(s) for workspace.
+- [Absentify Allowance Management API](https://apis.io/apis/absentify/absentify-allowance-management-api/) — The Allowance Management API from Absentify — 20 operation(s) for allowance management.
+- [Absentify Exports API](https://apis.io/apis/absentify/absentify-exports-api/) — The Exports API from Absentify — 2 operation(s) for exports.
+- [Absentify Out of office API](https://apis.io/apis/absentify/absentify-out-of-office-api/) — The Out of office API from Absentify — 2 operation(s) for out of office.
+- [Absentify Overtime API](https://apis.io/apis/absentify/absentify-overtime-api/) — The Overtime API from Absentify — 5 operation(s) for overtime.
 
 ### Published properties
 
@@ -209,18 +213,18 @@ Links to the company's own pages. This repository publishes no copy of their spe
 
 ## API Evangelist rating
 
-**Kin Score 49.0** — developing · rubric 0.25.0 · scored 2026-10-23
+**Kin Score 58.9** — strong · rubric 0.28.1 · scored 2026-11-21
 
 | Facet | Score |
 |---|---|
-| Discoverability | 57.1 |
-| Contract quality | 73.6 |
+| Discoverability | 64.3 |
+| Contract quality | 72.7 |
 | Contract governance | 27.3 |
-| Operational transparency | 26.3 |
+| Operational transparency | 28.6 |
 | Developer ergonomics | 34.5 |
-| Access clarity | 47.4 |
+| Access clarity | 76.6 |
 
-**Agent readiness 27.2** — agent-aware
+**Agent readiness 33.4** — agent-ready
 
 | Agent-readiness dimension | Result |
 |---|---|
@@ -231,12 +235,12 @@ Links to the company's own pages. This repository publishes no copy of their spe
 | Auth Clarity | bearer (partial credit) |
 | Idempotency | — |
 | Error Semantics | verified |
-| OpenAPI Examples | documented (partial credit) |
-| Rate Limit Signal | derived (partial credit) |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | verified |
 | Event Surface Described | — |
 | Agent Skills | — |
 | Well Known Catalog | — |
-| Consent Identity | — |
+| Consent Identity | signal |
 | Agent Card | — |
 | Dry Run Mode | — |
 | Delegated Identity | — |
@@ -245,6 +249,10 @@ Links to the company's own pages. This repository publishes no copy of their spe
 | Agentic Commerce | — |
 | Pagination Ratio | — |
 | Operation Distinctiveness | distinct |
+| MCP Tool Quality | na |
+| Onboarding Descriptor | — |
+| Dns Aid Index | na |
+| Markdown Negotiation | yes |
 
 **Regulatory alignment 35.3** — Employment & Payroll
 
